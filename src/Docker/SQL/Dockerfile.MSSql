@@ -1,0 +1,47 @@
+﻿FROM microsoft/mssql-server-linux
+
+ARG TAG=1.0.0-beta02-mssql
+
+COPY MSSql.create.sql /docker/
+RUN apt-get update ; apt-get -y  install mc htop wget ; \
+  export ACCEPT_EULA=Y; \
+  export SA_PASSWORD="demoFD123"; \
+  /opt/mssql/bin/sqlservr& \
+  cd /docker; \
+  cat <<EOF >create.sql; \
+CREATE DATABASE appdb COLLATE Cyrillic_General_CI_AS 
+GO
+EXEC sp_configure 'CONTAINED DATABASE AUTHENTICATION', 1
+GO
+RECONFIGURE
+GO
+USE [master]
+GO
+ALTER DATABASE [appdb] SET CONTAINMENT = PARTIAL
+GO
+USE [appdb]
+GO
+CREATE LOGIN flexberryuser WITH PASSWORD = 'demoFD123'
+GO
+CREATE USER flexberryuser WITH PASSWORD = 'demoFD123'
+GO
+ALTER AUTHORIZATION ON DATABASE::appdb TO flexberryuser
+GO
+ALTER ROLE db_owner ADD MEMBER flexberryuser
+GO
+DECLARE @SQL varchar(MAX)
+SELECT @SQL = BulkColumn
+FROM OPENROWSET
+    (   BULK '/MSSql.create.sql'
+    ,   SINGLE_BLOB ) AS MYTABLE
+
+--PRINT @sql
+EXEC (@sql)
+GO
+CHECKPOINT
+GO
+EOF 
+  /bin/sleep 1m ; \
+        /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P 'demoFD123' -i create.sql  -l 600 -t 600 ; \
+  /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P 'demoFD123' -i MSSql.create.sql  -l 600 -t 600 ; \
+  /opt/mssql-tools/bin/sqlcmd -l 600 -t 600 -S 127.0.0.1 -U SA -P 'demoFD123' -Q "SHUTDOWN" -l 600 -t 600  ;

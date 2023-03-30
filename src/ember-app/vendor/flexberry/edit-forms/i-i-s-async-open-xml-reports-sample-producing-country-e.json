@@ -1,0 +1,14 @@
+﻿{
+  "propertyLookup": [],
+  "external": false,
+  "caption": "Producing country",
+  "name": "IISAsyncOpenXmlReportsSampleProducingCountryE",
+  "className": "ProducingCountryE",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-producing-country",
+      "modelProjection": "ProducingCountryE"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+﻿{
+  "name": "IISAsyncOpenXmlReportsSampleSparePart",
+  "modelName": "i-i-s-async-open-xml-reports-sample-spare-part",
+  "className": "SparePart",
+  "nameSpace": "IIS.AsyncOpenXmlReportsSample",
+  "parentModelName": null,
+  "parentClassName": null,
+  "attrs": [
+    {
+      "name": "name",
+      "type": "string",
+      "flexberryType": "string",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
+      "name": "quantity",
+      "type": "number",
+      "flexberryType": "int",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
+      "name": "used",
+      "type": "boolean",
+      "flexberryType": "bool",
+      "notNull": false,
+      "defaultValue": "false",
+      "stored": true,
+      "ordered": false
+    }
+  ],
+  "belongsTo": [
+    {
+      "polymorphic": false,
+      "presence": false,
+      "name": "producingCountry",
+      "relatedTo": "i-i-s-async-open-xml-reports-sample-producing-country",
+      "inverse": null
+    },
+    {
+      "polymorphic": false,
+      "presence": true,
+      "name": "car",
+      "relatedTo": "i-i-s-async-open-xml-reports-sample-car",
+      "inverse": "sparePart"
+    }
+  ],
+  "hasMany": [],
+  "projections": [
+    {
+      "name": "SparePartE",
+      "modelName": "i-i-s-async-open-xml-reports-sample-spare-part",
+      "attrs": [
+        {
+          "name": "name",
+          "caption": "Name",
+          "hidden": false,
+          "index": 0
+        },
+        {
+          "name": "quantity",
+          "caption": "Quantity",
+          "hidden": false,
+          "index": 1
+        },
+        {
+          "name": "used",
+          "caption": "Used",
+          "hidden": false,
+          "index": 2
+        }
+      ],
+      "belongsTo": [
+        {
+          "lookupValue": "Name",
+          "lookupValueField": "name",
+          "relationName": "ProducingCountry",
+          "belongsTo": [],
+          "hidden": false,
+          "attrs": [
+            {
+              "name": "name",
+              "caption": "Name",
+              "hidden": true,
+              "index": 4
+            }
+          ],
+          "index": 3,
+          "type": "standard",
+          "caption": "Producing country",
+          "name": "producingCountry",
+          "relatedTo": "i-i-s-async-open-xml-reports-sample-producing-country",
+          "inverse": null
+        }
+      ],
+      "hasMany": []
+    }
+  ],
+  "stored": true,
+  "offline": true,
+  "external": false
+}

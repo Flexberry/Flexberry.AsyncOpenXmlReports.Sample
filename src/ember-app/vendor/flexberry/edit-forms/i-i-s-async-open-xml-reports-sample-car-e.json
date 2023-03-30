@@ -1,0 +1,31 @@
+﻿{
+  "propertyLookup": [
+    {
+      "master": null,
+      "displayAttributeName": null,
+      "required": false,
+      "relationName": "Brand",
+      "projection": "BrandL",
+      "detailModelName": null
+    },
+    {
+      "master": "producingCountry",
+      "displayAttributeName": "name",
+      "required": false,
+      "relationName": "SparePart.ProducingCountry",
+      "projection": "ProducingCountryL",
+      "detailModelName": "i-i-s-async-open-xml-reports-sample-spare-part"
+    }
+  ],
+  "external": false,
+  "caption": "Car",
+  "name": "IISAsyncOpenXmlReportsSampleCarE",
+  "className": "CarE",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-car",
+      "modelProjection": "CarE"
+    }
+  ]
+}

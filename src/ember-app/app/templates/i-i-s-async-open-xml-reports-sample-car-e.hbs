@@ -1,0 +1,90 @@
+<h3 class="ui header">{{t "forms.i-i-s-async-open-xml-reports-sample-car-e.caption"}}</h3>
+
+<form class="ui form flexberry-vertical-form" role="form">
+  {{flexberry-error error=error}}
+  <div class="field">
+    <div class="flexberry-edit-panel">
+      {{#unless readonly}}
+        <button class="ui button save-button" {{action "save"}}>
+          {{t "forms.edit-form.save-button-text"}}
+        </button>
+        {{#unless model.isNew}}
+          <button class="ui button save-del-button" {{action "delete"}}>
+            {{t "forms.edit-form.delete-button-text"}}
+          </button>
+        {{/unless}}
+      {{/unless}}
+      <button class="ui button close-button" {{action "close"}}>
+        {{t "forms.edit-form.close-button-text"}}
+      </button>
+    </div>
+  </div>
+  <div class="field flexberry-validationsummary-container">
+    <div class="sixteen wide">
+      {{flexberry-validationsummary errors=(v-get validationObject "messages")}}
+    </div>
+  </div>
+  <div class="field">
+    {{flexberry-field
+      readonly=readonly
+      value=model.carNumber
+      class=(if (v-get validationModel "carNumber" "isInvalid") "error")
+      label=(t "forms.i-i-s-async-open-xml-reports-sample-car-e.carNumber-caption")
+      data-test-i-i-s-async-open-xml-reports-sample-car-e-carNumber=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "carNumber" "message")}}
+  </div>
+  <div class="field" data-test-i-i-s-async-open-xml-reports-sample-car-e-carBody="true">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-car-e.carBody-caption"}}</label>
+    {{flexberry-dropdown
+      items=(flexberry-enum "i-i-s-async-open-xml-reports-sample-car-type")
+      value=model.carBody
+      class=(if (v-get validationModel "carBody" "isInvalid") "error")
+      readonly=readonly
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "carBody" "message")}}
+  </div>
+  <div class="field">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-car-e.carDate-caption"}}</label>
+    {{flexberry-simpledatetime
+      type="date"
+      readonly=readonly
+      value=model.carDate
+      class=(if (v-get validationModel "carDate" "isInvalid") "error")
+      data-test-i-i-s-async-open-xml-reports-sample-car-e-carDate=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "carDate" "message")}}
+  </div>
+  <div class="field">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-car-e.brand-caption"}}</label>
+    {{flexberry-lookup
+      choose="showLookupDialog"
+      remove="removeLookupValue"
+      value=model.brand
+      displayAttributeName="name"
+      autocomplete=true
+      relationName="brand"
+      projection="BrandL"
+      title=(t "forms.i-i-s-async-open-xml-reports-sample-car-e.brand-caption")
+      readonly=readonly
+      componentName="brandLookup"
+      class=(if (v-get validationModel "brand" "isInvalid") "error")
+      data-test-i-i-s-async-open-xml-reports-sample-car-e-brand=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "brand" "message")}}
+  </div>
+  <div class="field">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-car-e.sparePart-caption"}}</label>
+    {{flexberry-groupedit
+      componentName="sparePartGroupEdit"
+      mainModelProjection=modelProjection
+      modelProjection=modelProjection.attributes.sparePart
+      content=model.sparePart
+      readonly=readonly
+      orderable=false
+      class=(if (v-get validationModel "sparePart" "isInvalid") "error")
+      data-test-i-i-s-async-open-xml-reports-sample-car-e-sparePart=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "sparePart" "message")}}
+  </div>
+</form>

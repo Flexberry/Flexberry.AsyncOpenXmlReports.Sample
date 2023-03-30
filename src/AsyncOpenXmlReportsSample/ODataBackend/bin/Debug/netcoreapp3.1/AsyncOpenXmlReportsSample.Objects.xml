@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AsyncOpenXmlReportsSample.Objects</name>
+    </assembly>
+    <members>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.Brand">
+            <summary>
+            Brand.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Brand.Name">
+            <summary>
+            Name.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.Brand.Views">
+            <summary>
+            Class views container.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Brand.Views.BrandE">
+            <summary>
+            "BrandE" view.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Brand.Views.BrandL">
+            <summary>
+            "BrandL" view.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.Car">
+            <summary>
+            Car.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.CarBody">
+            <summary>
+            CarBody.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.CarDate">
+            <summary>
+            CarDate.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.CarNumber">
+            <summary>
+            CarNumber.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.Brand">
+            <summary>
+            Car.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.SparePart">
+            <summary>
+            Car.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.Car.Views">
+            <summary>
+            Class views container.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.Views.CarE">
+            <summary>
+            "CarE" view.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.Car.Views.CarL">
+            <summary>
+            "CarL" view.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.CarType">
+            <summary>
+            Car type.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.ObjectsMarker">
+            <summary>
+            Class for determinate objects assembly in DI.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.ProducingCountry">
+            <summary>
+            Producing country.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.ProducingCountry.Name">
+            <summary>
+            Name.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.ProducingCountry.Views">
+            <summary>
+            Class views container.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.ProducingCountry.Views.ProducingCountryE">
+            <summary>
+            "ProducingCountryE" view.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.ProducingCountry.Views.ProducingCountryL">
+            <summary>
+            "ProducingCountryL" view.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.SparePart">
+            <summary>
+            Spare part.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.Name">
+            <summary>
+            Name.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.Quantity">
+            <summary>
+            Quantity.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.Used">
+            <summary>
+            Used.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.ProducingCountry">
+            <summary>
+            Spare part.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.Car">
+            <summary>
+            мастеровая ссылка на шапку IIS.AsyncOpenXmlReportsSample.Car.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.SparePart.Views">
+            <summary>
+            Class views container.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.SparePart.Views.SparePartE">
+            <summary>
+            "SparePartE" view.
+            </summary>
+        </member>
+        <member name="T:IIS.AsyncOpenXmlReportsSample.DetailArrayOfSparePart">
+            <summary>
+            Detail array of SparePart.
+            </summary>
+        </member>
+        <member name="M:IIS.AsyncOpenXmlReportsSample.DetailArrayOfSparePart.#ctor(IIS.AsyncOpenXmlReportsSample.Car)">
+            <summary>
+            Construct detail array.
+            </summary>
+            <summary>
+            Returns object with type SparePart by index.
+            </summary>
+            <summary>
+            Adds object with type SparePart.
+            </summary>
+        </member>
+    </members>
+</doc>

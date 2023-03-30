@@ -1,0 +1,15 @@
+﻿{
+  "newForm": "i-i-s-async-open-xml-reports-sample-brand-e",
+  "editForm": "i-i-s-async-open-xml-reports-sample-brand-e",
+  "external": false,
+  "caption": "Brand",
+  "name": "IISAsyncOpenXmlReportsSampleBrandL",
+  "className": "BrandL",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-brand",
+      "modelProjection": "BrandL"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+﻿version: '3'
+
+services:
+  app:
+    image: asyncopenxmlreportssample/app
+    links:
+      - app-postgres-db:app-postgres-db
+    ports:
+      - 80:80
+    environment:
+      - UploadUrl=Uploads
+      - BackendRoot=https://localhost
+      - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
+
+  app-postgres-db:
+    image: asyncopenxmlreportssample/postgre-sql
+    volumes:
+      - DB:/var/lib/pgsql/data/
+    ports:
+      - 5432:5432
+volumes:
+  DB:

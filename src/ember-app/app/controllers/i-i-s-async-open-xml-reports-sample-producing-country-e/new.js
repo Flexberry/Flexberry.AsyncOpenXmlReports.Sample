@@ -1,0 +1,4 @@
+import IISAsyncOpenXmlReportsSampleProducingCountryEController from '../i-i-s-async-open-xml-reports-sample-producing-country-e';
+
+var IISAsyncOpenXmlReportsSampleProducingCountryENewController = IISAsyncOpenXmlReportsSampleProducingCountryEController;
+export default IISAsyncOpenXmlReportsSampleProducingCountryENewController;

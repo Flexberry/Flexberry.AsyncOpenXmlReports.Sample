@@ -1,0 +1,12 @@
+{
+  "name": "ember-app",
+  "dependencies": {
+    "devicejs": "0.2.7",
+    "blueimp-file-upload": "9.11.2",
+    "semantic-ui": "2.4.1",
+    "seiyria-bootstrap-slider": "6.0.6",
+    "jquery-minicolors": "2.3.4",
+    "js-beautify": "1.6.4",
+    "moment": "~2.22.0"
+  }
+}

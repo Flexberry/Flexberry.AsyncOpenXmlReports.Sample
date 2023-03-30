@@ -1,0 +1,23 @@
+﻿FROM wnameless/oracle-xe-11g
+
+COPY Oracle.create.sql /docker/
+
+ARG TAG=1.0.0-beta01-oracle
+
+RUN apt-get update ; apt-get -y  install mc htop wget ; \
+  export ORACLE_ALLOW_REMOTE=true; \
+  export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe; \
+  export ORACLE_SID=XE; \
+  export PATH=/u01/app/oracle/product/11.2.0/xe/bin:$PATH; \
+  /usr/sbin/startup.sh ; \
+  cd /docker;\
+  echo "
+CREATE USER FLEXBERRYUSER IDENTIFIED BY jhv DEFAULT TABLESPACE users  quota unlimited on users  TEMPORARY TABLESPACE temp;
+GRANT CREATE SESSION TO FLEXBERRYUSER;
+GRANT CREATE TABLE TO FLEXBERRYUSER;
+GRANT CREATE USER TO FLEXBERRYUSER;
+GRANT GRANT ANY PRIVILEGE TO FLEXBERRYUSER;
+QUIT" > create.sql
+  sqlplus system/oracle @host/create.sql; \
+  sqlplus FLEXBERRYUSER/jhv @Oracle.create.sql; \
+  /etc/init.d/oracle-xe stop;

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>IIS.AsyncOpenXmlReportsSample</RootNamespace>
+    <AssemblyName>AsyncOpenXmlReportsSample.Objects</AssemblyName>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NewPlatform.Flexberry.StyleCopRuleset" Version="1.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.ORM" Version="7.0.0"></PackageReference>
+  </ItemGroup>
+  <ItemGroup />
+</Project>

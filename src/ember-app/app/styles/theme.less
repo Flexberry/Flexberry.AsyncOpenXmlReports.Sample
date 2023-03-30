@@ -1,0 +1,59 @@
+/*******************************
+        Import Directives
+*******************************/
+
+@theme : @@element;
+@associate-name: "@{element}-associate";
+@associate: @@associate-name;
+
+
+/*--------------------
+   Site Variables
+---------------------*/
+
+/* Default */
+@import "@{semanticUiThemesFolder}/default/globals/site.variables";
+
+/* Packaged Theme */
+@import (optional) "@{semanticUiThemesFolder}/@{site}/globals/site.variables";
+
+@import (optional) "@{emberFlexberryThemesFolder}/@{theme}/globals/site.variables";
+
+@import (optional) "@{siteFolder}/@{theme}/globals/site.variables";
+
+/*-------------------
+ Component Variables
+---------------------*/
+
+/* Default */
+@import (optional) "@{semanticUiThemesFolder}/default/@{type}s/@{element}.variables";
+
+@import (optional) "@{emberFlexberryThemesFolder}/@{theme}/@{associate}.variables";
+
+/* Site Theme */
+@import (optional) "@{emberFlexberryThemesFolder}/@{theme}/@{type}s/@{element}.variables";
+
+@import (optional) "@{siteFolder}/@{theme}/@{type}s/@{element}.variables";
+
+
+/*******************************
+             Mix-ins
+*******************************/
+
+/*------------------
+       Fonts
+-------------------*/
+
+.loadFonts() when (@importGoogleFonts) {
+  @import url('@{googleProtocol}fonts.googleapis.com/css?family=@{googleFontRequest}');
+}
+
+/*------------------
+     Overrides
+-------------------*/
+
+.loadUIOverrides() {
+  @import (optional) "@{semanticUiThemesFolder}/default/@{type}s/@{element}.overrides";
+  @import (optional) "@{emberFlexberryThemesFolder}/@{theme}/@{type}s/@{element}.overrides";
+  @import (optional) "@{siteFolder}/@{theme}/@{type}s/@{element}.overrides";
+}

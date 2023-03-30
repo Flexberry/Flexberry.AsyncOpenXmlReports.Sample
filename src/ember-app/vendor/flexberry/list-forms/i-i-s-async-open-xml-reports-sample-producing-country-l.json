@@ -1,0 +1,15 @@
+﻿{
+  "newForm": "i-i-s-async-open-xml-reports-sample-producing-country-e",
+  "editForm": "i-i-s-async-open-xml-reports-sample-producing-country-e",
+  "external": false,
+  "caption": "Producing country",
+  "name": "IISAsyncOpenXmlReportsSampleProducingCountryL",
+  "className": "ProducingCountryL",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-producing-country",
+      "modelProjection": "ProducingCountryL"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+﻿{
+  "name": "IISAsyncOpenXmlReportsSampleProducingCountry",
+  "modelName": "i-i-s-async-open-xml-reports-sample-producing-country",
+  "className": "ProducingCountry",
+  "nameSpace": "IIS.AsyncOpenXmlReportsSample",
+  "parentModelName": null,
+  "parentClassName": null,
+  "attrs": [
+    {
+      "name": "name",
+      "type": "string",
+      "flexberryType": "string",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    }
+  ],
+  "belongsTo": [],
+  "hasMany": [],
+  "projections": [
+    {
+      "name": "ProducingCountryE",
+      "modelName": "i-i-s-async-open-xml-reports-sample-producing-country",
+      "attrs": [
+        {
+          "name": "name",
+          "caption": "Name",
+          "hidden": false,
+          "index": 0
+        }
+      ],
+      "belongsTo": [],
+      "hasMany": []
+    },
+    {
+      "name": "ProducingCountryL",
+      "modelName": "i-i-s-async-open-xml-reports-sample-producing-country",
+      "attrs": [
+        {
+          "name": "name",
+          "caption": "Name",
+          "hidden": false,
+          "index": 0
+        }
+      ],
+      "belongsTo": [],
+      "hasMany": []
+    }
+  ],
+  "stored": true,
+  "offline": true,
+  "external": false
+}

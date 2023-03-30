@@ -1,0 +1,14 @@
+﻿{
+  "propertyLookup": [],
+  "external": false,
+  "caption": "Brand",
+  "name": "IISAsyncOpenXmlReportsSampleBrandE",
+  "className": "BrandE",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-brand",
+      "modelProjection": "BrandE"
+    }
+  ]
+}

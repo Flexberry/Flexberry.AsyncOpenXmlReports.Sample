@@ -1,0 +1,36 @@
+﻿{
+  "applicationCaption": "Async open xml reports sample",
+  "applicationTitle": "Async open xml reports sample",
+  "items": [
+    {
+      "link": null,
+      "menuName": "async-open-xml-reports-sample",
+      "caption": "AsyncOpenXmlReportsSample",
+      "title": "AsyncOpenXmlReportsSample",
+      "children": [
+        {
+          "link": "i-i-s-async-open-xml-reports-sample-brand-l",
+          "menuName": null,
+          "caption": "Brand",
+          "title": "",
+          "children": null
+        },
+        {
+          "link": "i-i-s-async-open-xml-reports-sample-car-l",
+          "menuName": null,
+          "caption": "Car",
+          "title": "",
+          "children": null
+        },
+        {
+          "link": "i-i-s-async-open-xml-reports-sample-producing-country-l",
+          "menuName": null,
+          "caption": "Producing country",
+          "title": "",
+          "children": null
+        }
+      ]
+    }
+  ],
+  "mobile": true
+}

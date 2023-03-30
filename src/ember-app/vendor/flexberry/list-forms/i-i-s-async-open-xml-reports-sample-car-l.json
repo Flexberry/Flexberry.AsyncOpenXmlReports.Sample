@@ -1,0 +1,15 @@
+﻿{
+  "newForm": "i-i-s-async-open-xml-reports-sample-car-e",
+  "editForm": "i-i-s-async-open-xml-reports-sample-car-e",
+  "external": false,
+  "caption": "Car",
+  "name": "IISAsyncOpenXmlReportsSampleCarL",
+  "className": "CarL",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-car",
+      "modelProjection": "CarL"
+    }
+  ]
+}

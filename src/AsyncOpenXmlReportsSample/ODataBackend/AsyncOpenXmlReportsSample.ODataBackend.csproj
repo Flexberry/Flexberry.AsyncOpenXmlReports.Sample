@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>IIS.AsyncOpenXmlReportsSample</RootNamespace>
+    <AssemblyName>AsyncOpenXmlReportsSample.ODataBackend</AssemblyName>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NewPlatform.Flexberry.StyleCopRuleset" Version="1.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.ORM.ODataService" Version="7.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.LockService" Version="3.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.LogService.Objects" Version="4.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.ORM.PostgresDataService" Version="7.0.0"></PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.4"></PackageReference>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.2"></PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.UserSettingsService" Version="4.0.0"></PackageReference>
+    <PackageReference Include="Unity.Microsoft.DependencyInjection" Version="5.11.5"></PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Objects\AsyncOpenXmlReportsSample.Objects.csproj"></ProjectReference>
+  </ItemGroup>
+</Project>

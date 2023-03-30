@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>IIS.AsyncOpenXmlReportsSample</RootNamespace>
+    <AssemblyName>AsyncOpenXmlReportsSample.Tests</AssemblyName>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"></PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NewPlatform.Flexberry.StyleCopRuleset" Version="1.0.0"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.ORM" Version="7.0.0"></PackageReference>
+    <PackageReference Include="Moq" Version="4.18.4"></PackageReference>
+    <PackageReference Include="xunit" Version="2.4.2"></PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5"></PackageReference>
+    <PackageReference Include="NewPlatform.Flexberry.ORM.PostgresDataService" Version="7.0.0"></PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Objects\AsyncOpenXmlReportsSample.Objects.csproj"></ProjectReference>
+  </ItemGroup>
+</Project>

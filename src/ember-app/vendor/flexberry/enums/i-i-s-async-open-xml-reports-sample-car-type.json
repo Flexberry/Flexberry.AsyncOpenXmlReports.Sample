@@ -1,0 +1,9 @@
+﻿{
+  "nameSpace": "IIS.AsyncOpenXmlReportsSample",
+  "className": "CarType",
+  "enumObjects": {
+    "Coupe": "",
+    "Sedan": "",
+    "Crossover": ""
+  }
+}
