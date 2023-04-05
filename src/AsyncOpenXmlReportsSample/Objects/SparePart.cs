@@ -28,7 +28,7 @@ namespace IIS.AsyncOpenXmlReportsSample
     // *** End programmer edit section *** (SparePart CustomAttributes)
     [AutoAltered()]
     [Caption("Spare part")]
-    [AccessType(ICSSoft.STORMNET.AccessType.none)]
+    [AccessType(ICSSoft.STORMNET.AccessType.@this)]
     [View("SparePartE", new string[] {
             "Name as \'Name\'",
             "Quantity as \'Quantity\'",

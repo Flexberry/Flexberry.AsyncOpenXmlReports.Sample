@@ -4,6 +4,29 @@
         <name>AsyncOpenXmlReportsSample.ODataBackend</name>
     </assembly>
     <members>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.CurrentHttpUserService.Login">
+            <summary>
+            Логин пользователя.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.CurrentHttpUserService.Domain">
+            <summary>
+            Домен пользователя.
+            </summary>
+        </member>
+        <member name="P:IIS.AsyncOpenXmlReportsSample.CurrentHttpUserService.FriendlyName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="M:IIS.AsyncOpenXmlReportsSample.CurrentHttpUserService.GetIdentityName">
+            <summary>
+            Получить имя текущего пользователя из текущего HTTP контекста.
+            </summary>
+            <returns>
+            Имя текущего пользователя.
+            </returns>
+        </member>
         <member name="T:IIS.AsyncOpenXmlReportsSample.Program">
             <summary>
             Основной класс приложения.
@@ -56,6 +79,12 @@
             </remarks>
             <param name="app">An application configurator.</param>
             <param name="env">Information about web hosting environment.</param>
+        </member>
+        <member name="M:IIS.AsyncOpenXmlReportsSample.Startup.AfterGet(ICSSoft.STORMNET.DataObject[]@)">
+            <summary>
+            Выполнить дополнительную обработку объекта после вычитки.
+            </summary>
+            <param name="objs">Вычитанный объект.</param>
         </member>
         <member name="M:IIS.AsyncOpenXmlReportsSample.Startup.ConfigureContainer(Unity.IUnityContainer)">
             <summary>

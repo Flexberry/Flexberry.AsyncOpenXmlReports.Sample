@@ -27,7 +27,7 @@ namespace IIS.AsyncOpenXmlReportsSample
 
     // *** End programmer edit section *** (Brand CustomAttributes)
     [AutoAltered()]
-    [AccessType(ICSSoft.STORMNET.AccessType.none)]
+    [AccessType(ICSSoft.STORMNET.AccessType.@this)]
     [View("BrandE", new string[] {
             "Name as \'Name\'"})]
     [View("BrandL", new string[] {

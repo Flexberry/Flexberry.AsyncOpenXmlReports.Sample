@@ -9,13 +9,17 @@
     using Microsoft.AspNet.OData.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
+    using NewPlatform.Flexberry.Caching;
     using NewPlatform.Flexberry.ORM.ODataService.Extensions;
     using NewPlatform.Flexberry.ORM.ODataService.Files;
     using NewPlatform.Flexberry.ORM.ODataService.Model;
     using NewPlatform.Flexberry.ORM.ODataService.WebApi.Extensions;
     using NewPlatform.Flexberry.ORM.ODataServiceCore.Common.Exceptions;
+    using NewPlatform.Flexberry.Security;
     using NewPlatform.Flexberry.Services;
     using Unity;
 
@@ -59,6 +63,19 @@
 
             services.AddOData();
 
+            services.AddAuthentication("Bearer")
+              .AddJwtBearer("Bearer", options =>
+              {
+                options.Authority = "http://localhost:8080/realms/master/";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                };
+                options.RequireHttpsMetadata = false;
+              });
+
+            services.AddAuthorization();
+
             services.AddControllers().AddControllersAsServices();
 
             services.AddCors();
@@ -84,6 +101,9 @@
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
@@ -102,11 +122,31 @@
                     typeof(ApplicationLog).Assembly,
                     typeof(UserSetting).Assembly,
                     typeof(Lock).Assembly,
+                    typeof(Agent).Assembly,
+                    typeof(ICSSoft.Services.UserSetting).Assembly,
+                    typeof(NewPlatform.Flexberry.FlexberryUserSetting).Assembly,
                 };
                 var modelBuilder = new DefaultDataObjectEdmModelBuilder(assemblies, true);
 
                 var token = builder.MapDataObjectRoute(modelBuilder);
+
+                token.Events.CallbackAfterGet = AfterGet;
             });
+        }
+
+        /// <summary>
+        /// Выполнить дополнительную обработку объекта после вычитки.
+        /// </summary>
+        /// <param name="objs">Вычитанный объект.</param>
+        public static void AfterGet(ref DataObject[] objs)
+        {
+            foreach (var obj in objs)
+            {
+                if (obj.GetType() == typeof(Agent))
+                {
+                    ((Agent)obj).Pwd = null;
+                }
+            }
         }
 
         /// <summary>
@@ -128,6 +168,22 @@
 
             // FYI: сервис данных ходит в контейнер UnityFactory.
             container.RegisterInstance(Configuration);
+
+            container.RegisterType<IHttpContextAccessor, HttpContextAccessor>();
+
+            container.RegisterType<ICacheService, MemoryCacheService>();
+
+            // Регистрируем CurrentUserService.
+            ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
+            container.RegisterInstance<ICSSoft.Services.CurrentUserService.IUser>(userServise, InstanceLifetime.Singleton);
+
+            // Регистрируем SecurityManager. Общий на все датасервисы, будет разрешаться автоматически.
+            ISecurityManager emptySecurityManager = new EmptySecurityManager();
+            string securityConnectionString = Configuration.GetConnectionString("SecurityConnString");
+            IDataService securityDataService = new PostgresDataService(emptySecurityManager)
+            {
+                CustomizationString = securityConnectionString
+            };
 
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);
@@ -168,6 +224,27 @@
             {
                 throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
             }
+
+            ISecurityManager emptySecurityManager = new EmptySecurityManager();
+            string securityConnectionString = connStr;
+            IDataService securityDataService = new PostgresDataService(emptySecurityManager)
+            {
+                CustomizationString = securityConnectionString
+            };
+
+            ICacheService securityCacheService = new MemoryCacheService();
+            ISecurityManager securityManager = new SecurityManager(securityDataService, securityCacheService, true);
+            container.RegisterInstance<ISecurityManager>(securityManager, InstanceLifetime.Singleton);
+
+            IHttpContextAccessor contextAccesor = new HttpContextAccessor();
+            container.RegisterInstance<IHttpContextAccessor>(contextAccesor);
+            string mainConnectionString = connStr;
+            IDataService mainDataService = new PostgresDataService()
+            {
+                CustomizationString = mainConnectionString
+            };
+
+            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
 
             container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
             container.RegisterSingleton<IDataService, PostgresDataService>(
