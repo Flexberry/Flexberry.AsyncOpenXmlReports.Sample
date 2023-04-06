@@ -16,7 +16,7 @@ export default ListFormController.extend({
   appState: service(),
 
   actions: {
-    PrintCarList() {
+    CreateCarListReport() {
       let appState = this.get('appState');
       appState.loading();
 
