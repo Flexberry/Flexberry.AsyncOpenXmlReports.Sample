@@ -1,6 +1,7 @@
 import ListFormController from 'ember-flexberry/controllers/list-form';
 import $ from 'jquery';
 import config from '../config/environment';
+import { inject as service } from '@ember/service';
 
 export default ListFormController.extend({
   /**
@@ -12,10 +13,12 @@ export default ListFormController.extend({
    */
   editFormRoute: 'i-i-s-async-open-xml-reports-sample-car-e',
 
+  appState: service(),
+
   actions: {
     PrintCarList() {
-      //let appState = this.get('appState');
-      //appState.loading();
+      let appState = this.get('appState');
+      appState.loading();
 
       $.ajax({
         async: true,
@@ -34,7 +37,7 @@ export default ListFormController.extend({
           document.body.removeChild(link);
         },
         complete() {
-          //appState.reset();
+          appState.reset();
         }
       });
     },
