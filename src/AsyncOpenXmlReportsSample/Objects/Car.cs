@@ -27,7 +27,7 @@ namespace IIS.AsyncOpenXmlReportsSample
 
     // *** End programmer edit section *** (Car CustomAttributes)
     [AutoAltered()]
-    [AccessType(ICSSoft.STORMNET.AccessType.@this)]
+    [AccessType(ICSSoft.STORMNET.AccessType.none)]
     [View("CarE", new string[] {
             "CarNumber as \'Car number\'",
             "CarBody as \'Car body\'",

@@ -13,7 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.28" />
-    <PackageReference Include="NewPlatform.Flexberry.Security" Version="3.0.1-beta02" />
     <PackageReference Include="NewPlatform.Flexberry.StyleCopRuleset" Version="1.0.0"></PackageReference>
     <PackageReference Include="NewPlatform.Flexberry.ORM.ODataService" Version="7.0.0"></PackageReference>
     <PackageReference Include="NewPlatform.Flexberry.LockService" Version="3.0.0"></PackageReference>

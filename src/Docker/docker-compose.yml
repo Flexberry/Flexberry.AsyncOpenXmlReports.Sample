@@ -1,7 +1,7 @@
 ﻿version: '3'
 
 networks:
-  keycloak:
+  asyncopenxmlreportssample:
 
 services:
   app:
@@ -15,7 +15,7 @@ services:
       - BackendRoot=https://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
     networks:
-      - keycloak
+      - asyncopenxmlreportssample
 
   app-postgres-db:
     image: asyncopenxmlreportssample/postgre-sql
@@ -24,7 +24,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - keycloak
+      - asyncopenxmlreportssample
 
   keycloak:
     image: quay.io/keycloak/keycloak:19.0.1
@@ -38,7 +38,7 @@ services:
       KC_DB_USERNAME: flexberryuser
       KC_DB_PASSWORD: jhv
     networks:
-      - keycloak
+      - asyncopenxmlreportssample
     volumes:
       - KEYCLOAK:/opt/jboss/keycloak/standalone/data/
     command: start-dev

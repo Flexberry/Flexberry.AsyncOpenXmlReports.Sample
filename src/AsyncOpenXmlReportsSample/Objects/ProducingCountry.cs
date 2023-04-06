@@ -28,7 +28,7 @@ namespace IIS.AsyncOpenXmlReportsSample
     // *** End programmer edit section *** (ProducingCountry CustomAttributes)
     [AutoAltered()]
     [Caption("Producing country")]
-    [AccessType(ICSSoft.STORMNET.AccessType.@this)]
+    [AccessType(ICSSoft.STORMNET.AccessType.none)]
     [View("ProducingCountryE", new string[] {
             "Name as \'Name\'"})]
     [View("ProducingCountryL", new string[] {

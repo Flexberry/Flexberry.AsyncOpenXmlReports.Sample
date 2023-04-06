@@ -13,13 +13,11 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
-    using NewPlatform.Flexberry.Caching;
     using NewPlatform.Flexberry.ORM.ODataService.Extensions;
     using NewPlatform.Flexberry.ORM.ODataService.Files;
     using NewPlatform.Flexberry.ORM.ODataService.Model;
     using NewPlatform.Flexberry.ORM.ODataService.WebApi.Extensions;
     using NewPlatform.Flexberry.ORM.ODataServiceCore.Common.Exceptions;
-    using NewPlatform.Flexberry.Security;
     using NewPlatform.Flexberry.Services;
     using Unity;
 
@@ -122,31 +120,10 @@
                     typeof(ApplicationLog).Assembly,
                     typeof(UserSetting).Assembly,
                     typeof(Lock).Assembly,
-                    typeof(Agent).Assembly,
                     typeof(ICSSoft.Services.UserSetting).Assembly,
                     typeof(NewPlatform.Flexberry.FlexberryUserSetting).Assembly,
                 };
-                var modelBuilder = new DefaultDataObjectEdmModelBuilder(assemblies, true);
-
-                var token = builder.MapDataObjectRoute(modelBuilder);
-
-                token.Events.CallbackAfterGet = AfterGet;
             });
-        }
-
-        /// <summary>
-        /// Выполнить дополнительную обработку объекта после вычитки.
-        /// </summary>
-        /// <param name="objs">Вычитанный объект.</param>
-        public static void AfterGet(ref DataObject[] objs)
-        {
-            foreach (var obj in objs)
-            {
-                if (obj.GetType() == typeof(Agent))
-                {
-                    ((Agent)obj).Pwd = null;
-                }
-            }
         }
 
         /// <summary>
@@ -170,8 +147,6 @@
             container.RegisterInstance(Configuration);
 
             container.RegisterType<IHttpContextAccessor, HttpContextAccessor>();
-
-            container.RegisterType<ICacheService, MemoryCacheService>();
 
             // Регистрируем CurrentUserService.
             ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
@@ -231,10 +206,6 @@
             {
                 CustomizationString = securityConnectionString
             };
-
-            ICacheService securityCacheService = new MemoryCacheService();
-            ISecurityManager securityManager = new SecurityManager(securityDataService, securityCacheService, true);
-            container.RegisterInstance<ISecurityManager>(securityManager, InstanceLifetime.Singleton);
 
             IHttpContextAccessor contextAccesor = new HttpContextAccessor();
             container.RegisterInstance<IHttpContextAccessor>(contextAccesor);
