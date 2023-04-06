@@ -20,7 +20,7 @@ export default ListFormController.extend({
       $.ajax({
         async: true,
         cache: false,
-        type: 'POST',
+        type: 'GET',
         contentType: 'application/json; charset=utf-8',
         url: `${config.APP.backendUrls.root}/api/reports`,
         dataType: 'blob',

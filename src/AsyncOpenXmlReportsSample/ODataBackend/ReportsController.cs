@@ -20,7 +20,7 @@
             this.dataService = dataService;
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult Build()
         {
             var parameters = new Dictionary<string, object>();
