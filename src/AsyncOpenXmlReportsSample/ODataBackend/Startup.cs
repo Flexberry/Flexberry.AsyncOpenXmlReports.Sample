@@ -120,9 +120,11 @@
                     typeof(ApplicationLog).Assembly,
                     typeof(UserSetting).Assembly,
                     typeof(Lock).Assembly,
-                    typeof(ICSSoft.Services.UserSetting).Assembly,
                     typeof(NewPlatform.Flexberry.FlexberryUserSetting).Assembly,
                 };
+                var modelBuilder = new DefaultDataObjectEdmModelBuilder(assemblies, true);
+
+                var token = builder.MapDataObjectRoute(modelBuilder);
             });
         }
 
@@ -151,14 +153,6 @@
             // Регистрируем CurrentUserService.
             ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
             container.RegisterInstance<ICSSoft.Services.CurrentUserService.IUser>(userServise, InstanceLifetime.Singleton);
-
-            // Регистрируем SecurityManager. Общий на все датасервисы, будет разрешаться автоматически.
-            ISecurityManager emptySecurityManager = new EmptySecurityManager();
-            string securityConnectionString = Configuration.GetConnectionString("SecurityConnString");
-            IDataService securityDataService = new PostgresDataService(emptySecurityManager)
-            {
-                CustomizationString = securityConnectionString
-            };
 
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);
