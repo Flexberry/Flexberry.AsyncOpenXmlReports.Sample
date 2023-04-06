@@ -49,9 +49,9 @@ namespace IIS.AsyncOpenXmlReportsSample
         private string fCarNumber;
         
         private IIS.AsyncOpenXmlReportsSample.CarType fCarBody;
-        
-        private System.DateTime fCarDate = System.DateTime.Parse("DateTime.Now");
-        
+
+        private System.DateTime fCarDate = DateTime.Now;
+
         private IIS.AsyncOpenXmlReportsSample.Brand fBrand;
         
         private IIS.AsyncOpenXmlReportsSample.DetailArrayOfSparePart fSparePart;
