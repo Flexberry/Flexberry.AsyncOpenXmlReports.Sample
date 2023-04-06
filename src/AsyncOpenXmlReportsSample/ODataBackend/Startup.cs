@@ -120,7 +120,6 @@
                     typeof(ApplicationLog).Assembly,
                     typeof(UserSetting).Assembly,
                     typeof(Lock).Assembly,
-                    typeof(NewPlatform.Flexberry.FlexberryUserSetting).Assembly,
                 };
                 var modelBuilder = new DefaultDataObjectEdmModelBuilder(assemblies, true);
 
