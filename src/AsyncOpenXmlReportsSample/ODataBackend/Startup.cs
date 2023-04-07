@@ -9,8 +9,10 @@
     using Microsoft.AspNet.OData.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
     using NewPlatform.Flexberry.ORM.ODataService.Extensions;
     using NewPlatform.Flexberry.ORM.ODataService.Files;
     using NewPlatform.Flexberry.ORM.ODataService.Model;
@@ -59,6 +61,19 @@
 
             services.AddOData();
 
+            services.AddAuthentication("Bearer")
+              .AddJwtBearer("Bearer", options =>
+              {
+                options.Authority = "http://localhost:8080/realms/master/";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                };
+                options.RequireHttpsMetadata = false;
+              });
+
+            services.AddAuthorization();
+
             services.AddControllers().AddControllersAsServices();
 
             services.AddCors();
@@ -83,6 +98,9 @@
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
@@ -129,6 +147,12 @@
             // FYI: сервис данных ходит в контейнер UnityFactory.
             container.RegisterInstance(Configuration);
 
+            container.RegisterType<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Регистрируем CurrentUserService.
+            ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
+            container.RegisterInstance<ICSSoft.Services.CurrentUserService.IUser>(userServise, InstanceLifetime.Singleton);
+
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);
         }
@@ -168,6 +192,23 @@
             {
                 throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
             }
+
+            ISecurityManager emptySecurityManager = new EmptySecurityManager();
+            string securityConnectionString = connStr;
+            IDataService securityDataService = new PostgresDataService(emptySecurityManager)
+            {
+                CustomizationString = securityConnectionString
+            };
+
+            IHttpContextAccessor contextAccesor = new HttpContextAccessor();
+            container.RegisterInstance<IHttpContextAccessor>(contextAccesor);
+            string mainConnectionString = connStr;
+            IDataService mainDataService = new PostgresDataService()
+            {
+                CustomizationString = mainConnectionString
+            };
+
+            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
 
             container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
             container.RegisterSingleton<IDataService, PostgresDataService>(

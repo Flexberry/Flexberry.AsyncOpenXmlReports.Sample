@@ -1,4 +1,4 @@
-﻿FROM node:10 as ember_app
+﻿FROM node:12 as ember_app
 
 COPY /src/ember-app /ember-app
 

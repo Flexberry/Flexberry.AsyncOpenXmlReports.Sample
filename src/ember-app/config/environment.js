@@ -3,6 +3,7 @@
 module.exports = function(environment) {
   // Replace this local address to remote when backed will be published.
   var backendUrl = 'http://localhost:80';
+  var authorityUrl = 'http://localhost:8080';
 
   if (environment === 'development-loc') {
     // Use `ember s -e development-loc` command for local backend usage.
@@ -30,6 +31,15 @@ module.exports = function(environment) {
         // Prevent Ember Data from overriding Date.parse.
         Date: false
       }
+    },
+    KeycloakAuthSettings: {
+      ClientOptions: {
+        url: authorityUrl,
+        realm: 'master',
+        clientId: 'ember-app'
+      },
+      checkLoginIframe: false, // Можно включить если будет https и авторизация на одном поддомене.
+      responseMode: 'query', // Для работоспособности редиректа после логина.
     },
 
     APP: {
