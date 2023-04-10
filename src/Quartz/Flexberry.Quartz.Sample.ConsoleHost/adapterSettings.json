@@ -1,0 +1,17 @@
+{
+  "UploadUrl": "Uploads",
+  "BackendRoot": "http://localhost",
+  "DefConnStr": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
+  "SecurityConnString": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "AllowedQuartzRoles": {
+    "TestReport": "admin"
+  }
+}
