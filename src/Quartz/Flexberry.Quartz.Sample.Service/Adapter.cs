@@ -73,26 +73,15 @@ namespace Flexberry.Quartz.Sample.Service
 
             var builder =
                 WebHost.CreateDefaultBuilder()
-                    .ConfigureAppConfiguration((hostingContext, config) =>
-                        {
-                            config.AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false);
-                        })
+                    .UseConfiguration(conf)
+                    //.ConfigureAppConfiguration((hostingContext, config) =>
+                    //    {
+                    //        config.AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false);
+                    //    })
                     .UseIISIntegration()
                     //.UseStartup<AdapterStartup>();
                     .ConfigureServices(adapterStartup.ConfigureServices)
                     .Configure(adapterStartup.Configure);
-
-            /*
-            var builder =
-                Host.CreateDefaultBuilder()
-                    .ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                        config.AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false);
-                    })
-                    //.UseIISIntegration()
-                    //.UseStartup<AdapterStartup>();
-                    .ConfigureServices(adapterStartup.ConfigureServices);
-                    //.Configure(adapterStartup.Configure);*/
 
             _webHost = builder.Build();
             _webHost.Run();
