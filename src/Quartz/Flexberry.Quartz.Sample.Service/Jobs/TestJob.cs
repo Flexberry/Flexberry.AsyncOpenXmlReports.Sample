@@ -1,10 +1,7 @@
 ﻿using Flexberry.Quartz.Sample.Service.RequestsObjects;
 using ICSSoft.STORMNET;
-using ICSSoft.STORMNET.Business;
 using Quartz;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Flexberry.Quartz.Sample.Service.Jobs

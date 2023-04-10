@@ -1,15 +1,9 @@
 ﻿using ICSSoft.STORMNET;
 using ICSSoft.STORMNET.Business;
-using ICSSoft.STORMNET.Security;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Unity;
 
 namespace Flexberry.Quartz.Sample.Service
 {

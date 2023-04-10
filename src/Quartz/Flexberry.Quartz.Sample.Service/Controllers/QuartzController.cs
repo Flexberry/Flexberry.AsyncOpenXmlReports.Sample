@@ -1,13 +1,10 @@
 ﻿using Flexberry.Quartz.Sample.Service.Jobs;
 using Flexberry.Quartz.Sample.Service.RequestsObjects;
 using ICSSoft.STORMNET;
-using ICSSoft.STORMNET.Business;
 using Microsoft.AspNetCore.Mvc;
 using Quartz;
 using Quartz.Impl;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Flexberry.Quartz.Sample.Service.Controllers
