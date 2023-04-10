@@ -18,16 +18,10 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
     {
         [HttpPost]
         [ActionName("TestReport")]
-        public StatusCodeResult TestReport([FromBody] TestReportRequest request)//, [FromServices] IDataService ds, [FromServices] IUserWithRoles user)
+        public StatusCodeResult TestReport([FromBody] TestReportRequest request)
         {
             LogService.LogDebugFormat("TestReport: params = '{0}'", request.ToString());
 
-            /*
-            user.Login = request.UserLogin;
-            user.Domain = request.UserDomain;
-            user.FriendlyName = request.UserFriendlyName;
-            user.Roles = request.UserRoles;
-            */
             var runTask = new Task(async () => {
                 StdSchedulerFactory factory = new StdSchedulerFactory();
                 IScheduler scheduler = await factory.GetScheduler();

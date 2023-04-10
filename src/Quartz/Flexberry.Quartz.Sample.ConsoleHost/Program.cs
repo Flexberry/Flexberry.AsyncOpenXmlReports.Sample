@@ -10,9 +10,6 @@ namespace Flexberry.Quartz.Sample.ConsoleHost
             var adapter = new Adapter();
             adapter.OnStart();
             Console.WriteLine("Adapter service host is started. Press any key to stop it and exit . . .");
-
-            //Console.ReadKey(true);
-            //adapter.OnStop();
         }
     }
 }

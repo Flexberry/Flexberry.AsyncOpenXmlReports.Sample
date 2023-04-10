@@ -39,15 +39,11 @@ namespace Flexberry.Quartz.Sample.Service
         public void ConfigureServices(IServiceCollection services)
         {
             string connStr = Configuration["DefConnStr"];
-            //var str = String.Join(Environment.NewLine, services.Select(x => x.ServiceType?.FullName));
 
             LogService.LogDebug("Adapter.ConfigureServices Start");
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
-            //services.AddMvcCore().AddFormatterMappings();
 
-            //services.AddSingleton<ISecurityManager, RoleSecurityManager>();
-            //services.AddScoped<IUserWithRoles, AdapterUserService>();
             services.AddSingleton<IDataService, PostgresDataService>((serviceProvider) =>
             {
                 return new PostgresDataService() { CustomizationString = connStr };
