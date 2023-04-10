@@ -1,10 +1,16 @@
 ﻿namespace IIS.AsyncOpenXmlReportsSample
 {
     using System;
+    using System.Collections.Generic;
+    using System.Text;
     using ICSSoft.Services;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
     using ICSSoft.STORMNET.Security;
+    using IIS.AsyncOpenXmlReportsSample.MailConfigurations;
+    using IIS.AsyncOpenXmlReportsSample.MailConfigurations.MailComponents;
+    using IIS.AsyncOpenXmlReportsSample.Services;
+    using IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates;
     using IIS.Caseberry.Logging.Objects;
     using Microsoft.AspNet.OData.Extensions;
     using Microsoft.AspNetCore.Builder;
@@ -80,6 +86,8 @@
             services
                 .AddHealthChecks()
                 .AddNpgSql(connStr);
+
+            services.Configure<MailConfigurations.EmailOptions>(this.Configuration.GetSection("Email"));
         }
 
         /// <summary>
@@ -155,6 +163,12 @@
 
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);
+
+            var emailOptions = new MailConfigurations.EmailOptions();
+            Configuration.GetSection("Email").Bind(emailOptions);
+            container.RegisterInstance(emailOptions);
+            container.RegisterType<Services.IEmailSender, Services.MailKitEmailService>();
+            SendStartUpLetter();
         }
 
         /// <summary>
@@ -213,6 +227,64 @@
             container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
             container.RegisterSingleton<IDataService, PostgresDataService>(
                 Inject.Property(nameof(PostgresDataService.CustomizationString), connStr));
+        }
+
+        /// <summary>
+        /// Отправить письмо о запуске почтового сервиса.
+        /// </summary>
+        public static void SendStartUpLetter()
+        {
+            var subject = "Запуск почтового сервиса";
+            string message = $"Настоящим письмом сообщаем об успешном запуске почтового сервиса. " +
+                            $"Настоятельно рекомендуем проверить наличие прикреплённого файла." +
+                            $"<br><br>" +
+                            $"Мы рады, что у Вас всё получилось!<br>" +
+                            $"<br><br>" +
+                            $"С уважением,<br>" +
+                            $"Служба поддержки сервиса рассылки отчётов.";
+            T4MailTemplate mailCommonRu = new T4MailTemplate()
+            {
+                Subject = subject,
+                HtmlMessage = message,
+                Greetings = $"Доброго времени суток, мой юный друг!",
+            };
+            string messageBody = mailCommonRu.TransformText();
+
+            MailDataBase mailData = new MailDataBase()
+            {
+                From = new Contact("sender", "mailsender@neoplatform.ru"),
+                To = new List<Contact>()
+                {
+                    new Contact("recipient 1", "recipient1@neoplatform.ru"),
+                },
+                CopyTo = new List<Contact>()
+                {
+                    new Contact("recipient to copy", "recipientcopy@neoplatform.ru"),
+                },
+                Subject = subject,
+                Body = messageBody,
+            };
+
+            string s = "Раз содержимое этого файла предстало перед Вашим взором, " +
+                "то мы поздравляем с очередным успехом!\n" +
+                "Верьте в себя и у Вас всё обязательно получится!";
+            byte[] bitString = Encoding.UTF8.GetBytes(s);
+            AttachmentFile attachmentFile = new AttachmentFile()
+            {
+                Name = "attachment.txt",
+                Body = bitString,
+            };
+
+            try
+            {
+                var container = UnityFactory.GetContainer();
+                var emailService = container.Resolve<IEmailSender>();
+                emailService.SendEmail(mailData, attachmentFile);
+            }
+            catch (Exception ex)
+            {
+                LogService.LogError($"SendMail ERROR", ex);
+            }
         }
     }
 }

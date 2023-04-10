@@ -1,0 +1,123 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title><#= this.Subject #></title>
+
+</head>
+<body>
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
+<tbody>
+<tr>
+<td valign="top" style="padding:0cm 0cm 0cm 0cm">
+  <div align="center">
+    <table border="1" cellspacing="0" cellpadding="0" width="0" style="width:450.0pt;border-collapse:collapse;border:none">
+      <tbody>
+        <tr>
+          <td valign="top" style="border-top:none;border-left:solid #eeeeee 1.0pt;border-bottom:none;border-right:solid #eeeeee 1.0pt;padding:0cm 0cm 0cm 0cm">
+            <div align="center">
+              <table border="0" cellspacing="0" cellpadding="0" width="0" style="width:100%;border-collapse:collapse">
+                <tbody>
+                  <tr>
+                  <td align="center" width="100%" style="width:33.0%;background:#730c86;padding:15.0pt 15.0pt 15.0pt 15.0pt"">
+                    <a href="<#= this.PublishedSiteUrl #>" target="_blank"><img width="150" alt="Flexberry platform" src="cid:logoIconCid"></a>
+                  </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" style="border-top:none;border-left:solid #eeeeee 1.0pt;border-bottom:none;border-right:solid #eeeeee 1.0pt;background:white;padding:0cm 0cm 0cm 0cm">
+            <div align="center">
+              <table border="0" cellspacing="0" cellpadding="0" width="0" style="width:450.0pt;border-collapse:collapse">
+                <tbody>
+                  <tr>
+                    <td valign="top" style="padding:0cm 0cm 0cm 0cm">
+                      <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
+                        <tbody>
+                          <tr>
+                            <td valign="top" style="padding:22.5pt 22.5pt 22.5pt 22.5pt">
+                              <div>
+                                <h2><span style="font-family:&quot;Arial&quot;,sans-serif;color:#333333"><#= this.Greetings #></span></h2>
+                                <table border="0" cellspacing="0" cellpadding="0" width="0" style="width:450.0pt;border-collapse:collapse">
+                                  <tbody>
+                                    <tr>
+                                      <td style="padding:0cm 0cm 0cm 0cm">
+                                        <table border="0" cellspacing="0" cellpadding="0" align="left" width="0" style="width:362.5pt;border-collapse:collapse">
+                                          <tbody>
+                                            <tr>
+                                              <td style="padding:6.0pt 6.0pt 12.0pt 6.0pt">
+                                                <p><span style="font-size:11.0pt;line-height:15pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333"><#= this.HtmlMessage #></span></p>
+                                                <p></p>
+                                                
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td style="border:none;border-top:solid #dddddd 1.0pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">
+                                                <p><span style="font-size:11.0pt;line-height:15pt;font-family:&quot;Arial&quot;,sans-serif;color:#a2a2a2">	С уважением, команда Flexberry Platform</span></p>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" style="border:solid #eeeeee 1.0pt;border-top:none;background-color:#f4f4f4;padding:0cm 0cm 0cm 0cm">
+            <div align="center">
+              <table border="0" cellspacing="0" cellpadding="0" width="0" style="width:450.0pt;border-collapse:collapse;background-color:#f4f4f4">
+                <tbody>
+                  <tr>
+                    <td valign="top" style="padding:22.5pt 22.5pt 22.5pt 22.5pt">
+                      <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse;background-color:#f4f4f4">
+                        <tbody>
+                          <tr>
+                            <td style="border:none;background-color:#f4f4f4">
+                              <p align="center" style="text-align:center">
+                                <span style="font-size:8.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333">
+                                  <a href="https://vk.com/flexberry" target="_blank"><img alt="Vk" src="cid:SocIconVkCid"></a>&nbsp; &nbsp;
+                                  <a href="https://twitter.com/Flexberry" target="_blank"><img alt="Twitter" src="cid:SocIconTwCid"></a>&nbsp; &nbsp;
+                                  <a href="https://github.com/Flexberry" target="_blank"><img alt="Github" src="cid:SocIconGhCid"></a>&nbsp; &nbsp;
+                                  <a href="https://www.youtube.com/user/FlexberryPLATFORM" target="_blank"><img alt="Youtube" src="cid:SocIconYtCid"></a>&nbsp; &nbsp;
+                                  <a href="https://t.me/flexberry" target="_blank"><img alt="Telegram" src="cid:SocIconTgCid"></a>
+                                </span>
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
