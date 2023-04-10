@@ -51,6 +51,8 @@
         {
             string connStr = Configuration["DefConnStr"];
 
+            services.AddSignalR();
+
             services.AddMvcCore(
                     options =>
                     {
@@ -102,12 +104,19 @@
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials();
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
+                endpoints.MapHub<SignalRHub>("/SignalRTest");
             });
 
             app.UseODataService(builder =>
