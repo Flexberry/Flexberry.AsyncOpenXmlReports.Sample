@@ -1,5 +1,6 @@
 ﻿using Flexberry.Quartz.Sample.Service.RequestsObjects;
 using ICSSoft.STORMNET;
+using ICSSoft.STORMNET.Business;
 using Quartz;
 using System;
 using System.Threading.Tasks;
@@ -12,18 +13,17 @@ namespace Flexberry.Quartz.Sample.Service.Jobs
         {
             var dataMap = context.JobDetail.JobDataMap;
 
-            if (dataMap.ContainsKey("TestReportRequest"))
-            {
-                var request = dataMap["TestReportRequest"] as TestReportRequest;
+            CheckParam(dataMap, "TestReportRequest");
+            CheckParam(dataMap, "SQLDataService");
+            CheckParam(dataMap, "IUserWithRoles");
 
-                LogService.Log.Info("TestJob: request = " + request.ToString());
+            var request = dataMap["TestReportRequest"] as TestReportRequest;
+            var ds = dataMap["SQLDataService"] as SQLDataService;
+            var user = dataMap["IUserWithRoles"] as IUserWithRoles;
 
-                return Task.CompletedTask;
-            } 
-            else
-            {
-                throw new ArgumentNullException("context.JobDetail.JobDataMap[TestReportRequest]");
-            }
+            LogService.Log.Info($"TestJob: request = {request}; user = {user.Login}; ds = {ds.CustomizationString}");
+
+            return Task.CompletedTask;
         }
 
         public static IJobDetail GetTestDetail(string name, string group)
@@ -43,6 +43,14 @@ namespace Flexberry.Quartz.Sample.Service.Jobs
                 .Build();
 
             return trigger;
+        }
+
+        private void CheckParam(JobDataMap dataMap, string name)
+        {
+            if (!dataMap.ContainsKey(name) || dataMap[name] == null)
+            {
+                throw new ArgumentNullException($"context.JobDetail.JobDataMap[{name}]");
+            }
         }
     }
 }

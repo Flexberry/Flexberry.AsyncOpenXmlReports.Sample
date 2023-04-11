@@ -38,6 +38,7 @@ namespace Flexberry.Quartz.Sample.Service
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
+            services.AddScoped<IUserWithRoles, AdapterUserService>();
             services.AddSingleton<IDataService, PostgresDataService>((serviceProvider) =>
             {
                 return new PostgresDataService() { CustomizationString = connStr };
