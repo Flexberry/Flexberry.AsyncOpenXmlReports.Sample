@@ -7,7 +7,7 @@ SignalR Core это библиотека от компании Microsoft, кот
 ## Добавление серверной части (В бэкенде netcore 3.1)
 
 1) Дополнительных пакетов устанавливать не нужно. Создадим класс-хаб, наследуемый от базового Hub SignalR. Hub - это сущность через которую происходит взаимодействие с клиентом
-
+```
     namespace IIS.AsyncOpenXmlReportsSample
     {
         using System.Threading.Tasks;
@@ -21,11 +21,13 @@ SignalR Core это библиотека от компании Microsoft, кот
             }
         }
     }
+```
 
 В данном примере описана только одна функция. Эту функцию можно вызывать из клиента. Выполняет вызов функции "NotifyUser" у всех активных клиентов. В параметре функции передает Hi {username}
 
 2) Включим SignalR в *Startup.cs*
 
+```
     public void ConfigureServices(IServiceCollection services)
     {
     	....
@@ -53,19 +55,25 @@ SignalR Core это библиотека от компании Microsoft, кот
     		endpoints.MapHub<SignalRHub>("/SignalRTest");
     	});
     }
+```
 
 ## Добавление клиентской части (В ember 3)
 
 1) Установим пакет signalR
 
+```
     yarn add @aspnet/signalr
+```
 
 2) Добавим импорт в *ember-cli-build.js*
 
+```
       app.import('node_modules/@aspnet/signalr/dist/browser/signalr.js');
+```
 
 3) Добавим *utils/signalr.js*. Класс для коннекта signalR
 
+```
     import { resolve } from 'rsvp';
     
     class SignalRConnection {
@@ -96,9 +104,11 @@ SignalR Core это библиотека от компании Microsoft, кот
     }
     
     export default SignalRConnection;
+```
 
 4) Добавим инициализатор соедиения initializers/signalr.js
 
+```
     import SignalRConnection from '../utils/signalr';
     import config from '../config/environment';
     
@@ -106,9 +116,11 @@ SignalR Core это библиотека от компании Microsoft, кот
       let signalr = new SignalRConnection(config.APP.backendUrls.root + '/SignalRTest');
       application.register('realtime:signalr', signalr, { instantiate: false });
     }
+```
 
 5) Добавим миксин *mixins/signalr* для взаимодействия с SignalR
 
+```
     import { getOwner } from '@ember/application';
     import Mixin from '@ember/object/mixin';
     
@@ -146,12 +158,13 @@ SignalR Core это библиотека от компании Microsoft, кот
         console.log("SignalR notify User and send message - " + message);
       }
     });
-
+```
 
 В этом миксине мы также подписываем функцию *_notifyUser*   на вызов *NotifyUser* со стороны бэкенда.
 
 6)  В controllers/application.js добавим вызов подключения к SignalR и тестовый экшен, который вызывает функцию на бэкенде в Hub SignalR.
 
+```
     import Controller from '@ember/controller';
     ....
     import SignalRMixin from '../mixins/signalr';
@@ -176,3 +189,4 @@ SignalR Core это библиотека от компании Microsoft, кот
         },
       }
     });
+```
