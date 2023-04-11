@@ -50,6 +50,14 @@ namespace IIS.AsyncOpenXmlReportsSample
             return agentClaim;
         }
 
+        private string GetRoles()
+        {
+            var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
+            string roles = currentClaims?.FirstOrDefault(p => p.Type == "resource_access").Value;
+
+            return roles;
+        }
+
         private string GetEmail()
         {
             var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
