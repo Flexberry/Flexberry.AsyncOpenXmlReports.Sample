@@ -117,6 +117,10 @@ export default Controller.extend(SignalRMixin, {
   */
   appState: service(),
 
+  callSignarRTestNotificationModalOpen: false,
+
+  modalSignalRMessage: undefined,
+
   actions: {
     /**
       Call `updateWidthTrigger` for `objectlistviewEventsService`.
@@ -180,6 +184,9 @@ export default Controller.extend(SignalRMixin, {
       const signalR = this.getSignalR();
       if (signalR) {
         signalR.connection.invoke("SendNotifyUserMessage", this.userName);
+        let modalSignalRMessage = this.getModalSignalRMessage();
+        this.set('modalSignalRMessage', modalSignalRMessage);
+        this.set('callSignarRTestNotificationModalOpen', true);
       }
     },
   }

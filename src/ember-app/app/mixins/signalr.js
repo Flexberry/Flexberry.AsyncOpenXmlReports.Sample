@@ -30,8 +30,14 @@ export default Mixin.create({
     });
   },
 
+  modalSignalRMessage: undefined,
+
+  getModalSignalRMessage() {
+    return this.modalSignalRMessage;
+  },
+
   _notifyUser(message) {
-    // eslint-disable-next-line no-console
-    console.log("SignalR notify User and send message - " + message);
+    let modalSignalRMessage = "SignalR notify User and send message - " + message;
+    this.set('modalSignalRMessage', modalSignalRMessage);
   }
 });
