@@ -44,6 +44,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Flexberry_Flexberry.AsyncOpenXmlReports.Sample" /o:"flexberry" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet restore "src/AsyncOpenXmlReportsSample/AsyncOpenXmlReportsSample.sln" -NonInteractive
+          nuget restore "src/AsyncOpenXmlReportsSample/AsyncOpenXmlReportsSample.sln" -NonInteractive
           dotnet build /verbosity:quiet /p:WarningLevel=0 /p:Configuration=Debug "src/AsyncOpenXmlReportsSample/AsyncOpenXmlReportsSample.sln"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
