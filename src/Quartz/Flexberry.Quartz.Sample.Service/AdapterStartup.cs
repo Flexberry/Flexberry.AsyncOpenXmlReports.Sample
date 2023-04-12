@@ -8,6 +8,9 @@ using Unity;
 
 namespace Flexberry.Quartz.Sample.Service
 {
+    /// <summary>
+    /// Настройки для запуска хоста адаптера.
+    /// </summary>
     public class AdapterStartup
     {
         /// <summary>

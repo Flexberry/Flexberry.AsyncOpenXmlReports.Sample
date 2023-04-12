@@ -11,17 +11,24 @@ using Unity.Microsoft.DependencyInjection;
 
 namespace Flexberry.Quartz.Sample.Service
 {
+    /// <summary>
+    /// Адаптер для запуска хоста процессов, в котором будет веб-хост для получения запросов на формирование отчетов.
+    /// </summary>
     public class Adapter
     {
+        /// <summary>
+        /// Главный хост.
+        /// </summary>
         private IHost host = null;
 
+        /// <summary>
+        /// Главный контейнер зависимостей.
+        /// </summary>
         public static readonly IUnityContainer Container = UnityFactory.GetContainer();
 
-        public Adapter()
-        {
-
-        }
-
+        /// <summary>
+        /// Старт адаптера.
+        /// </summary>
         public void OnStart()
         {
             try
@@ -43,6 +50,9 @@ namespace Flexberry.Quartz.Sample.Service
             }
         }
 
+        /// <summary>
+        /// Завершение работы адаптера.
+        /// </summary>
         public void OnStop()
         {
             try
@@ -65,37 +75,57 @@ namespace Flexberry.Quartz.Sample.Service
 
         }
 
+        /// <summary>
+        /// Старт адаптера.
+        /// </summary>
         protected void Start()
         {
             Stop();
 
+            // Конфигурация.
             var conf = new ConfigurationBuilder()
                 .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
                 .Build();
 
+            // Настройки адаптера.
             var adapterStartup = new AdapterStartup(conf);
 
+            // Построение хоста.
             var builder = Host.CreateDefaultBuilder()
+                // Добавляем файл конфигурации.
                 .ConfigureAppConfiguration(cfg =>
                 {
                     cfg.AddJsonFile("adapterSettings.json");
                 })
+                // Включаем использование unity.
                 .UseUnityServiceProvider(Container)
+                // Настраиваем контейнер.
                 .ConfigureContainer<IUnityContainer>(adapterStartup.ConfigureContainer)
+                // Настраиваем сервисы.
                 .ConfigureServices((hostContext, services) =>
                 {
+                    // Добавляем сервис адаптера.
                     services.AddHostedService<AdapterService>();
                 });
 
             host = builder.Build();
+
+            // Запускаем хост.
             host.Run();
         }
 
+        /// <summary>
+        /// Завершение работы адаптера.
+        /// </summary>
         protected void Stop()
         {
             Close(ref host);
         }
 
+        /// <summary>
+        /// Закрытие хоста.
+        /// </summary>
+        /// <param name="serviceHost">Хост процессов.</param>
         protected void Close(ref IHost serviceHost)
         {
             if (serviceHost != null)

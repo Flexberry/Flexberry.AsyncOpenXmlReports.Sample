@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Flexberry.Quartz.Sample.Service.Controllers
 {
+    /// <summary>
+    /// Контроллер запуска отчетов с использованием Quartz.
+    /// </summary>
     [Route("api/quartz")]
     [ApiController]
     public class QuartzController : ControllerBase
@@ -30,12 +33,12 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
                 StdSchedulerFactory factory = new StdSchedulerFactory();
                 IScheduler scheduler = await factory.GetScheduler();
 
-                // and start it off
                 await scheduler.Start();
 
                 var job = TestJob.GetTestDetail("job1_" + request.Id, "group1_" + request.Id);
                 var trigger = TestJob.GetTestTrigger("trigger1_" + request.Id, "group1_" + request.Id);
 
+                // Добавим к задаче данные запроса.
                 job.JobDataMap.Add("TestReportRequest", request);
 
                 await scheduler.ScheduleJob(job, trigger);

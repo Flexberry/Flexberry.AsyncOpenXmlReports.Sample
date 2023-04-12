@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 namespace Flexberry.Quartz.Sample.Service
 {
+    /// <summary>
+    /// Интерфейс сервиса текущего пользователя с использованием ролей.
+    /// </summary>
     public interface IUserWithRoles : ICSSoft.Services.CurrentUserService.IUser
     {
         /// <summary>
-        /// Перечень ролей в строке, через запятую.
+        /// Роли пользователя в строке, через запятую.
         /// </summary>
         string Roles { get; set; }
 
