@@ -4,9 +4,9 @@ import { computed, observer } from '@ember/object';
 import { isNone } from '@ember/utils';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
+import SignalRMixin from '../mixins/signalr';
 
-
-export default Controller.extend({
+export default Controller.extend(SignalRMixin, {
   keycloakSession: service(),
 
   userName: computed('keycloakSession.tokenParsed.preferred_username', function() {
@@ -97,6 +97,8 @@ export default Controller.extend({
     } else {
       i18n.set('locale', shortCurrentLocale);
     }
+
+    this.signalRConnect();
   },
 
   /**
@@ -114,6 +116,10 @@ export default Controller.extend({
     @type AppStateService
   */
   appState: service(),
+
+  modalSignalRMessage: undefined,
+
+  callSignarRTestNotificationModalOpen: false,
 
   actions: {
     /**
@@ -174,14 +180,11 @@ export default Controller.extend({
       this.keycloakSession.logout();
     },
 
-    checkUser(){
-      $.ajax({
-        async: true,
-        headers: {'Authorization': `Bearer ${this.keycloakSession.keycloak['token']}`},
-        type: 'GET',
-        url: 'http://localhost:6500/api/UserInfo',
-        contentType: 'application/json; charset=utf-8'
-      });
+    callSignarRTestNotification() {
+      const signalR = this.getSignalR();
+      if (signalR) {
+        signalR.connection.invoke("SendNotifyUserMessage", this.userName);
+      }
     },
   }
 });

@@ -64,5 +64,8 @@
   },
   "engines": {
     "node": "^4.5 || 6.* || >= 7.*"
+  },
+  "dependencies": {
+    "@aspnet/signalr": "^1.0.27"
   }
 }
