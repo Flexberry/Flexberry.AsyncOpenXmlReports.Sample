@@ -62,6 +62,21 @@
 </div>
 <div class="ui main container">
   {{outlet "modal"}}
+  {{#if callSignarRTestNotificationModalOpen}}
+    {{#modal-dialog
+      title="SignalR Message"
+      useOkButton=true
+      useCloseButton=true
+      close=(action set "callSignarRTestNotificationModalOpen" false)
+      settings=(hash
+        context=".stackable.grid.container"
+      )
+    }}
+      <p> 
+        {{modalSignalRMessage}}
+      </p>      
+    {{/modal-dialog}}
+  {{/if}}
 </div>
 <div class="ui vertical footer segment">
   <div class="ui container flex-container">

@@ -117,6 +117,10 @@ export default Controller.extend(SignalRMixin, {
   */
   appState: service(),
 
+  modalSignalRMessage: undefined,
+
+  callSignarRTestNotificationModalOpen: false,
+
   actions: {
     /**
       Call `updateWidthTrigger` for `objectlistviewEventsService`.

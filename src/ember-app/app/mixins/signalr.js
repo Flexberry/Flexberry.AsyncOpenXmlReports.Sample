@@ -31,7 +31,8 @@ export default Mixin.create({
   },
 
   _notifyUser(message) {
-    // eslint-disable-next-line no-console
-    console.log("SignalR notify User and send message - " + message);
+    const modalSignalRMessage = "SignalR notify User and send message - " + message;
+    this.set('modalSignalRMessage', modalSignalRMessage);
+    this.set('callSignarRTestNotificationModalOpen', true);
   }
 });
