@@ -9,6 +9,15 @@
     <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Templates\MailTemplates\T4MailTemplate.tt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\MailTemplates\T4MailTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>T4MailTemplate1.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +40,13 @@
     <ProjectReference Include="..\Objects\AsyncOpenXmlReportsSample.Objects.csproj"></ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Templates\" />
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Templates\MailTemplates\T4MailTemplate1.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4MailTemplate.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

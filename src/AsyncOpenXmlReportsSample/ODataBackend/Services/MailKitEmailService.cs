@@ -23,6 +23,18 @@
             _emailOptions = emailOptions;
         }
 
+        public void SendT4Email(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
+        {
+            T4MailTemplate mailCommonRu = new T4MailTemplate()
+            {
+                Subject = subject,
+                HtmlMessage = body,
+                Greetings = $"Доброго времени суток, мой юный друг!",
+            };
+            string messageBody = mailCommonRu.TransformText();
+            SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
+        }
+
         public void SendEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
             try
@@ -77,12 +89,10 @@
             builder.TextBody = body;
             builder.HtmlBody = body;
 
-            if (bodyAttachments == null)
+            if (bodyAttachments != null)
             {
-                bodyAttachments = T4MailTemplateAttachments.GetT4MailTemplateAttachments();
+                builder = AddResources(builder, bodyAttachments);
             }
-
-            builder = AddResources(builder, bodyAttachments);
 
             if (fileBody != null)
             {

@@ -82,8 +82,6 @@
             services
                 .AddHealthChecks()
                 .AddNpgSql(connStr);
-
-            services.Configure<MailConfigurations.EmailOptions>(this.Configuration.GetSection("Email"));
         }
 
         /// <summary>
