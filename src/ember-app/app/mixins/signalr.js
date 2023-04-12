@@ -30,14 +30,6 @@ export default Mixin.create({
     });
   },
 
-  modalSignalRMessage: undefined,
-
-  callSignarRTestNotificationModalOpen: false,
-
-  getModalSignalRMessage() {
-    return this.modalSignalRMessage;
-  },
-
   _notifyUser(message) {
     const modalSignalRMessage = "SignalR notify User and send message - " + message;
     this.set('modalSignalRMessage', modalSignalRMessage);
