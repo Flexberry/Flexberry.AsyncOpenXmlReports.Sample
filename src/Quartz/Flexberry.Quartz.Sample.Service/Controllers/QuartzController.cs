@@ -32,11 +32,6 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
             user.FriendlyName = request.UserFriendlyName;
             user.Roles = request.UserRoles;
 
-            if (request.UserLogin == "Lenin")
-            {
-                System.Threading.Thread.Sleep(5000);
-            }
-
             var runTask = new Task(async () => {
                 StdSchedulerFactory factory = new StdSchedulerFactory();
                 IScheduler scheduler = await factory.GetScheduler();
