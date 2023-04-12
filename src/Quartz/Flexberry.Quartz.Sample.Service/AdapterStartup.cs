@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Unity;
 
 namespace Flexberry.Quartz.Sample.Service
 {
@@ -32,18 +33,9 @@ namespace Flexberry.Quartz.Sample.Service
         /// <param name="services">An collection of application services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            string connStr = Configuration["DefConnStr"];
-
             LogService.LogDebug("Adapter.ConfigureServices Start");
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
-
-            services.AddScoped<IUserWithRoles, AdapterUserService>();
-            services.AddTransient<IDataService, PostgresDataService>((serviceProvider) =>
-            {
-                return new PostgresDataService() { CustomizationString = connStr };
-            });
-
             services.AddCors();
 
             LogService.LogDebug("Adapter.ConfigureServices End");
@@ -69,6 +61,42 @@ namespace Flexberry.Quartz.Sample.Service
             });
 
             LogService.LogDebug("Adapter.Configure End");
+        }
+
+        /// <summary>
+        /// Configurate application container.
+        /// </summary>
+        /// <param name="container">Container to configure.</param>
+        public void ConfigureContainer(IUnityContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            // FYI: сервисы, в т.ч. контроллеры, создаются из дочернего контейнера.
+            while (container.Parent != null)
+            {
+                container = container.Parent;
+            }
+
+            string connStr = Configuration["DefConnStr"];
+
+            if (string.IsNullOrEmpty(connStr))
+            {
+                throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
+            }
+
+            container.RegisterInstance(Configuration);
+
+            container.RegisterFactory<IUserWithRoles>((cont) => new AdapterUserService(), FactoryLifetime.PerThread);
+
+            IDataService mainDataService = new PostgresDataService()
+            {
+                CustomizationString = connStr
+            };
+
+            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
         }
     }
 }

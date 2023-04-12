@@ -4,6 +4,7 @@ using ICSSoft.STORMNET.Business;
 using Quartz;
 using System;
 using System.Threading.Tasks;
+using Unity;
 
 namespace Flexberry.Quartz.Sample.Service.Jobs
 {
@@ -14,12 +15,16 @@ namespace Flexberry.Quartz.Sample.Service.Jobs
             var dataMap = context.JobDetail.JobDataMap;
 
             CheckParam(dataMap, "TestReportRequest");
-            CheckParam(dataMap, "SQLDataService");
-            CheckParam(dataMap, "IUserWithRoles");
 
             var request = dataMap["TestReportRequest"] as TestReportRequest;
-            var ds = dataMap["SQLDataService"] as SQLDataService;
-            var user = dataMap["IUserWithRoles"] as IUserWithRoles;
+            
+            var ds = Adapter.Container.Resolve<IDataService>();
+            var user = Adapter.Container.Resolve<IUserWithRoles>();
+
+            user.Login = request.UserLogin;
+            user.Domain = request.UserDomain;
+            user.FriendlyName = request.UserFriendlyName;
+            user.Roles = request.UserRoles;
 
             LogService.Log.Info($"TestJob: request = {request}; user = {user.Login}; ds = {ds.CustomizationString}");
 

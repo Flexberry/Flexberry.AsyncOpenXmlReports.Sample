@@ -1,7 +1,6 @@
 ﻿using Flexberry.Quartz.Sample.Service.Jobs;
 using Flexberry.Quartz.Sample.Service.RequestsObjects;
 using ICSSoft.STORMNET;
-using ICSSoft.STORMNET.Business;
 using Microsoft.AspNetCore.Mvc;
 using Quartz;
 using Quartz.Impl;
@@ -23,14 +22,9 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
         /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>./></returns>
         [HttpPost]
         [ActionName("TestReport")]
-        public StatusCodeResult TestReport([FromBody] TestReportRequest request, [FromServices] IDataService ds, [FromServices] IUserWithRoles user)
+        public StatusCodeResult TestReport([FromBody] TestReportRequest request)
         {
             LogService.LogDebugFormat("TestReport: params = '{0}'", request.ToString());
-
-            user.Login = request.UserLogin;
-            user.Domain = request.UserDomain;
-            user.FriendlyName = request.UserFriendlyName;
-            user.Roles = request.UserRoles;
 
             var runTask = new Task(async () => {
                 StdSchedulerFactory factory = new StdSchedulerFactory();
@@ -43,8 +37,6 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
                 var trigger = TestJob.GetTestTrigger("trigger1_" + request.Id, "group1_" + request.Id);
 
                 job.JobDataMap.Add("TestReportRequest", request);
-                job.JobDataMap.Add("SQLDataService", ds as SQLDataService);
-                job.JobDataMap.Add("IUserWithRoles", user);
 
                 await scheduler.ScheduleJob(job, trigger);
             });

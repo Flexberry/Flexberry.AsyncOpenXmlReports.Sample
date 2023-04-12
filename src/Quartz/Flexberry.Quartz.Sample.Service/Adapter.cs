@@ -1,16 +1,21 @@
-﻿using ICSSoft.STORMNET;
-using Microsoft.AspNetCore;
+﻿using ICSSoft.Services;
+using ICSSoft.STORMNET;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Unity;
+using Unity.Microsoft.DependencyInjection;
 
 namespace Flexberry.Quartz.Sample.Service
 {
     public class Adapter
     {
-        private IWebHost _webHost = null;
+        private IHost host = null;
+
+        public static readonly IUnityContainer Container = UnityFactory.GetContainer();
 
         public Adapter()
         {
@@ -70,23 +75,28 @@ namespace Flexberry.Quartz.Sample.Service
 
             var adapterStartup = new AdapterStartup(conf);
 
-            var builder =
-                WebHost.CreateDefaultBuilder()
-                    .UseConfiguration(conf)
-                    .UseIISIntegration()
-                    .ConfigureServices(adapterStartup.ConfigureServices)
-                    .Configure(adapterStartup.Configure);
+            var builder = Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(cfg =>
+                {
+                    cfg.AddJsonFile("adapterSettings.json");
+                })
+                .UseUnityServiceProvider(Container)
+                .ConfigureContainer<IUnityContainer>(adapterStartup.ConfigureContainer)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<AdapterService>();
+                });
 
-            _webHost = builder.Build();
-            _webHost.Run();
+            host = builder.Build();
+            host.Run();
         }
 
         protected void Stop()
         {
-            Close(ref _webHost);
+            Close(ref host);
         }
 
-        protected void Close(ref IWebHost serviceHost)
+        protected void Close(ref IHost serviceHost)
         {
             if (serviceHost != null)
             {
