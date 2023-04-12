@@ -39,9 +39,6 @@ export default ListFormController.extend({
           link.click();
           document.body.removeChild(link);
         },
-        error(response) {
-          console.log(response);
-        },
         complete() {
           appState.reset();
         }
@@ -70,9 +67,6 @@ export default ListFormController.extend({
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
-        },
-        error(response) {
-          console.log(response);
         },
         complete() {
           appState.reset();
@@ -112,12 +106,9 @@ export default ListFormController.extend({
         data: formData,
         contentType: false,
         processData: false,
-        success(response) {
+        success() {
           alert('Шаблон успешно загружен');
           inputFile.value='';
-        },
-        error(response) {
-          console.log(response);
         },
         complete() {
           appState.reset();

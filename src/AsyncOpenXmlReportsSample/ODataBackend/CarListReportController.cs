@@ -79,7 +79,6 @@
             }
             catch (Exception ex)
             {
-                LogService.LogError(ex);
                 return this.StatusCode(500);
             }
         }
@@ -94,7 +93,7 @@
                     return this.StatusCode(400);
                 }
 
-                using (FileStream output = new (this.config["TemplatesPath"] + TemplateName, FileMode.Open))
+                using (FileStream output = new FileStream(this.config["TemplatesPath"] + TemplateName, FileMode.Open))
                 {
                     file.CopyTo(output);
                 }
@@ -103,7 +102,6 @@
             }
             catch (Exception ex)
             {
-                LogService.LogError(ex);
                 return this.StatusCode(500);
             }
         }
@@ -119,7 +117,6 @@
             }
             catch (Exception ex)
             {
-                LogService.LogError(ex);
                 return this.StatusCode(500);
             }
         }
