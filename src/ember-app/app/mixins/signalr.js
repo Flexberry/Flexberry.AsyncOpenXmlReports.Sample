@@ -14,11 +14,8 @@ export default Mixin.create({
     this.signalRTryToConnect();
   },
 
-  signalRTryToConnect(_this) {
-    if (!_this) {
-      _this = this;
-    }
-    
+  signalRTryToConnect() {
+    const _this = this;
     const signalr = _this.getSignalR();
 
     signalr.start().then(function () {
@@ -32,7 +29,7 @@ export default Mixin.create({
 
       // eslint-disable-next-line no-console
       console.log("SignalR NOT Connected." + err);
-      setTimeout(_this.signalRTryToConnect(_this), 5000);
+      setTimeout(_this.signalRTryToConnect(), 5000);
     });
   },
 
@@ -43,7 +40,7 @@ export default Mixin.create({
     if (!signalR.connected) {
       this.signalRTryToConnect();
       later((function() {
-        self._signalRTryToReconnect();
+        _this._signalRTryToReconnect();
       }), 60000);
     }
   },
@@ -54,10 +51,10 @@ export default Mixin.create({
 
     if (signalR.connected) {
       signalR.connected = false;
-      later((function() {
-        _this._signalRTryToReconnect();
-      }), 5000);
-    }    
+    }
+    later((function() {
+      _this._signalRTryToReconnect();
+    }), 5000);
   },
 
   _notifyUser(message) {
