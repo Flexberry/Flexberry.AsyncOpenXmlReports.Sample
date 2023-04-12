@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Интерфейс сервиса текущего пользователя с использованием ролей.
     /// </summary>
@@ -17,11 +17,13 @@ namespace Flexberry.Quartz.Sample.Service
         /// <summary>
         /// Перечень ролей.
         /// </summary>
-        List<string> RolesList {
-            get {
-                if (!string.IsNullOrWhiteSpace(Roles))
+        List<string> RolesList
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(this.Roles))
                 {
-                    return new List<string>(Roles.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()));
+                    return new List<string>(this.Roles.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()));
                 }
 
                 return null;

@@ -1,11 +1,14 @@
-﻿using Flexberry.Quartz.Sample.Service;
-using System;
-
-namespace Flexberry.Quartz.Sample.ConsoleHost
+﻿namespace Flexberry.Quartz.Sample.ConsoleHost
 {
-    class Program
+    using System;
+    using Flexberry.Quartz.Sample.Service;
+
+    /// <summary>
+    /// Программа.
+    /// </summary>
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var adapter = new Adapter();
             adapter.OnStart();

@@ -1,30 +1,29 @@
-﻿using ICSSoft.Services;
-using ICSSoft.STORMNET;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using Unity;
-using Unity.Microsoft.DependencyInjection;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
+    using System;
+    using ICSSoft.STORMNET;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Unity;
+    using Unity.Microsoft.DependencyInjection;
+
     /// <summary>
     /// Адаптер для запуска хоста процессов, в котором будет веб-хост для получения запросов на формирование отчетов.
     /// </summary>
     public class Adapter
     {
         /// <summary>
+        /// Главный контейнер зависимостей.
+        /// </summary>
+        public static readonly IUnityContainer Container = new UnityContainer();
+
+        /// <summary>
         /// Главный хост.
         /// </summary>
         private IHost host = null;
-
-        /// <summary>
-        /// Главный контейнер зависимостей.
-        /// </summary>
-        public static readonly IUnityContainer Container = UnityFactory.GetContainer();
 
         /// <summary>
         /// Старт адаптера.
@@ -72,7 +71,19 @@ namespace Flexberry.Quartz.Sample.Service
 
                 throw;
             }
+        }
 
+        /// <summary>
+        /// Закрытие хоста.
+        /// </summary>
+        /// <param name="serviceHost">Хост процессов.</param>
+        protected static void Close(ref IHost serviceHost)
+        {
+            if (serviceHost != null)
+            {
+                serviceHost.StopAsync().Wait();
+                serviceHost = null;
+            }
         }
 
         /// <summary>
@@ -92,15 +103,19 @@ namespace Flexberry.Quartz.Sample.Service
 
             // Построение хоста.
             var builder = Host.CreateDefaultBuilder()
+
                 // Добавляем файл конфигурации.
                 .ConfigureAppConfiguration(cfg =>
                 {
                     cfg.AddJsonFile("adapterSettings.json");
                 })
+
                 // Включаем использование unity.
                 .UseUnityServiceProvider(Container)
+
                 // Настраиваем контейнер.
                 .ConfigureContainer<IUnityContainer>(adapterStartup.ConfigureContainer)
+
                 // Настраиваем сервисы.
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -120,19 +135,6 @@ namespace Flexberry.Quartz.Sample.Service
         protected void Stop()
         {
             Close(ref host);
-        }
-
-        /// <summary>
-        /// Закрытие хоста.
-        /// </summary>
-        /// <param name="serviceHost">Хост процессов.</param>
-        protected void Close(ref IHost serviceHost)
-        {
-            if (serviceHost != null)
-            {
-                serviceHost.StopAsync().Wait();
-                serviceHost = null;
-            }
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Unity.Microsoft.DependencyInjection;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
+    using Unity.Microsoft.DependencyInjection;
+
     /// <summary>
     /// Сервис адаптера.
     /// </summary>
@@ -23,7 +23,7 @@ namespace Flexberry.Quartz.Sample.Service
         /// Запуск сервиса.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены. Указывает, что процесс запуска был прерван.</param>
-        /// <returns></returns>
+        /// <returns>Task.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // Конфигурация.
@@ -36,14 +36,19 @@ namespace Flexberry.Quartz.Sample.Service
 
             // Построение веб-хоста.
             var builder = WebHost.CreateDefaultBuilder()
+
                 // Добавляем конфигурацию.
                 .UseConfiguration(conf)
+
                 // Добавляем IIS.
                 .UseIISIntegration()
+
                 // Включаем использование unity.
                 .UseUnityServiceProvider(Adapter.Container)
+
                 // Настройка севрисов.
                 .ConfigureServices(adapterStartup.ConfigureServices)
+
                 // Общая настройка.
                 .Configure(adapterStartup.Configure);
 
@@ -57,7 +62,7 @@ namespace Flexberry.Quartz.Sample.Service
         /// Завершение сервиса.
         /// </summary>
         /// <param name="cancellationToken">Токен отмены. Указывает, что процесс завершения был прерван.</param>
-        /// <returns></returns>
+        /// <returns>Task.</returns>
         public Task StopAsync(CancellationToken cancellationToken)
         {
             return host.StopAsync();

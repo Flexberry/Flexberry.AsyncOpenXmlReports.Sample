@@ -1,14 +1,14 @@
-﻿using Flexberry.Quartz.Sample.Service.Jobs;
-using Flexberry.Quartz.Sample.Service.RequestsObjects;
-using ICSSoft.STORMNET;
-using Microsoft.AspNetCore.Mvc;
-using Quartz;
-using Quartz.Impl;
-using System;
-using System.Threading.Tasks;
-
-namespace Flexberry.Quartz.Sample.Service.Controllers
+﻿namespace Flexberry.Quartz.Sample.Service.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+    using Flexberry.Quartz.Sample.Service.Jobs;
+    using Flexberry.Quartz.Sample.Service.RequestsObjects;
+    using global::Quartz;
+    using global::Quartz.Impl;
+    using ICSSoft.STORMNET;
+    using Microsoft.AspNetCore.Mvc;
+
     /// <summary>
     /// Контроллер запуска отчетов с использованием Quartz.
     /// </summary>
@@ -19,15 +19,16 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
         /// <summary>
         /// Тестовый метод формирования отчета.
         /// </summary>
-        /// <param name="request">Переметры запроса <see cref="TestReportRequest">TestReportRequest</see>./></param>
-        /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>./></returns>
+        /// <param name="request">Переметры запроса <see cref="TestReportRequest">TestReportRequest</see>.</param>
+        /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>.</returns>
         [HttpPost]
         [ActionName("TestReport")]
         public StatusCodeResult TestReport([FromBody] TestReportRequest request)
         {
             LogService.LogDebugFormat("TestReport: params = '{0}'", request.ToString());
 
-            var runTask = new Task(async () => {
+            var runTask = new Task(async () =>
+            {
                 StdSchedulerFactory factory = new StdSchedulerFactory();
                 IScheduler scheduler = await factory.GetScheduler();
 

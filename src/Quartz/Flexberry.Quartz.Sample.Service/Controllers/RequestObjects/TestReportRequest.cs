@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Flexberry.Quartz.Sample.Service.RequestsObjects
+﻿namespace Flexberry.Quartz.Sample.Service.RequestsObjects
 {
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Данные для тестового запроса.
     /// </summary>

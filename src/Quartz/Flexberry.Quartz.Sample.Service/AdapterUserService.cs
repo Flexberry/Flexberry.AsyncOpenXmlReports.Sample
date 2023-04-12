@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
     /// <summary>
     /// Сервис текущего пользователя с использованием ролей.

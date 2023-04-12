@@ -1,13 +1,13 @@
-﻿using ICSSoft.STORMNET;
-using ICSSoft.STORMNET.Business;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using Unity;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
+    using System;
+    using ICSSoft.STORMNET;
+    using ICSSoft.STORMNET.Business;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Unity;
+
     /// <summary>
     /// Настройки для запуска хоста адаптера.
     /// </summary>
@@ -51,7 +51,6 @@ namespace Flexberry.Quartz.Sample.Service
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </remarks>
         /// <param name="app">An application configurator.</param>
-        /// <param name="env">Information about web hosting environment.</param>
         public void Configure(IApplicationBuilder app)
         {
             LogService.LogDebug("Adapter.Configure Start");
@@ -96,7 +95,7 @@ namespace Flexberry.Quartz.Sample.Service
 
             IDataService mainDataService = new PostgresDataService()
             {
-                CustomizationString = connStr
+                CustomizationString = connStr,
             };
 
             container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
