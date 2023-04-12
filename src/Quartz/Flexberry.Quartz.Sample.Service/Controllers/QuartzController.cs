@@ -20,8 +20,6 @@ namespace Flexberry.Quartz.Sample.Service.Controllers
         /// Тестовый метод формирования отчета.
         /// </summary>
         /// <param name="request">Переметры запроса <see cref="TestReportRequest">TestReportRequest</see>./></param>
-        /// <param name="ds">Сервис данных.</param>
-        /// <param name="user">Сервис пользователя.</param>
         /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>./></returns>
         [HttpPost]
         [ActionName("TestReport")]
