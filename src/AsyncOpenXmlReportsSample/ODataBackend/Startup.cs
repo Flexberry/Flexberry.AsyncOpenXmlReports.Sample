@@ -63,10 +63,12 @@
 
             services.AddOData();
 
+            var authorityUrl = Configuration["AuthorityUrl"];
+
             services.AddAuthentication("Bearer")
               .AddJwtBearer("Bearer", options =>
               {
-                options.Authority = "http://localhost:8080/realms/master/";
+                options.Authority = authorityUrl;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false,
@@ -201,23 +203,6 @@
             {
                 throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
             }
-
-            ISecurityManager emptySecurityManager = new EmptySecurityManager();
-            string securityConnectionString = connStr;
-            IDataService securityDataService = new PostgresDataService(emptySecurityManager)
-            {
-                CustomizationString = securityConnectionString
-            };
-
-            IHttpContextAccessor contextAccesor = new HttpContextAccessor();
-            container.RegisterInstance<IHttpContextAccessor>(contextAccesor);
-            string mainConnectionString = connStr;
-            IDataService mainDataService = new PostgresDataService()
-            {
-                CustomizationString = mainConnectionString
-            };
-
-            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
 
             container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
             container.RegisterSingleton<IDataService, PostgresDataService>(
