@@ -59,7 +59,7 @@
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute("Quartz", "api/quartz", defaults: new { controller = "Quartz", action = "TestReport" });
+                routes.MapRoute("Quartz", "api/quartz", defaults: new { controller = "Quartz", action = "SampleReport" });
             });
 
             LogService.LogDebug("Adapter.Configure End");

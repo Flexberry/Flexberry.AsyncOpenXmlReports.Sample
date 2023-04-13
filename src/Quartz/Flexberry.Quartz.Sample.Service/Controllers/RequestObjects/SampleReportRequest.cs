@@ -5,7 +5,7 @@
     /// <summary>
     /// Данные для тестового запроса.
     /// </summary>
-    public class TestReportRequest
+    public class SampleReportRequest
     {
         /// <summary>
         /// Идентификатор апроса.

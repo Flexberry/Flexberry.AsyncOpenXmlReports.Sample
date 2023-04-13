@@ -11,7 +11,7 @@
     /// <summary>
     /// Тестовая задача Quartz.
     /// </summary>
-    public class TestJob : IJob
+    public class SampleJob : IJob
     {
         /// <summary>
         /// Получить свойства данного экземпляра задания.
@@ -19,9 +19,9 @@
         /// <param name="name">Имя задания.</param>
         /// <param name="group">Группа задания.</param>
         /// <returns>Подробные свойства данного экземпляра задания.</returns>
-        public static IJobDetail GetTestDetail(string name, string group)
+        public static IJobDetail GetDetail(string name, string group)
         {
-            IJobDetail job = JobBuilder.Create<TestJob>()
+            IJobDetail job = JobBuilder.Create<SampleJob>()
                 .WithIdentity(name, group)
                 .Build();
 
@@ -34,7 +34,7 @@
         /// <param name="name">Имя задания.</param>
         /// <param name="group">Группа задания.</param>
         /// <returns>Триггер для данного экземпляра задания.</returns>
-        public static ITrigger GetTestTrigger(string name, string group)
+        public static ITrigger GetTrigger(string name, string group)
         {
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(name, group)
@@ -53,9 +53,9 @@
         {
             var dataMap = context.JobDetail.JobDataMap;
 
-            this.CheckParam(dataMap, "TestReportRequest");
+            this.CheckParam(dataMap, "SampleReportRequest");
 
-            var request = dataMap["TestReportRequest"] as TestReportRequest;
+            var request = dataMap["SampleReportRequest"] as SampleReportRequest;
 
             // Инициализация сервисов.
             var ds = Adapter.Container.Resolve<IDataService>();
@@ -68,7 +68,7 @@
 
             var user2 = Adapter.Container.Resolve<IUserWithRoles>();
 
-            LogService.Log.Info($"TestJob: request = {request}; user = {user2.Login}; ds = {ds.CustomizationString}");
+            LogService.Log.Info($"SampleJob: request = {request}; user = {user2.Login}; ds = {ds.CustomizationString}");
 
             return Task.CompletedTask;
         }

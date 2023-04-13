@@ -19,13 +19,13 @@
         /// <summary>
         /// Тестовый метод формирования отчета.
         /// </summary>
-        /// <param name="request">Переметры запроса <see cref="TestReportRequest">TestReportRequest</see>.</param>
+        /// <param name="request">Переметры запроса <see cref="SampleReportRequest">SampleReportRequest</see>.</param>
         /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>.</returns>
         [HttpPost]
-        [ActionName("TestReport")]
-        public StatusCodeResult TestReport([FromBody] TestReportRequest request)
+        [ActionName("SampleReport")]
+        public StatusCodeResult SampleReport([FromBody] SampleReportRequest request)
         {
-            LogService.LogDebugFormat("TestReport: params = '{0}'", request.ToString());
+            LogService.LogDebugFormat("SampleReport: params = '{0}'", request.ToString());
 
             var runTask = new Task(async () =>
             {
@@ -34,11 +34,11 @@
 
                 await scheduler.Start();
 
-                var job = TestJob.GetTestDetail("job1_" + request.Id, "group1_" + request.Id);
-                var trigger = TestJob.GetTestTrigger("trigger1_" + request.Id, "group1_" + request.Id);
+                var job = SampleJob.GetDetail("job1_" + request.Id, "group1_" + request.Id);
+                var trigger = SampleJob.GetTrigger("trigger1_" + request.Id, "group1_" + request.Id);
 
                 // Добавим к задаче данные запроса.
-                job.JobDataMap.Add("TestReportRequest", request);
+                job.JobDataMap.Add("SampleReportRequest", request);
 
                 await scheduler.ScheduleJob(job, trigger);
             });
