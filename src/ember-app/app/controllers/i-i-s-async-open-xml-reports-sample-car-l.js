@@ -19,7 +19,7 @@ export default ListFormController.extend({
 
   actions: {
     BuildCarListReport() {
-      let authToken = this.get('keycloakSession.token');
+      const authToken = this.get('keycloakSession.token');
       let appState = this.get('appState');
       appState.loading();
 
@@ -33,7 +33,7 @@ export default ListFormController.extend({
         url: `${config.APP.backendUrls.root}/api/CarListReport/Build`,
         dataType: 'blob',
         success(response) {
-          let link = document.createElement('a');
+          const link = document.createElement('a');
           link.href = window.URL.createObjectURL(response);
           link.download = "CarListReport.docx";
           link.style.display = 'none';
@@ -48,7 +48,7 @@ export default ListFormController.extend({
     },
 
     DownloadCarListTemplate() {
-      let authToken = this.get('keycloakSession.token');
+      const authToken = this.get('keycloakSession.token');
       let appState = this.get('appState');
       appState.loading();
 
@@ -62,7 +62,7 @@ export default ListFormController.extend({
         url: `${config.APP.backendUrls.root}/api/CarListReport/DownloadTemplate`,
         dataType: 'blob',
         success(response) {
-          let link = document.createElement('a');
+          const link = document.createElement('a');
           link.href = window.URL.createObjectURL(response);
           link.download = "CarListTemplate.docx";
           link.style.display = 'none';
@@ -77,13 +77,13 @@ export default ListFormController.extend({
     },
 
     UploadCarListTemplate() {
-      let input = document.getElementById('file-upload');
+      const input = document.getElementById('file-upload');
       input.click();
     },
 
     SendCarListTemplateToServer() {
       const inputFile = document.getElementById("file-upload");
-      let file = inputFile.files[0];
+      const file = inputFile.files[0];
       var formData = new FormData();
       formData.append("file", file);
 
@@ -92,7 +92,7 @@ export default ListFormController.extend({
         return;
       }
 
-      let authToken = this.get('keycloakSession.token');
+      const authToken = this.get('keycloakSession.token');
       let appState = this.get('appState');
       appState.loading();
 

@@ -18,12 +18,14 @@
         /// <summary>
         /// App configuration.
         /// </summary>
-        protected IConfiguration config;
+        private readonly IConfiguration config;
 
         /// <summary>
         /// Data service.
         /// </summary>
         private readonly IDataService dataService;
+
+        public const string TemplateName = "CarListTemplate.docx";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
@@ -35,8 +37,6 @@
             this.dataService = dataService;
             this.config = configuration;
         }
-
-        public const string TemplateName = "CarListTemplate.docx";
 
         [HttpGet("[action]")]
         public IActionResult Build()
