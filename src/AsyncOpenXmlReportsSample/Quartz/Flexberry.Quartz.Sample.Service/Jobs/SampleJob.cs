@@ -56,11 +56,6 @@
 
             JobTools.InitUserInfo(request.UserInfo);
 
-            if (request.UserInfo.Login == "Lenin")
-            {
-                System.Threading.Thread.Sleep(5000);
-            }
-
             if (!JobTools.AccessCheck(dataMap))
             {
                 LogService.Log.Warn($"SampleJob has no access to execute: request = {request}.");
