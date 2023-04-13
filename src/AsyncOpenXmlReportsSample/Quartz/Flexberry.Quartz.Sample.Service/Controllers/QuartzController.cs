@@ -2,8 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using Flexberry.Quartz.Sample.Service.Jobs;
-    using Flexberry.Quartz.Sample.Service.RequestsObjects;
     using global::Quartz;
     using global::Quartz.Impl;
     using ICSSoft.STORMNET;
@@ -38,6 +38,7 @@
                 var trigger = SampleJob.GetTrigger("trigger1_" + request.Id, "group1_" + request.Id);
 
                 // Добавим к задаче данные запроса.
+                job.JobDataMap.Add(JobTools.ReportNameParam, "SampleReport");
                 job.JobDataMap.Add("SampleReportRequest", request);
 
                 await scheduler.ScheduleJob(job, trigger);

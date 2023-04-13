@@ -21,6 +21,11 @@
         public static readonly IUnityContainer Container = new UnityContainer();
 
         /// <summary>
+        /// Конфигурация.
+        /// </summary>
+        public static IConfiguration Configuration { get; private set; }
+
+        /// <summary>
         /// Главный хост.
         /// </summary>
         private IHost host = null;
@@ -94,12 +99,12 @@
             Stop();
 
             // Конфигурация.
-            var conf = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                 .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
                 .Build();
 
             // Настройки адаптера.
-            var adapterStartup = new AdapterStartup(conf);
+            var adapterStartup = new AdapterStartup(Configuration);
 
             // Построение хоста.
             var builder = Host.CreateDefaultBuilder()
