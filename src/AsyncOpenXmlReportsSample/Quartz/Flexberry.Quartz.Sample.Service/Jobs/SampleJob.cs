@@ -13,6 +13,8 @@
     /// </summary>
     public class SampleJob : IJob
     {
+        private readonly JobTools jobTools = new JobTools();
+
         /// <summary>
         /// Получить свойства данного экземпляра задания.
         /// </summary>
@@ -52,11 +54,11 @@
         public Task Execute(IJobExecutionContext context)
         {
             var dataMap = context.JobDetail.JobDataMap;
-            var request = JobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
+            var request = jobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
 
-            JobTools.InitUserInfo(request.UserInfo);
+            jobTools.InitUserInfo(request.UserInfo);
 
-            if (!JobTools.AccessCheck(dataMap))
+            if (!jobTools.AccessCheck(dataMap))
             {
                 LogService.Log.Warn($"SampleJob has no access to execute: request = {request}.");
 

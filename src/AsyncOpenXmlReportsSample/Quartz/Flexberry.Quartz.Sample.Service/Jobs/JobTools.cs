@@ -23,7 +23,7 @@
         /// Инициализировать пользователя.
         /// </summary>
         /// <param name="userInfo">Данные пользователя.</param>
-        public static void InitUserInfo(UserInfo userInfo)
+        public void InitUserInfo(UserInfo userInfo)
         {
             var user = Adapter.Container.Resolve<IUserWithRoles>();
 
@@ -41,7 +41,7 @@
         /// <param name="name">Имя параметра.</param>
         /// <exception cref="ArgumentNullException">Если параметр не будет найден.</exception>
         /// <returns>Значение параметра.</returns>
-        public static TParam GetParam<TParam>(JobDataMap dataMap, string name)
+        public TParam GetParam<TParam>(JobDataMap dataMap, string name)
             where TParam : class
         {
             if (!dataMap.ContainsKey(name))
@@ -64,7 +64,7 @@
         /// </summary>
         /// <param name="dataMap">Данные отчета.</param>
         /// <returns>Доступность отчета.</returns>
-        public static bool AccessCheck(JobDataMap dataMap)
+        public bool AccessCheck(JobDataMap dataMap)
         {
             var reportName = GetParam<string>(dataMap, ReportNameParam);
             var confSection = Adapter.Configuration.GetSection(ConfigSectionName).GetChildren();
@@ -75,7 +75,7 @@
                 var operationName = confElem.First().Value;
 
                 return AccessCheck(operationName);
-            }
+            } 
             else
             {
                 throw new Exception($"Report {reportName} have no setting for operation! Configuration section name: {ConfigSectionName}");
@@ -87,7 +87,7 @@
         /// </summary>
         /// <param name="operationName">Имя операции.</param>
         /// <returns>Доступность отчета.</returns>
-        public static bool AccessCheck(string operationName)
+        public bool AccessCheck(string operationName)
         {
             var securityManager = Adapter.Container.Resolve<ISecurityManager>();
 
