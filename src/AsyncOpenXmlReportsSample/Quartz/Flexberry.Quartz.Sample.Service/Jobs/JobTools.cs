@@ -17,6 +17,9 @@
         /// </summary>
         public const string ReportNameParam = "ReportName";
 
+        /// <summary>
+        /// Имя раздела в файле конфигурации, в котором указаны соответствия отчетов и операций.
+        /// </summary>
         private const string ConfigSectionName = "AllowedReportOperations";
 
         /// <summary>
@@ -75,7 +78,7 @@
                 var operationName = confElem.First().Value;
 
                 return AccessCheck(operationName);
-            } 
+            }
             else
             {
                 throw new Exception($"Report {reportName} have no setting for operation! Configuration section name: {ConfigSectionName}");
