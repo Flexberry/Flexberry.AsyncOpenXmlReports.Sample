@@ -2,7 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Flexberry.Quartz.Sample.Service.RequestsObjects;
+    using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
@@ -52,39 +52,29 @@
         public Task Execute(IJobExecutionContext context)
         {
             var dataMap = context.JobDetail.JobDataMap;
+            var request = JobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
 
-            this.CheckParam(dataMap, "SampleReportRequest");
+            JobTools.InitUserInfo(request.UserInfo);
 
-            var request = dataMap["SampleReportRequest"] as SampleReportRequest;
+            if (request.UserInfo.Login == "Lenin")
+            {
+                System.Threading.Thread.Sleep(5000);
+            }
+
+            if (!JobTools.AccessCheck(dataMap))
+            {
+                LogService.Log.Warn($"SampleJob has no access to execute: request = {request}.");
+
+                return Task.CompletedTask;
+            }
 
             // Инициализация сервисов.
             var ds = Adapter.Container.Resolve<IDataService>();
-            var user = Adapter.Container.Resolve<IUserWithRoles>();
-
-            user.Login = request.UserLogin;
-            user.Domain = request.UserDomain;
-            user.FriendlyName = request.UserFriendlyName;
-            user.Roles = request.UserRoles;
-
             var user2 = Adapter.Container.Resolve<IUserWithRoles>();
 
             LogService.Log.Info($"SampleJob: request = {request}; user = {user2.Login}; ds = {ds.CustomizationString}");
 
             return Task.CompletedTask;
-        }
-
-        /// <summary>
-        /// Проверить наличие параметра в context.JobDetail.JobDataMap.
-        /// </summary>
-        /// <param name="dataMap">Информация по заданию.</param>
-        /// <param name="name">Имя параметра.</param>
-        /// <exception cref="ArgumentNullException">Если параметр не будет найден.</exception>
-        private void CheckParam(JobDataMap dataMap, string name)
-        {
-            if (!dataMap.ContainsKey(name) || dataMap[name] == null)
-            {
-                throw new ArgumentNullException($"context.JobDetail.JobDataMap[{name}]");
-            }
         }
     }
 }

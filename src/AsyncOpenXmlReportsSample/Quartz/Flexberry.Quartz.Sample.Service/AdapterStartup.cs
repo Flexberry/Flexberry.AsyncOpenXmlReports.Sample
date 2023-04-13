@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using NewPlatform.Flexberry.Caching;
     using Unity;
 
     /// <summary>
@@ -83,25 +84,39 @@
                 container = container.Parent;
             }
 
-            string connStr = Configuration["DefConnStr"];
+            string mainConnStr = Configuration["DefConnStr"];
+            string securityConnStr = Configuration["SecurityConnString"];
 
-            if (string.IsNullOrEmpty(connStr))
+            if (string.IsNullOrEmpty(mainConnStr))
             {
                 throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
             }
 
+            if (string.IsNullOrEmpty(securityConnStr))
+            {
+                securityConnStr = mainConnStr;
+            }
+
+            IDataService securityDataService = new PostgresDataService(new EmptySecurityManager()) { CustomizationString = securityConnStr };
+            IDataService mainDataService = new PostgresDataService() { CustomizationString = mainConnStr };
+
             container.RegisterInstance(Configuration);
+            container.RegisterInstance<IDataService>("SecurityDataService", securityDataService, InstanceLifetime.Singleton);
+            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
 
             container.RegisterFactory<IUserWithRoles>((cont) => new AdapterUserService(), FactoryLifetime.PerThread);
+            container.RegisterFactory<ISecurityManager>(
+                (cont) =>
+                {
+                    var dataService = cont.Resolve<IDataService>("SecurityDataService");
+                    var cacheManager = cont.Resolve<ICacheService>();
+                    var userService = cont.Resolve<IUserWithRoles>();
 
-            container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
+                    return new RoleSecurityManager(dataService, cacheManager, userService);
+                },
+                FactoryLifetime.PerThread);
 
-            IDataService mainDataService = new PostgresDataService()
-            {
-                CustomizationString = connStr,
-            };
-
-            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
+            container.RegisterSingleton<ICacheService, MemoryCacheService>();
         }
     }
 }

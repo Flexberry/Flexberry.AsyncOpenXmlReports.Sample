@@ -1,4 +1,4 @@
-﻿namespace Flexberry.Quartz.Sample.Service.RequestsObjects
+﻿namespace Flexberry.Quartz.Sample.Service.Controllers.RequestObjects
 {
     using Newtonsoft.Json;
 
@@ -13,24 +13,9 @@
         public string Id { get; set; }
 
         /// <summary>
-        /// Идентификатор пользователя.
+        /// Информация о пользователе.
         /// </summary>
-        public string UserLogin { get; set; }
-
-        /// <summary>
-        /// Домен пользователя.
-        /// </summary>
-        public string UserDomain { get; set; }
-
-        /// <summary>
-        /// Имя пользователя.
-        /// </summary>
-        public string UserFriendlyName { get; set; }
-
-        /// <summary>
-        /// Роли пользователя, разделенные запятоыми.
-        /// </summary>
-        public string UserRoles { get; set; }
+        public UserInfo UserInfo { get; set; }
 
         /// <summary>
         /// Returns a string that represents the current object.
