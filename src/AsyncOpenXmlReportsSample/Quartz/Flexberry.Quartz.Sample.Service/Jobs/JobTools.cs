@@ -26,10 +26,8 @@
         /// Инициализировать пользователя.
         /// </summary>
         /// <param name="userInfo">Данные пользователя.</param>
-        public void InitUserInfo(UserInfo userInfo)
+        public void InitUserInfo(UserInfo userInfo, IUserWithRoles user)
         {
-            var user = Adapter.Container.Resolve<IUserWithRoles>();
-
             user.Login = userInfo.Login;
             user.Domain = userInfo.Domain;
             user.FriendlyName = userInfo.FriendlyName;

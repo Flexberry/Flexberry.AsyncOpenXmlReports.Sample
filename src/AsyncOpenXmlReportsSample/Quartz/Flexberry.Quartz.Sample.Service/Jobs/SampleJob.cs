@@ -55,8 +55,9 @@
         {
             var dataMap = context.JobDetail.JobDataMap;
             var request = jobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
+            var user = Adapter.Container.Resolve<IUserWithRoles>();
 
-            jobTools.InitUserInfo(request.UserInfo);
+            jobTools.InitUserInfo(request.UserInfo, user);
 
             if (!jobTools.AccessCheck(dataMap))
             {
