@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <CodeAnalysisRuleSet>..\Flexberry.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Flexberry.ruleset</CodeAnalysisRuleSet>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
 
