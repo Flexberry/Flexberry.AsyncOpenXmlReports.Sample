@@ -94,7 +94,7 @@
 
             if (string.IsNullOrEmpty(securityConnStr))
             {
-                securityConnStr = mainConnStr;
+                throw new System.Configuration.ConfigurationErrorsException("SecurityConnString is not specified in Configuration or enviromnent variables.");
             }
 
             IDataService securityDataService = new PostgresDataService(new EmptySecurityManager()) { CustomizationString = securityConnStr };
