@@ -3,6 +3,7 @@
     using System;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
+    using ICSSoft.STORMNET.Security;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -92,6 +93,8 @@
             container.RegisterInstance(Configuration);
 
             container.RegisterFactory<IUserWithRoles>((cont) => new AdapterUserService(), FactoryLifetime.PerThread);
+
+            container.RegisterSingleton<ISecurityManager, EmptySecurityManager>();
 
             IDataService mainDataService = new PostgresDataService()
             {

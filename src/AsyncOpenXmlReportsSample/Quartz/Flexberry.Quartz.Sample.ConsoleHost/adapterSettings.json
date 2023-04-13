@@ -11,8 +11,8 @@
     }
   },
   "AllowedHosts": "*",
-  "AllowedQuartzRoles": {
-    "TestReport": "admin"
+  "AllowedReportOperations": {
+    "SampleReport": "Reports.SampleReport"
   },
   "Urls": "http://*:5001"
 }
