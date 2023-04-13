@@ -15,22 +15,27 @@ export default ListFormController.extend({
 
   appState: service(),
 
+  keycloakSession: service(),
+
   actions: {
-    CreateCarListReport() {
+    BuildCarListReport() {
+      const authToken = this.get('keycloakSession.token');
       let appState = this.get('appState');
       appState.loading();
 
       $.ajax({
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        },
         async: true,
         cache: false,
         type: 'GET',
-        contentType: 'application/json; charset=utf-8',
-        url: `${config.APP.backendUrls.root}/api/reports`,
+        url: `${config.APP.backendUrls.root}/api/CarListReport/Build`,
         dataType: 'blob',
         success(response) {
-          let link = document.createElement('a');
+          const link = document.createElement('a');
           link.href = window.URL.createObjectURL(response);
-          link.download = "Car list.docx";
+          link.download = "CarListReport.docx";
           link.style.display = 'none';
           document.body.appendChild(link);
           link.click();
@@ -41,5 +46,76 @@ export default ListFormController.extend({
         }
       });
     },
+
+    DownloadCarListTemplate() {
+      const authToken = this.get('keycloakSession.token');
+      let appState = this.get('appState');
+      appState.loading();
+
+      $.ajax({
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        },
+        async: true,
+        cache: false,
+        type: 'GET',
+        url: `${config.APP.backendUrls.root}/api/CarListReport/DownloadTemplate`,
+        dataType: 'blob',
+        success(response) {
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(response);
+          link.download = "CarListTemplate.docx";
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        },
+        complete() {
+          appState.reset();
+        }
+      });
+    },
+
+    UploadCarListTemplate() {
+      const input = document.getElementById('file-upload');
+      input.click();
+    },
+
+    SendCarListTemplateToServer() {
+      const inputFile = document.getElementById("file-upload");
+      const file = inputFile.files[0];
+      var formData = new FormData();
+      formData.append("file", file);
+
+      if (!file) {
+        alert('Не выбран файл');
+        return;
+      }
+
+      const authToken = this.get('keycloakSession.token');
+      let appState = this.get('appState');
+      appState.loading();
+
+      $.ajax({
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        },
+        async: true,
+        cache: false,
+        type: 'POST',
+        url: `${config.APP.backendUrls.root}/api/CarListReport/`,
+        dataType: 'blob',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success() {
+          alert('Шаблон успешно загружен');
+        },
+        complete() {
+          appState.reset();
+          inputFile.value='';
+        }
+      });
+    }
   }
 });
