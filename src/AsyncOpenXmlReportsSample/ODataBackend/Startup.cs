@@ -5,6 +5,7 @@
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
     using ICSSoft.STORMNET.Security;
+    using IIS.AsyncOpenXmlReportsSample.Services;
     using IIS.Caseberry.Logging.Objects;
     using Microsoft.AspNet.OData.Extensions;
     using Microsoft.AspNetCore.Builder;
@@ -163,6 +164,9 @@
             // Регистрируем CurrentUserService.
             ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
             container.RegisterInstance<ICSSoft.Services.CurrentUserService.IUser>(userServise, InstanceLifetime.Singleton);
+
+            // Регистрируем сервис оповещения пользователей.
+            container.RegisterType<IUserNotifier, UsersReportsNotifier>();
 
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);

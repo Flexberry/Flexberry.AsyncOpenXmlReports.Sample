@@ -1,12 +1,16 @@
-﻿using ICSSoft.STORMNET;
-using ICSSoft.STORMNET.Business;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
-namespace Flexberry.Quartz.Sample.Service
+﻿namespace Flexberry.Quartz.Sample.Service
 {
+    using System;
+    using ICSSoft.STORMNET;
+    using ICSSoft.STORMNET.Business;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Unity;
+
+    /// <summary>
+    /// Настройки для запуска хоста адаптера.
+    /// </summary>
     public class AdapterStartup
     {
         /// <summary>
@@ -32,17 +36,9 @@ namespace Flexberry.Quartz.Sample.Service
         /// <param name="services">An collection of application services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            string connStr = Configuration["DefConnStr"];
-
             LogService.LogDebug("Adapter.ConfigureServices Start");
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
-
-            services.AddSingleton<IDataService, PostgresDataService>((serviceProvider) =>
-            {
-                return new PostgresDataService() { CustomizationString = connStr };
-            });
-
             services.AddCors();
 
             LogService.LogDebug("Adapter.ConfigureServices End");
@@ -55,7 +51,6 @@ namespace Flexberry.Quartz.Sample.Service
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </remarks>
         /// <param name="app">An application configurator.</param>
-        /// <param name="env">Information about web hosting environment.</param>
         public void Configure(IApplicationBuilder app)
         {
             LogService.LogDebug("Adapter.Configure Start");
@@ -64,10 +59,46 @@ namespace Flexberry.Quartz.Sample.Service
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute("Quartz", "api/quartz", defaults: new { controller = "Quartz", action = "TestReport" });
+                routes.MapRoute("Quartz", "api/quartz", defaults: new { controller = "Quartz", action = "SampleReport" });
             });
 
             LogService.LogDebug("Adapter.Configure End");
+        }
+
+        /// <summary>
+        /// Configurate application container.
+        /// </summary>
+        /// <param name="container">Container to configure.</param>
+        public void ConfigureContainer(IUnityContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            // FYI: сервисы, в т.ч. контроллеры, создаются из дочернего контейнера.
+            while (container.Parent != null)
+            {
+                container = container.Parent;
+            }
+
+            string connStr = Configuration["DefConnStr"];
+
+            if (string.IsNullOrEmpty(connStr))
+            {
+                throw new System.Configuration.ConfigurationErrorsException("DefConnStr is not specified in Configuration or enviromnent variables.");
+            }
+
+            container.RegisterInstance(Configuration);
+
+            container.RegisterFactory<IUserWithRoles>((cont) => new AdapterUserService(), FactoryLifetime.PerThread);
+
+            IDataService mainDataService = new PostgresDataService()
+            {
+                CustomizationString = connStr,
+            };
+
+            container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
         }
     }
 }
