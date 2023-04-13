@@ -15,6 +15,8 @@ export default ListFormController.extend({
 
   appState: service(),
 
+  keycloakSession: service(),
+
   actions: {
     BuildCarListReport() {
       let authToken = this.get('keycloakSession.token');
@@ -108,10 +110,10 @@ export default ListFormController.extend({
         processData: false,
         success() {
           alert('Шаблон успешно загружен');
-          inputFile.value='';
         },
         complete() {
           appState.reset();
+          inputFile.value='';
         }
       });
     }

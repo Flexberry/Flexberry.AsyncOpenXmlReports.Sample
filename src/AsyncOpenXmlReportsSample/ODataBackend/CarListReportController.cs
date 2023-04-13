@@ -43,9 +43,9 @@
         {
             try
             {
-                var parameters = new Dictionary<string, object>();
+                Dictionary<string, object> parameters = new Dictionary<string, object>();
 
-                var template = new DocxReport(this.config["TemplatesPath"] + TemplateName);
+                DocxReport template = new DocxReport(this.config["TemplatesPath"] + TemplateName);
 
                 var lcs = new LoadingCustomizationStruct(null)
                 {
@@ -53,13 +53,13 @@
                     View = Car.Views.CarL,
                 };
 
-                var cars = this.dataService.LoadObjects(lcs).Cast<Car>().ToList();
+                List<Car> cars = this.dataService.LoadObjects(lcs).Cast<Car>().ToList();
 
-                var allCarsParameters = new List<Dictionary<string, object>>();
+                List<Dictionary<string, object>> allCarsParameters = new List<Dictionary<string, object>>();
 
-                foreach (var car in cars)
+                foreach (Car car in cars)
                 {
-                    var singleCarParameters = new Dictionary<string, object>();
+                    Dictionary<string, object> singleCarParameters = new Dictionary<string, object>();
 
                     singleCarParameters.Add("CarNumber", car.CarNumber);
                     singleCarParameters.Add("CarDate", car.CarDate.ToString("dd.MM.yyyy"));
@@ -72,10 +72,10 @@
 
                 template.BuildWithParameters(parameters);
 
-                var stream = new MemoryStream();
+                MemoryStream stream = new MemoryStream();
                 template.SaveAs(stream);
                 stream.Position = 0;
-                return this.File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+                return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
             }
             catch (Exception ex)
             {
@@ -90,12 +90,12 @@
             {
                 if (file is null)
                 {
-                    return this.StatusCode(400);
+                    return Content("File not found");
                 }
 
-                using (FileStream output = new FileStream(this.config["TemplatesPath"] + TemplateName, FileMode.Open))
+                using (FileStream fileStream = new FileStream(this.config["TemplatesPath"] + TemplateName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
-                    file.CopyTo(output);
+                    file.CopyTo(fileStream);
                 }
 
                 return this.StatusCode(200);
@@ -111,9 +111,17 @@
         {
             try
             {
-                var fullPath = this.config["TemplatesPath"] + TemplateName;
-                var stream = new FileStream(fullPath, FileMode.Open);
-                return this.File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+                string fullPath = this.config["TemplatesPath"] + TemplateName;
+
+                MemoryStream memoryStream = new MemoryStream();
+
+                using (FileStream fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    fileStream.CopyTo(memoryStream);
+                }
+
+                memoryStream.Position = 0;
+                return this.File(memoryStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
             }
             catch (Exception ex)
             {
