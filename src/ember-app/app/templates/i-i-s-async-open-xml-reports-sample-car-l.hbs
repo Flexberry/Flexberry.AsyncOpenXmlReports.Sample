@@ -36,9 +36,20 @@
     applyFilters=(action "applyFilters")
     resetFilters=(action "resetFilters")
     filterByAnyMatch=(action "filterByAnyMatch")
-    customButtons=(array (hash
+    customButtons=(array
+    (hash
       buttonName='Сформировать отчет'
-      buttonAction=(action "CreateCarListReport")
-    ))
+      buttonAction=(action "BuildCarListReport")
+    )
+    (hash
+      buttonName='Скачать шаблон'
+      buttonAction=(action "DownloadCarListTemplate")
+    )
+    (hash
+      buttonName='Загрузить шаблон'
+      buttonAction=(action "UploadCarListTemplate")
+    )
+    )
   }}
 </div>
+<input id="file-upload" type="file" style="display: none" accept=".docx" oninput={{action "SendCarListTemplateToServer"}}/>
