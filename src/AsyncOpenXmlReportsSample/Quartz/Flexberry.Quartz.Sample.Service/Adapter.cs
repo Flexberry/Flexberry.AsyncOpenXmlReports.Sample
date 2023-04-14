@@ -18,7 +18,7 @@
         /// <summary>
         /// Главный контейнер зависимостей.
         /// </summary>
-        public static readonly IUnityContainer Container = new UnityContainer();
+        public static readonly IUnityContainer Container = ICSSoft.Services.UnityFactory.GetContainer();
 
         /// <summary>
         /// Конфигурация.
@@ -28,7 +28,7 @@
         /// <summary>
         /// Главный хост.
         /// </summary>
-        private IHost host = null;
+        private IHost host;
 
         /// <summary>
         /// Старт адаптера.
