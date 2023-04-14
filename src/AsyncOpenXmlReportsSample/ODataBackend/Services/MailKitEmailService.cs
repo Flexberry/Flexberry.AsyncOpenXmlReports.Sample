@@ -23,18 +23,39 @@
             _emailOptions = emailOptions;
         }
 
+        /// <summary>
+        /// Отправить письмо, сформированное на основе шаблона Т4.
+        /// </summary>
+        /// <param name="from">Отправитель письма.</param>
+        /// <param name="to">Получатель письма.</param>
+        /// <param name="copyTo">Получатель копии письма.</param>
+        /// <param name="subject">Тема письма.</param>
+        /// <param name="body">Содержимое письма.</param>
+        /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
+        /// <param name="fileName">Имя прикрепляемого файла.</param>
+        /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
         public void SendT4Email(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
             T4MailTemplate mailCommonRu = new T4MailTemplate()
             {
                 Subject = subject,
                 HtmlMessage = body,
-                Greetings = $"Доброго времени суток, мой юный друг!",
             };
             string messageBody = mailCommonRu.TransformText();
             SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
         }
 
+        /// <summary>
+        /// Отправить письмо, сформированное на основе шаблона Т4.
+        /// </summary>
+        /// <param name="from">Отправитель письма.</param>
+        /// <param name="to">Получатель письма.</param>
+        /// <param name="copyTo">Получатель копии письма.</param>
+        /// <param name="subject">Тема письма.</param>
+        /// <param name="body">Содержимое письма.</param>
+        /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
+        /// <param name="fileName">Имя прикрепляемого файла.</param>
+        /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
         public void SendEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
             try

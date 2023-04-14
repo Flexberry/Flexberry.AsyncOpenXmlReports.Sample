@@ -14,7 +14,7 @@
   <ItemGroup>
     <Content Include="Templates\MailTemplates\T4MailTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>T4MailTemplate1.cs</LastGenOutput>
+      <LastGenOutput>T4MailTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +43,7 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Templates\MailTemplates\T4MailTemplate1.cs">
+    <Compile Update="Templates\MailTemplates\T4MailTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>T4MailTemplate.tt</DependentUpon>

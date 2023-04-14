@@ -1,16 +1,13 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".cs" #>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><#= this.Subject #></title>
+    <title><#= this.Subject #> <#= this.Subject #></title>
 </head>
 <body>
-
   <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
     <tbody>
       <tr>
@@ -31,7 +28,7 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                 <tr>
                     <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #272727; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 36px; font-weight: 400; line-height: 48px;">
-                        <h1 style="font-size: 48px; font-weight: 400; margin: 0; line-height: 48px;"><#= this.Greetings #></h1>
+                        <h1 style="font-size: 48px; font-weight: 400; margin: 0; line-height: 48px;"></h1>
                     </td>
                 </tr>
             </table>
@@ -53,7 +50,7 @@
           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
               <tr>
                   <td bgcolor="#ffffff" style="border:none; border-top:solid #dddddd 2px; padding:20px 30px 40px 30px;">
-                    <p><span style="font-size:14px; line-height:14px; font-family:'Lato', Helvetica, Arial, sans-serif; color:#a2a2a2"><#= this.Signature #></span></p>
+                    <p><span style="font-size:14px; line-height:14px; font-family:'Lato', Helvetica, Arial, sans-serif; color:#a2a2a2"></span></p>
                   </td>
               </tr>
           </table>
