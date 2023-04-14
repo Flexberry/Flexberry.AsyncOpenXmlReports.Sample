@@ -1,7 +1,6 @@
 ﻿namespace IIS.AsyncOpenXmlReportsSample
 {
     using System.Collections.Concurrent;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.SignalR;
 
@@ -42,8 +41,7 @@
         {
             if (users.Values.Contains(username))
             {
-                string id = users.Keys.Where(p => p == username).FirstOrDefault();
-                await Clients.User(id).SendAsync("NotifyUser", $"{username}! {message}");
+                await Clients.Caller.SendAsync("NotifyUser", $"{username}! {message}");
             }
         }
 
