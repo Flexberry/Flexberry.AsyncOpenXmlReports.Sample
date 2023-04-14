@@ -5,11 +5,13 @@
     using System.Linq;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
+    using ICSSoft.STORMNET.Business.LINQProvider;
     using ICSSoft.STORMNET.FunctionalLanguage;
     using ICSSoft.STORMNET.KeyGen;
     using ICSSoft.STORMNET.Security;
     using NewPlatform.Flexberry.Caching;
     using NewPlatform.Flexberry.Security;
+    using UnauthorizedAccessException = ICSSoft.STORMNET.UnauthorizedAccessException;
 
     /// <summary>
     /// SecurityManager на основе ролей.
@@ -108,14 +110,16 @@
         /// </returns>
         public bool AccessCheck(string operationId)
         {
-            bool result = false;
+            if (!(currentUser?.RolesList?.Any() ?? false))
+                return false;
+
+            bool totalResult = false;
+
             try
             {
-                if (!(currentUser?.RolesList?.Any() ?? false))
-                    return false;
-
                 foreach (var roleName in currentUser.RolesList)
                 {
+                    var result = false;
                     string cacheKey = $"{nameof(AccessCheck)}_RoleName_{roleName}_{operationId}";
 
                     // Проверим в кэше.
@@ -126,15 +130,7 @@
                     }
                     else
                     {
-                        // Ограничение на роли по имени.
-                        var lcs = LoadingCustomizationStruct.GetSimpleStruct(typeof(Agent), Agent.Views.RoleOrGroupL);
-
-                        lcs.LimitFunction = langDef.GetFunction(
-                                langDef.funcAND,
-                                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.StringType, Information.ExtractPropertyPath<Agent>(x => x.Name)), roleName),
-                                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.BoolType, Information.ExtractPropertyPath<Agent>(x => x.IsRole))));
-
-                        var roles = dataService.LoadObjects(lcs).Cast<Agent>();
+                        IEnumerable<Agent> roles = GetRolesByName(roleName);
 
                         // Для каждой роли вычитаем дочерние роли и проверим наличие доступа.
                         foreach (var role in roles)
@@ -145,33 +141,19 @@
                             AddLinkedAgents(role.AgentKey.Value, agentPKs);
 
                             // Ограничение на все дочерние роли.
-                            var funcInParams = new object[agentPKs.Count + 1];
-                            funcInParams[0] = new VariableDef(langDef.GuidType, Information.ExtractPropertyPath<Permition>(x => x.Agent));
-
-                            for (int i = 0; i < agentPKs.Count; i++)
-                            {
-                                funcInParams[i + 1] = agentPKs[i];
-                            }
-
-                            lcs = LoadingCustomizationStruct.GetSimpleStruct(typeof(Permition), Permition.Views.CheckAccessOperation);
-                            lcs.LimitFunction = langDef.GetFunction(
-                                langDef.funcAND,
-                                langDef.GetFunction(langDef.funcIN, funcInParams),
-                                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.BoolType, Information.ExtractPropertyPath<Permition>(x => x.Subject.IsOperation))),
-                                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.StringType, Information.ExtractPropertyPath<Permition>(x => x.Subject.Name)), operationId));
-
-                            // Количество ролей которым доступна указанная операция.
-                            var permitionsCount = dataService.GetObjectsCount(lcs);
+                            int permitionsCount = GetPermitionCount(operationId, agentPKs);
 
                             cacheService?.SetToCache(cacheKey, permitionsCount, new string[] { SecurityCacheTags.SecurityCacheMainTag, SecurityCacheTags.SecurityManagerCacheTag });
 
                             if (permitionsCount > 0)
-                                return true;
+                                result = true;
                         }
                     }
+
+                    totalResult |= result;
                 }
 
-                return result;
+                return totalResult;
             }
             catch (Exception exc)
             {
@@ -190,16 +172,40 @@
         /// Если у текущего пользователя есть доступ, то <c>true</c>.
         /// Возвращает <c>true</c> без проверок если полномочия выключены в <see cref="Enabled"/>.
         /// </returns>
-        /// <remarks>
-        /// Не поддерживается в текущей реализации.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">Исключение генерируется при передаче <c>null</c> в качестве значения для <paramref name="type"/>.</exception>
         /// <exception cref="ICSSoft.STORMNET.UnauthorizedAccessException">
         /// Исключение генерируется в том случае, если у пользователя отсутствует доступ и параметр <paramref name="throwException"/> установлен в <c>true</c>.
         /// </exception>
         public bool AccessObjectCheck(Type type, tTypeAccess operation, bool throwException)
         {
-            throw new NotImplementedException();
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
+            if (!(currentUser?.RolesList?.Any() ?? false))
+                return false;
+
+            AccessTypeAttribute accessTypeAttribute = GetAccessTypeAttribute(type);
+
+            if (accessTypeAttribute == null || accessTypeAttribute.value == AccessType.none)
+                return true;
+
+            bool totalResult = false;
+
+            foreach (var roleName in currentUser.RolesList)
+            {
+                IEnumerable<Agent> roles = GetRolesByName(roleName);
+
+                // Для каждой роли вычитаем дочерние роли и проверим наличие доступа.
+                foreach (var role in roles)
+                {
+                    totalResult |= CheckTypeAccess(type, operation, role.AgentKey.Value);
+                }
+            }
+
+            if (!totalResult && throwException)
+                throw new UnauthorizedAccessException(operation.ToString(), type);
+
+            return totalResult;
         }
 
         /// <summary>
@@ -209,16 +215,20 @@
         /// <param name="operation">Тип операции.</param>
         /// <param name="throwException">Генерировать ли исключение в случае отсутствия прав.</param>
         /// <returns>Если у текущего пользователя есть доступ, то <c>true</c>.</returns>
-        /// <remarks>
-        /// Не поддерживается в текущей реализации.
-        /// </remarks>
         /// <exception cref="ArgumentNullException">Исключение генерируется при передаче <c>null</c> в качестве значения для <paramref name="obj"/>.</exception>
         /// <exception cref="ICSSoft.STORMNET.UnauthorizedAccessException">
         /// Исключение генерируется в том случае, если у пользователя отсутствует доступ и параметр <paramref name="throwException"/> установлен в <c>true</c>.
         /// </exception>
         public bool AccessObjectCheck(object obj, tTypeAccess operation, bool throwException)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+
+            // Проверяем полномочия на тип.
+            Type type = obj.GetType();
+            bool result = AccessObjectCheck(type, operation, throwException);
+
+            return result;
         }
 
         /// <summary>
@@ -257,9 +267,6 @@
         /// <summary>
         /// Получить ограничение для текущего пользователя.
         /// </summary>
-        /// <remarks>
-        /// Не поддерживается в текущей реализации.
-        /// </remarks>
         /// <param name="subjectType">Тип объекта.</param>
         /// <param name="operation">Тип операции.</param>
         /// <param name="limit">Ограничение, которое есть для текущего пользователя.</param>
@@ -267,7 +274,10 @@
         /// <returns>Результат выполнения операции.</returns>
         public OperationResult GetLimitForAccess(Type subjectType, tTypeAccess operation, out object limit, out bool canAccess)
         {
-            throw new NotImplementedException();
+            canAccess = AccessObjectCheck(subjectType, operation, false);
+            limit = null;
+
+            return OperationResult.Успешно;
         }
 
         /// <summary>
@@ -306,6 +316,41 @@
         public void ClearCache()
         {
             cacheService.ClearCache();
+        }
+
+        /// <summary>
+        /// Получение имени типа для системы полномочий в терминах физического хранения в СУБД.
+        /// Данная реализация <see cref="ISecurityManager"/> поддерживает только режим, когда в БД хранятся значения <c>type.FullName</c>.
+        /// </summary>
+        /// <param name="type">Тип, для которого нужно получить имя.</param>
+        /// <returns>Строковое имя типа, с которым будут работать внутренние механизмы системы полномочий.</returns>
+        /// <exception cref="ArgumentNullException">Исключение генерируется при передаче <c>null</c> в качестве значения для <paramref name="type"/>.</exception>
+        protected virtual string GetSubjectTypeName(Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            return type.FullName;
+        }
+
+        /// <summary>
+        /// Метод для загрузки атрибута <see cref="AccessTypeAttribute"/> для типа.
+        /// </summary>
+        /// <param name="type">Тип, для которого нужно загрузить атрибут.</param>
+        /// <returns>Экземпляр атрибута или <c>null</c>, если атрибут не был найден.</returns>
+        private static AccessTypeAttribute GetAccessTypeAttribute(Type type)
+        {
+            object[] attrs = type.GetCustomAttributes(typeof(AccessTypeAttribute), false);
+
+            if (attrs.Length == 1)
+                return (AccessTypeAttribute)attrs[0];
+
+            if (attrs.Length == 0)
+                return null;
+
+            throw new InvalidOperationException($"Multiple [AccessTypeAttribute] detected for type {type.FullName}.");
         }
 
         /// <summary>
@@ -384,6 +429,117 @@
 
             if (!agentPKs.Contains(Agent.AllUsersRoleGuid))
                 agentPKs.Add(Agent.AllUsersRoleGuid);
+        }
+
+        /// <summary>
+        /// Получить список ролей из полномочий по имени роли.
+        /// </summary>
+        /// <param name="roleName">Имя роли.</param>
+        /// <returns>Список ролей.</returns>
+        private IEnumerable<Agent> GetRolesByName(string roleName)
+        {
+            var roles = dataService.Query<Agent>(Agent.Views.RoleOrGroupL)
+                .Where(x => x.Name == roleName && x.IsRole)
+                .Cast<Agent>();
+
+            return roles;
+        }
+
+        /// <summary>
+        /// Получить количество объектов доступа к операции.
+        /// </summary>
+        /// <param name="operationName">Имя опреации.</param>
+        /// <param name="agentPKs">Список ключей агентов.</param>
+        /// <returns>Количество объектов доступа.</returns>
+        private int GetPermitionCount(string operationName, List<Guid> agentPKs)
+        {
+            var funcInParams = new object[agentPKs.Count + 1];
+            funcInParams[0] = new VariableDef(langDef.GuidType, Information.ExtractPropertyPath<Permition>(x => x.Agent));
+
+            for (int i = 0; i < agentPKs.Count; i++)
+            {
+                funcInParams[i + 1] = agentPKs[i];
+            }
+
+            var lcs = LoadingCustomizationStruct.GetSimpleStruct(typeof(Permition), Permition.Views.CheckAccessOperation);
+
+            lcs.LimitFunction = langDef.GetFunction(
+                langDef.funcAND,
+                langDef.GetFunction(langDef.funcIN, funcInParams),
+                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.BoolType, Information.ExtractPropertyPath<Permition>(x => x.Subject.IsOperation))),
+                langDef.GetFunction(langDef.funcEQ, new VariableDef(langDef.StringType, Information.ExtractPropertyPath<Permition>(x => x.Subject.Name)), operationName));
+
+            // Количество ролей которым доступна указанная операция.
+            var permitionsCount = dataService.GetObjectsCount(lcs);
+
+            return permitionsCount;
+        }
+
+        /// <summary>
+        /// Проверка полномочий на выполнение операции с типом.
+        /// Реализует всю логику проверки доступа к типу, в т.ч. с учетом наследования (через <see cref="AccessType.@base"/>)  и <see cref="AccessType.this_and_base"/>.
+        /// </summary>
+        /// <param name="type">Тип объекта данных.</param>
+        /// <param name="operation">Тип операции.</param>
+        /// <param name="agentKey">Ключ агента.</param>
+        /// <returns>Если у текущего пользователя есть доступ, то <c>true</c>.</returns>
+        private bool CheckTypeAccess(Type type, tTypeAccess operation, Guid agentKey)
+        {
+            AccessTypeAttribute accessTypeAttribute = GetAccessTypeAttribute(type);
+
+            if (accessTypeAttribute == null)
+                return true;
+
+            if (accessTypeAttribute.value == AccessType.none)
+                return true;
+
+            bool result = true;
+            if (accessTypeAttribute.value == AccessType.@base || accessTypeAttribute.value == AccessType.this_and_base)
+                result = CheckTypeAccess(type.BaseType, operation, agentKey);
+
+            if (!result)
+                return false;
+
+            string typeName = GetSubjectTypeName(type);
+
+            try
+            {
+                Access[] acesses;
+                string cacheKey = $"{nameof(CheckTypeAccess)}{agentKey}_{typeName}";
+
+                if (cacheService != null && cacheService.Exists(cacheKey))
+                {
+                    acesses = cacheService.GetFromCache<Access[]>(cacheKey);
+                }
+                else
+                {
+                    var agentPKs = new List<Guid>();
+                    AddLinkedAgents(agentKey, agentPKs);
+
+                    object[] funcInParams = new object[agentPKs.Count + 1];
+                    funcInParams[0] = new VariableDef(langDef.GuidType, Information.ExtractPropertyPath<Access>(x => x.Permition.Agent));
+                    for (int i = 0; i < agentPKs.Count; i++)
+                        funcInParams[i + 1] = agentPKs[i];
+
+                    Function lf = langDef.GetFunction(
+                        langDef.funcAND,
+                        langDef.GetFunction(langDef.funcIN, funcInParams),
+                        langDef.GetFunction(langDef.funcLike, new VariableDef(langDef.StringType, Information.ExtractPropertyPath<Access>(x => x.Permition.Subject.Name)), typeName));
+
+                    LoadingCustomizationStruct lcsAccess = LoadingCustomizationStruct.GetSimpleStruct(typeof(Access), Access.Views.CheckAccessClass);
+                    lcsAccess.LimitFunction = lf;
+
+                    acesses = dataService.LoadObjects(lcsAccess).Cast<Access>().ToArray();
+                    cacheService?.SetToCache(cacheKey, acesses, new string[] { SecurityCacheTags.SecurityCacheMainTag, SecurityCacheTags.SecurityManagerCacheTag });
+                }
+
+                return acesses.Any(ac => ac.TypeAccess == operation || ac.TypeAccess == tTypeAccess.Full);
+            }
+            catch (Exception exc)
+            {
+                LogService.LogError($"Error in checking access to type {typeName} with operation {operation}.", exc);
+                throw;
+            }
         }
     }
 }
