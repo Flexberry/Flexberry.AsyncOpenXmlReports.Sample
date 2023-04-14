@@ -54,3 +54,13 @@ VALUES ('ae1e9ff4-65a1-407a-a82d-6225abb03a81', 'e1403cb5-0726-44e9-adf3-d2d5a92
 
 INSERT INTO public.stormac(primarykey, typeaccess, permition_m0)
 VALUES ('fec68377-0499-4a3e-87bd-e1d26adc9c9a', 'Full', 'ae1e9ff4-65a1-407a-a82d-6225abb03a81');
+
+-- AllAccess -> Reports.CarListReport
+INSERT INTO public.storms(primarykey, name, isattribute, isoperation, isview, isclass, sharedoper)
+VALUES ('141b3e42-2070-4d8a-a109-159a921b1aa2', 'Reports.CarListReport', false, true, false, false, false);
+
+INSERT INTO public.stormp(primarykey, subject_m0, agent_m0)
+VALUES ('3646c92b-3c86-4413-894e-675bfb2f2e35', '141b3e42-2070-4d8a-a109-159a921b1aa2', 'b02d3e4a-ce84-40d7-8d27-b5d85f543a84');
+
+INSERT INTO public.stormac(primarykey, typeaccess, permition_m0)
+VALUES ('d2f18840-625d-4255-a345-73bf6f863bbc', 'Full', '3646c92b-3c86-4413-894e-675bfb2f2e35');

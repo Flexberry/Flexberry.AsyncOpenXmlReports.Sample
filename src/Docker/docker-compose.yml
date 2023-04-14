@@ -15,6 +15,7 @@ services:
       - BackendRoot=https://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - AuthorityUrl=http://keycloak:8080/realms/master/
+      - QuartzUrl=http://quartz:5001/api/quartz/
     networks:
       - asyncopenxmlreportssample
 
