@@ -1,21 +1,15 @@
 ﻿namespace IIS.AsyncOpenXmlReportsSample
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
-    using ICSSoft.STORMNET;
-    using ICSSoft.STORMNET.Business;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
-    using NewPlatform.Flexberry.Reports;
     using Newtonsoft.Json;
 
     [ApiController]
