@@ -13,7 +13,8 @@
   },
   "AllowedHosts": "*",
   "AllowedReportOperations": {
-    "SampleReport": "Reports.SampleReport"
+    "SampleReport": "Reports.SampleReport",
+    "CarListReport":  "Reports.CarListReport"
   },
   "Urls": "http://*:5001"
 }

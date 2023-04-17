@@ -21,7 +21,7 @@
         /// </summary>
         /// <param name="request">Переметры запроса <see cref="SampleReportRequest">SampleReportRequest</see>.</param>
         /// <returns>Статус запроса <see cref="StatusCodeResult">StatusCodeResult</see>.</returns>
-        [HttpPost]
+        [HttpPost("[action]")]
         [ActionName("SampleReport")]
         public StatusCodeResult SampleReport([FromBody] SampleReportRequest request)
         {
@@ -40,6 +40,34 @@
                 // Добавим к задаче данные запроса.
                 job.JobDataMap.Add(JobTools.ReportNameParam, "SampleReport");
                 job.JobDataMap.Add("SampleReportRequest", request);
+
+                await scheduler.ScheduleJob(job, trigger);
+            });
+
+            runTask.Start();
+
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [ActionName("CarListReport")]
+        public StatusCodeResult CarListReport([FromBody] CarListReportRequest request)
+        {
+            LogService.LogDebugFormat("SampleReport: params = '{0}'", request.ToString());
+
+            var runTask = new Task(async () =>
+            {
+                StdSchedulerFactory factory = new StdSchedulerFactory();
+                IScheduler scheduler = await factory.GetScheduler();
+
+                await scheduler.Start();
+
+                var job = CarListJob.GetDetail("job1_" + request.Id, "group1_" + request.Id);
+                var trigger = CarListJob.GetTrigger("trigger1_" + request.Id, "group1_" + request.Id);
+
+                // Добавим к задаче данные запроса.
+                job.JobDataMap.Add(JobTools.ReportNameParam, "CarListReport");
+                job.JobDataMap.Add("CarListReportRequest", request);
 
                 await scheduler.ScheduleJob(job, trigger);
             });

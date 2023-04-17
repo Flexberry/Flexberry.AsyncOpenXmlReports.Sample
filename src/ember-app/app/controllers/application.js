@@ -33,19 +33,25 @@ export default Controller.extend(SignalRMixin, {
             link: 'i-i-s-async-open-xml-reports-sample-brand-l',
             caption: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-brand-l.caption'),
             title: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-brand-l.title'),
-            icon: 'briefcase',
+            icon: 'list',
             children: null
           }, {
             link: 'i-i-s-async-open-xml-reports-sample-car-l',
             caption: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-car-l.caption'),
             title: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-car-l.title'),
-            icon: 'table',
+            icon: 'folder open',
             children: null
           }, {
             link: 'i-i-s-async-open-xml-reports-sample-producing-country-l',
             caption: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-producing-country-l.caption'),
             title: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-producing-country-l.title'),
-            icon: 'tags',
+            icon: 'chart line',
+            children: null
+          }, {
+            link: 'i-i-s-async-open-xml-reports-sample-user-report-l',
+            caption: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-user-report-l.caption'),
+            title: i18n.t('forms.application.sitemap.async-open-xml-reports-sample.i-i-s-async-open-xml-reports-sample-user-report-l.title'),
+            icon: 'folder open',
             children: null
           }]
         }
@@ -183,7 +189,7 @@ export default Controller.extend(SignalRMixin, {
     callSignarRTestNotification() {
       const signalR = this.getSignalR();
       if (signalR) {
-        signalR.connection.invoke("SendNotifyUserMessage", this.userName);
+        signalR.connection.invoke("SendNotifyUserMessage", this.userName, "Hi!");
       }
     },
   }

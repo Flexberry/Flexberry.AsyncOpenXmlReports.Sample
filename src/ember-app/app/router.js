@@ -21,6 +21,11 @@ Router.map(function () {
   { path: 'i-i-s-async-open-xml-reports-sample-producing-country-e/:id' });
   this.route('i-i-s-async-open-xml-reports-sample-producing-country-e.new',
   { path: 'i-i-s-async-open-xml-reports-sample-producing-country-e/new' });
+  this.route('i-i-s-async-open-xml-reports-sample-user-report-l');
+  this.route('i-i-s-async-open-xml-reports-sample-user-report-e',
+  { path: 'i-i-s-async-open-xml-reports-sample-user-report-e/:id' });
+  this.route('i-i-s-async-open-xml-reports-sample-user-report-e.new',
+  { path: 'i-i-s-async-open-xml-reports-sample-user-report-e/new' });
 });
 
 export default Router;

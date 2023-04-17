@@ -1,8 +1,16 @@
 import { getOwner } from '@ember/application';
 import Mixin from '@ember/object/mixin';
 import { later } from '@ember/runloop';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default Mixin.create({
+  keycloakSession: service(),
+
+  userName: computed('keycloakSession.tokenParsed.preferred_username', function() {
+    return this.keycloakSession.tokenParsed.preferred_username;
+  }),
+
   getSignalR() {
     const app = getOwner(this);
     const signalr = app.lookup('realtime:signalr');
@@ -25,6 +33,7 @@ export default Mixin.create({
 
       signalr.connection.onclose( _this._signalROnDisconnected.bind(_this));
       signalr.connection.on('NotifyUser', _this._notifyUser.bind(_this));
+      signalr.connection.invoke("AddUser", _this.userName);
     }).catch(function (err) {
 
       // eslint-disable-next-line no-console

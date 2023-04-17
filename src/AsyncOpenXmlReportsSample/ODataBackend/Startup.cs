@@ -170,6 +170,11 @@
 
             RegisterDataObjectFileAccessor(container);
             RegisterORM(container);
+
+            var emailOptions = new MailConfigurations.EmailOptions();
+            Configuration.GetSection("Email").Bind(emailOptions);
+            container.RegisterInstance(emailOptions);
+            container.RegisterType<Services.IEmailSender, Services.MailKitEmailService>();
         }
 
         /// <summary>

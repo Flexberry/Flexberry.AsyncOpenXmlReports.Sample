@@ -28,6 +28,13 @@
           "caption": "Producing country",
           "title": "",
           "children": null
+        },
+        {
+          "link": "i-i-s-async-open-xml-reports-sample-user-report-l",
+          "menuName": null,
+          "caption": "User report",
+          "title": "",
+          "children": null
         }
       ]
     }

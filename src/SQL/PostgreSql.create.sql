@@ -34,6 +34,15 @@ CREATE TABLE ProducingCountry (
  PRIMARY KEY (primaryKey));
 
 
+CREATE TABLE UserReport (
+ primaryKey UUID NOT NULL,
+ File TEXT NULL,
+ ReportTaskStartTime TIMESTAMP(3) NULL,
+ Status VARCHAR(10) NULL,
+ UserName VARCHAR(255) NULL,
+ PRIMARY KEY (primaryKey));
+
+
 CREATE TABLE STORMNETLOCKDATA (
  LockKey VARCHAR(300) NOT NULL,
  UserName VARCHAR(300) NOT NULL,

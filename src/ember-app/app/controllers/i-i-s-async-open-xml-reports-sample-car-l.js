@@ -19,9 +19,7 @@ export default ListFormController.extend({
 
   actions: {
     BuildCarListReport() {
-      const authToken = this.get('keycloakSession.token');
-      let appState = this.get('appState');
-      appState.loading();
+      const authToken = this.get('keycloakSession.token');;
 
       $.ajax({
         headers: {
@@ -31,19 +29,7 @@ export default ListFormController.extend({
         cache: false,
         type: 'GET',
         url: `${config.APP.backendUrls.root}/api/CarListReport/Build`,
-        dataType: 'blob',
-        success(response) {
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(response);
-          link.download = "CarListReport.docx";
-          link.style.display = 'none';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        },
-        complete() {
-          appState.reset();
-        }
+        dataType: 'json',
       });
     },
 
