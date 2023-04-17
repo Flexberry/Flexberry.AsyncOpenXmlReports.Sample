@@ -6,6 +6,7 @@ import { attr, belongsTo, hasMany } from 'ember-flexberry-data/utils/attributes'
 
 export let Model = Mixin.create({
   file: DS.attr('file'),
+  reportId: DS.attr('guid'),
   reportTaskStartTime: DS.attr('date'),
   status: DS.attr('i-i-s-async-open-xml-reports-sample-report-status-type'),
   userName: DS.attr('string')
@@ -14,6 +15,12 @@ export let Model = Mixin.create({
 export let ValidationRules = {
   file: {
     descriptionKey: 'models.i-i-s-async-open-xml-reports-sample-user-report.validations.file.__caption__',
+    validators: [
+      validator('ds-error'),
+    ],
+  },
+  reportId: {
+    descriptionKey: 'models.i-i-s-async-open-xml-reports-sample-user-report.validations.reportId.__caption__',
     validators: [
       validator('ds-error'),
     ],
@@ -35,6 +42,7 @@ export let ValidationRules = {
     descriptionKey: 'models.i-i-s-async-open-xml-reports-sample-user-report.validations.userName.__caption__',
     validators: [
       validator('ds-error'),
+      validator('presence', true),
     ],
   },
 };
@@ -42,15 +50,17 @@ export let ValidationRules = {
 export let defineProjections = function (modelClass) {
   modelClass.defineProjection('UserReportE', 'i-i-s-async-open-xml-reports-sample-user-report', {
     userName: attr('', { index: 0 }),
-    reportTaskStartTime: attr('', { index: 1 }),
-    status: attr('', { index: 2 }),
-    file: attr('', { index: 3 })
+    reportId: attr('', { index: 1, hidden: true }),
+    reportTaskStartTime: attr('', { index: 2 }),
+    status: attr('', { index: 3 }),
+    file: attr('', { index: 4 })
   });
 
   modelClass.defineProjection('UserReportL', 'i-i-s-async-open-xml-reports-sample-user-report', {
     userName: attr('', { index: 0 }),
-    reportTaskStartTime: attr('', { index: 1 }),
-    status: attr('', { index: 2 }),
-    file: attr('', { index: 3 })
+    reportId: attr('', { index: 1, hidden: true }),
+    reportTaskStartTime: attr('', { index: 2 }),
+    status: attr('', { index: 3 }),
+    file: attr('', { index: 4 })
   });
 };

@@ -4,6 +4,9 @@ export default {
       userName: {
         __caption__: 'Пользователь'
       },
+      reportId: {
+        __caption__: ''
+      },
       reportTaskStartTime: {
         __caption__: 'Дата запроса отчета'
       },
@@ -17,6 +20,9 @@ export default {
     UserReportL: {
       userName: {
         __caption__: 'Пользователь'
+      },
+      reportId: {
+        __caption__: ''
       },
       reportTaskStartTime: {
         __caption__: 'Дата запроса отчета'
@@ -32,6 +38,9 @@ export default {
   validations: {
     file: {
       __caption__: 'file'
+    },
+    reportId: {
+      __caption__: 'reportId'
     },
     reportTaskStartTime: {
       __caption__: 'reportTaskStartTime'

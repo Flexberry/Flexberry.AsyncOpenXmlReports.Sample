@@ -16,6 +16,15 @@
       "ordered": false
     },
     {
+      "name": "reportId",
+      "type": "guid",
+      "flexberryType": "guid",
+      "notNull": true,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
       "name": "reportTaskStartTime",
       "type": "date",
       "flexberryType": "DateTime",
@@ -37,7 +46,7 @@
       "name": "userName",
       "type": "string",
       "flexberryType": "string",
-      "notNull": false,
+      "notNull": true,
       "defaultValue": "",
       "stored": true,
       "ordered": false
@@ -57,22 +66,28 @@
           "index": 0
         },
         {
-          "name": "reportTaskStartTime",
+          "name": "reportId",
           "caption": "",
-          "hidden": false,
+          "hidden": true,
           "index": 1
         },
         {
-          "name": "status",
+          "name": "reportTaskStartTime",
           "caption": "",
           "hidden": false,
           "index": 2
         },
         {
-          "name": "file",
+          "name": "status",
           "caption": "",
           "hidden": false,
           "index": 3
+        },
+        {
+          "name": "file",
+          "caption": "",
+          "hidden": false,
+          "index": 4
         }
       ],
       "belongsTo": [],
@@ -89,22 +104,28 @@
           "index": 0
         },
         {
-          "name": "reportTaskStartTime",
+          "name": "reportId",
           "caption": "",
-          "hidden": false,
+          "hidden": true,
           "index": 1
         },
         {
-          "name": "status",
+          "name": "reportTaskStartTime",
           "caption": "",
           "hidden": false,
           "index": 2
         },
         {
-          "name": "file",
+          "name": "status",
           "caption": "",
           "hidden": false,
           "index": 3
+        },
+        {
+          "name": "file",
+          "caption": "",
+          "hidden": false,
+          "index": 4
         }
       ],
       "belongsTo": [],

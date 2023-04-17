@@ -31,18 +31,24 @@ namespace IIS.AsyncOpenXmlReportsSample
     [AccessType(ICSSoft.STORMNET.AccessType.none)]
     [View("UserReportE", new string[] {
             "UserName",
+            "ReportId",
             "ReportTaskStartTime",
             "Status",
-            "File"})]
+            "File"}, Hidden=new string[] {
+            "ReportId"})]
     [View("UserReportL", new string[] {
             "UserName",
+            "ReportId",
             "ReportTaskStartTime",
             "Status",
-            "File"})]
+            "File"}, Hidden=new string[] {
+            "ReportId"})]
     public class UserReport : ICSSoft.STORMNET.DataObject
     {
         
         private string fUserName;
+
+        private System.Guid fReportId;
         
         private System.DateTime fReportTaskStartTime = DateTime.Now;
         
@@ -83,6 +89,38 @@ namespace IIS.AsyncOpenXmlReportsSample
                 // *** Start programmer edit section *** (UserReport.File Set end)
 
                 // *** End programmer edit section *** (UserReport.File Set end)
+            }
+        }
+        
+        /// <summary>
+        /// ReportId.
+        /// </summary>
+        // *** Start programmer edit section *** (UserReport.ReportId CustomAttributes)
+
+        // *** End programmer edit section *** (UserReport.ReportId CustomAttributes)
+        [NotNull()]
+        public virtual System.Guid ReportId
+        {
+            get
+            {
+                // *** Start programmer edit section *** (UserReport.ReportId Get start)
+
+                // *** End programmer edit section *** (UserReport.ReportId Get start)
+                System.Guid result = this.fReportId;
+                // *** Start programmer edit section *** (UserReport.ReportId Get end)
+
+                // *** End programmer edit section *** (UserReport.ReportId Get end)
+                return result;
+            }
+            set
+            {
+                // *** Start programmer edit section *** (UserReport.ReportId Set start)
+
+                // *** End programmer edit section *** (UserReport.ReportId Set start)
+                this.fReportId = value;
+                // *** Start programmer edit section *** (UserReport.ReportId Set end)
+
+                // *** End programmer edit section *** (UserReport.ReportId Set end)
             }
         }
         
@@ -155,6 +193,7 @@ namespace IIS.AsyncOpenXmlReportsSample
 
         // *** End programmer edit section *** (UserReport.UserName CustomAttributes)
         [StrLen(255)]
+        [NotNull()]
         public virtual string UserName
         {
             get

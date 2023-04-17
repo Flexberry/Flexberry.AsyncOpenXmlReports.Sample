@@ -37,9 +37,10 @@ CREATE TABLE ProducingCountry (
 CREATE TABLE UserReport (
  primaryKey UUID NOT NULL,
  File TEXT NULL,
+ ReportId UUID NOT NULL,
  ReportTaskStartTime TIMESTAMP(3) NULL,
  Status VARCHAR(10) NULL,
- UserName VARCHAR(255) NULL,
+ UserName VARCHAR(255) NOT NULL,
  PRIMARY KEY (primaryKey));
 
 
