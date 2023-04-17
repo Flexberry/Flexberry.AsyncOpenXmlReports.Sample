@@ -72,6 +72,18 @@
 
             LogService.Log.Info($"SampleJob: request = {request}; user = {user2.Login}; ds = {ds.CustomizationString}");
 
+            try
+            {
+                var fileName = $"{Adapter.Configuration["FilesFolder"]}{request.Id}.txt";
+
+                LogService.Log.Debug($"Creating file: {fileName}");
+                System.IO.File.WriteAllText(fileName, request.ToString());
+            }
+            catch (Exception ex)
+            {
+                LogService.Log.Error(ex);
+            }
+
             return Task.CompletedTask;
         }
     }

@@ -17,7 +17,7 @@ services:
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - AuthorityUrl=http://keycloak:8080/realms/master/
     volumes:
-      - COMMON:/app/files
+      - COMMON:/var/reports
     networks:
       - asyncopenxmlreportssample
 
@@ -54,7 +54,7 @@ services:
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - SecurityConnString=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
     volumes:
-      - COMMON:/app/files
+      - COMMON:/var/reports
     networks:
       - asyncopenxmlreportssample
 
