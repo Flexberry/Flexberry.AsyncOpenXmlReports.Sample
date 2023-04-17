@@ -183,7 +183,7 @@ export default Controller.extend(SignalRMixin, {
     callSignarRTestNotification() {
       const signalR = this.getSignalR();
       if (signalR) {
-        signalR.connection.invoke("SendNotifyUserMessage", this.userName);
+        signalR.connection.invoke("SendNotifyUserMessage", this.userName, "Hi!");
       }
     },
   }
