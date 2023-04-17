@@ -1,0 +1,9 @@
+﻿{
+  "nameSpace": "IIS.AsyncOpenXmlReportsSample",
+  "className": "ReportStatusType",
+  "enumObjects": {
+    "InProgress": "",
+    "Unexecuted": "",
+    "Executed": ""
+  }
+}

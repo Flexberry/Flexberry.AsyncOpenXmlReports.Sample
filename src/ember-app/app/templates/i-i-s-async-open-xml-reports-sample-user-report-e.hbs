@@ -1,0 +1,69 @@
+<h3 class="ui header">{{t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.caption"}}</h3>
+
+<form class="ui form flexberry-vertical-form" role="form">
+  {{flexberry-error error=error}}
+  <div class="field">
+    <div class="flexberry-edit-panel">
+      {{#unless readonly}}
+        <button class="ui button save-button" {{action "save"}}>
+          {{t "forms.edit-form.save-button-text"}}
+        </button>
+        {{#unless model.isNew}}
+          <button class="ui button save-del-button" {{action "delete"}}>
+            {{t "forms.edit-form.delete-button-text"}}
+          </button>
+        {{/unless}}
+      {{/unless}}
+      <button class="ui button close-button" {{action "close"}}>
+        {{t "forms.edit-form.close-button-text"}}
+      </button>
+    </div>
+  </div>
+  <div class="field flexberry-validationsummary-container">
+    <div class="sixteen wide">
+      {{flexberry-validationsummary errors=(v-get validationObject "messages")}}
+    </div>
+  </div>
+  <div class="field">
+    {{flexberry-field
+      readonly=readonly
+      value=model.userName
+      class=(if (v-get validationModel "userName" "isInvalid") "error")
+      label=(t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.userName-caption")
+      data-test-i-i-s-async-open-xml-reports-sample-user-report-e-userName=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "userName" "message")}}
+  </div>
+  <div class="field">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.reportTaskStartTime-caption"}}</label>
+    {{flexberry-simpledatetime
+      type="date"
+      readonly=readonly
+      value=model.reportTaskStartTime
+      class=(if (v-get validationModel "reportTaskStartTime" "isInvalid") "error")
+      data-test-i-i-s-async-open-xml-reports-sample-user-report-e-reportTaskStartTime=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "reportTaskStartTime" "message")}}
+  </div>
+  <div class="field" data-test-i-i-s-async-open-xml-reports-sample-user-report-e-status="true">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.status-caption"}}</label>
+    {{flexberry-dropdown
+      items=(flexberry-enum "i-i-s-async-open-xml-reports-sample-report-status-type")
+      value=model.status
+      class=(if (v-get validationModel "status" "isInvalid") "error")
+      readonly=readonly
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "status" "message")}}
+  </div>
+  <div class="field">
+    <label>{{t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.file-caption"}}</label>
+    {{flexberry-file
+      readonly=readonly
+      value=model.file
+      class=(if (v-get validationModel "file" "isInvalid") "error")
+      label=(t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.file-caption")
+      data-test-i-i-s-async-open-xml-reports-sample-user-report-e-file=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "file" "message")}}
+  </div>
+</form>

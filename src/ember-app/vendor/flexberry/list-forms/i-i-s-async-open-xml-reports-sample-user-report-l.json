@@ -1,0 +1,15 @@
+﻿{
+  "newForm": "i-i-s-async-open-xml-reports-sample-user-report-e",
+  "editForm": "i-i-s-async-open-xml-reports-sample-user-report-e",
+  "external": false,
+  "caption": "User report",
+  "name": "IISAsyncOpenXmlReportsSampleUserReportL",
+  "className": "UserReportL",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-user-report",
+      "modelProjection": "UserReportL"
+    }
+  ]
+}

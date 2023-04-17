@@ -4,13 +4,16 @@ import EmberFlexberryTranslations from 'ember-flexberry/locales/en/translations'
 import IISAsyncOpenXmlReportsSampleBrandLForm from './forms/i-i-s-async-open-xml-reports-sample-brand-l';
 import IISAsyncOpenXmlReportsSampleCarLForm from './forms/i-i-s-async-open-xml-reports-sample-car-l';
 import IISAsyncOpenXmlReportsSampleProducingCountryLForm from './forms/i-i-s-async-open-xml-reports-sample-producing-country-l';
+import IISAsyncOpenXmlReportsSampleUserReportLForm from './forms/i-i-s-async-open-xml-reports-sample-user-report-l';
 import IISAsyncOpenXmlReportsSampleBrandEForm from './forms/i-i-s-async-open-xml-reports-sample-brand-e';
 import IISAsyncOpenXmlReportsSampleCarEForm from './forms/i-i-s-async-open-xml-reports-sample-car-e';
 import IISAsyncOpenXmlReportsSampleProducingCountryEForm from './forms/i-i-s-async-open-xml-reports-sample-producing-country-e';
+import IISAsyncOpenXmlReportsSampleUserReportEForm from './forms/i-i-s-async-open-xml-reports-sample-user-report-e';
 import IISAsyncOpenXmlReportsSampleBrandModel from './models/i-i-s-async-open-xml-reports-sample-brand';
 import IISAsyncOpenXmlReportsSampleCarModel from './models/i-i-s-async-open-xml-reports-sample-car';
 import IISAsyncOpenXmlReportsSampleProducingCountryModel from './models/i-i-s-async-open-xml-reports-sample-producing-country';
 import IISAsyncOpenXmlReportsSampleSparePartModel from './models/i-i-s-async-open-xml-reports-sample-spare-part';
+import IISAsyncOpenXmlReportsSampleUserReportModel from './models/i-i-s-async-open-xml-reports-sample-user-report';
 
 const translations = {};
 $.extend(true, translations, EmberFlexberryTranslations);
@@ -20,7 +23,8 @@ $.extend(true, translations, {
     'i-i-s-async-open-xml-reports-sample-brand': IISAsyncOpenXmlReportsSampleBrandModel,
     'i-i-s-async-open-xml-reports-sample-car': IISAsyncOpenXmlReportsSampleCarModel,
     'i-i-s-async-open-xml-reports-sample-producing-country': IISAsyncOpenXmlReportsSampleProducingCountryModel,
-    'i-i-s-async-open-xml-reports-sample-spare-part': IISAsyncOpenXmlReportsSampleSparePartModel
+    'i-i-s-async-open-xml-reports-sample-spare-part': IISAsyncOpenXmlReportsSampleSparePartModel,
+    'i-i-s-async-open-xml-reports-sample-user-report': IISAsyncOpenXmlReportsSampleUserReportModel
   },
 
   'application-name': 'Async open xml reports sample',
@@ -100,6 +104,10 @@ $.extend(true, translations, {
           'i-i-s-async-open-xml-reports-sample-producing-country-l': {
             caption: 'Producing country',
             title: ''
+          },
+          'i-i-s-async-open-xml-reports-sample-user-report-l': {
+            caption: 'User report',
+            title: ''
           }
         }
       }
@@ -116,9 +124,11 @@ $.extend(true, translations, {
     'i-i-s-async-open-xml-reports-sample-brand-l': IISAsyncOpenXmlReportsSampleBrandLForm,
     'i-i-s-async-open-xml-reports-sample-car-l': IISAsyncOpenXmlReportsSampleCarLForm,
     'i-i-s-async-open-xml-reports-sample-producing-country-l': IISAsyncOpenXmlReportsSampleProducingCountryLForm,
+    'i-i-s-async-open-xml-reports-sample-user-report-l': IISAsyncOpenXmlReportsSampleUserReportLForm,
     'i-i-s-async-open-xml-reports-sample-brand-e': IISAsyncOpenXmlReportsSampleBrandEForm,
     'i-i-s-async-open-xml-reports-sample-car-e': IISAsyncOpenXmlReportsSampleCarEForm,
-    'i-i-s-async-open-xml-reports-sample-producing-country-e': IISAsyncOpenXmlReportsSampleProducingCountryEForm
+    'i-i-s-async-open-xml-reports-sample-producing-country-e': IISAsyncOpenXmlReportsSampleProducingCountryEForm,
+    'i-i-s-async-open-xml-reports-sample-user-report-e': IISAsyncOpenXmlReportsSampleUserReportEForm
   },
 
 });

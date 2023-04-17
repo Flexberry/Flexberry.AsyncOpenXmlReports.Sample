@@ -1,0 +1,117 @@
+﻿{
+  "name": "IISAsyncOpenXmlReportsSampleUserReport",
+  "modelName": "i-i-s-async-open-xml-reports-sample-user-report",
+  "className": "UserReport",
+  "nameSpace": "IIS.AsyncOpenXmlReportsSample",
+  "parentModelName": null,
+  "parentClassName": null,
+  "attrs": [
+    {
+      "name": "file",
+      "type": "file",
+      "flexberryType": "WebFile",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
+      "name": "reportTaskStartTime",
+      "type": "date",
+      "flexberryType": "DateTime",
+      "notNull": false,
+      "defaultValue": "DateTime.Now",
+      "stored": true,
+      "ordered": false
+    },
+    {
+      "name": "status",
+      "type": "i-i-s-async-open-xml-reports-sample-report-status-type",
+      "flexberryType": "ReportStatusType",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
+      "name": "userName",
+      "type": "string",
+      "flexberryType": "string",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    }
+  ],
+  "belongsTo": [],
+  "hasMany": [],
+  "projections": [
+    {
+      "name": "UserReportE",
+      "modelName": "i-i-s-async-open-xml-reports-sample-user-report",
+      "attrs": [
+        {
+          "name": "userName",
+          "caption": "",
+          "hidden": false,
+          "index": 0
+        },
+        {
+          "name": "reportTaskStartTime",
+          "caption": "",
+          "hidden": false,
+          "index": 1
+        },
+        {
+          "name": "status",
+          "caption": "",
+          "hidden": false,
+          "index": 2
+        },
+        {
+          "name": "file",
+          "caption": "",
+          "hidden": false,
+          "index": 3
+        }
+      ],
+      "belongsTo": [],
+      "hasMany": []
+    },
+    {
+      "name": "UserReportL",
+      "modelName": "i-i-s-async-open-xml-reports-sample-user-report",
+      "attrs": [
+        {
+          "name": "userName",
+          "caption": "",
+          "hidden": false,
+          "index": 0
+        },
+        {
+          "name": "reportTaskStartTime",
+          "caption": "",
+          "hidden": false,
+          "index": 1
+        },
+        {
+          "name": "status",
+          "caption": "",
+          "hidden": false,
+          "index": 2
+        },
+        {
+          "name": "file",
+          "caption": "",
+          "hidden": false,
+          "index": 3
+        }
+      ],
+      "belongsTo": [],
+      "hasMany": []
+    }
+  ],
+  "stored": true,
+  "offline": true,
+  "external": false
+}
