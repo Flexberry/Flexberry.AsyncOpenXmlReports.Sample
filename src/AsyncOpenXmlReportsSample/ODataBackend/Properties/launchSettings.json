@@ -6,7 +6,7 @@
       "applicationUrl": "http://localhost:6500",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "BackendRoot": "http://localhost",
+        "BackendRoot": "http://localhost:6500",
         "DefConnStr": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;"
       }
     }

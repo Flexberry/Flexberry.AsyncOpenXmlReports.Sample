@@ -1,0 +1,14 @@
+﻿{
+  "propertyLookup": [],
+  "external": false,
+  "caption": "User report",
+  "name": "IISAsyncOpenXmlReportsSampleUserReportE",
+  "className": "UserReportE",
+  "attrs": [],
+  "projections": [
+    {
+      "modelName": "i-i-s-async-open-xml-reports-sample-user-report",
+      "modelProjection": "UserReportE"
+    }
+  ]
+}
