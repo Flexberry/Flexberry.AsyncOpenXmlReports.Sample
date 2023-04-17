@@ -1,15 +1,16 @@
 ﻿namespace IIS.AsyncOpenXmlReportsSample
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using ICSSoft.STORMNET;
-    using ICSSoft.STORMNET.Business;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
-    using NewPlatform.Flexberry.Reports;
+    using Newtonsoft.Json;
 
     [ApiController]
     [Route("api/[controller]")]
@@ -20,10 +21,9 @@
         /// </summary>
         private readonly IConfiguration config;
 
-        /// <summary>
-        /// Data service.
-        /// </summary>
-        private readonly IDataService dataService;
+        private readonly IWebHostEnvironment webHostEnvironment;
+
+        private readonly IHttpContextAccessor contextAccessor;
 
         public const string TemplateName = "CarListTemplate.docx";
 
@@ -31,55 +31,64 @@
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
         /// </summary>
         /// <param name="configuration">App configuration.</param>
-        /// <param name="dataService">Data service.</param>
-        public CarListReportController(IConfiguration configuration, IDataService dataService)
+        public CarListReportController(IConfiguration configuration, IHttpContextAccessor contextAccessor, IWebHostEnvironment webHostEnvironment)
         {
-            this.dataService = dataService;
             this.config = configuration;
+            this.contextAccessor = contextAccessor;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("[action]")]
-        public IActionResult Build()
+        public async Task<string> Build()
         {
             try
             {
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
+                var userService = new CurrentHttpUserService(contextAccessor);
 
-                DocxReport template = new DocxReport(this.config["TemplatesPath"] + TemplateName);
+                var templatePath = this.webHostEnvironment.ContentRootPath;
 
-                var lcs = new LoadingCustomizationStruct(null)
+                var responseString = string.Empty;
+                var apiUrl = this.config["QuartzUrl"] + "CarListReport";
+
+                using (var httpClient = new HttpClient())
                 {
-                    LoadingTypes = new[] { typeof(Car) },
-                    View = Car.Views.CarL,
-                };
+                    object input = new
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        TemplatePath = templatePath + @"\" + this.config["TemplatesPath"],
+                        TemplateName = TemplateName,
+                        UserInfo = new
+                        {
+                            Login = userService.Login,
+                            Roles = "AllAccess", // TODO: Достать роли текущего пользователя
+                        },
+                    };
 
-                List<Car> cars = this.dataService.LoadObjects(lcs).Cast<Car>().ToList();
+                    var msg = JsonConvert.SerializeObject(input);
+                    var buffer = Encoding.UTF8.GetBytes(msg);
+                    var byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                List<Dictionary<string, object>> allCarsParameters = new List<Dictionary<string, object>>();
-
-                foreach (Car car in cars)
-                {
-                    Dictionary<string, object> singleCarParameters = new Dictionary<string, object>();
-
-                    singleCarParameters.Add("CarNumber", car.CarNumber);
-                    singleCarParameters.Add("CarDate", car.CarDate.ToString("dd.MM.yyyy"));
-                    singleCarParameters.Add("CarBody", EnumCaption.GetCaptionFor(car.CarBody));
-
-                    allCarsParameters.Add(singleCarParameters);
+                    using (var response = await httpClient.PostAsync(apiUrl, byteContent))
+                    {
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            // TODO: обработать варианты ответов (скачивать/отправлять на e-mail/высылать уведомление)
+                            responseString = "Отчет формируется";
+                        }
+                        else
+                        {
+                            responseString = "Что-то пошло не так";
+                        }
+                    }
                 }
 
-                parameters.Add("Car", allCarsParameters);
-
-                template.BuildWithParameters(parameters);
-
-                MemoryStream stream = new MemoryStream();
-                template.SaveAs(stream);
-                stream.Position = 0;
-                return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+                return responseString;
             }
             catch (Exception ex)
             {
-                return this.StatusCode(500);
+                // TODO: обработать корректно исключение
+                return ex.Message;
             }
         }
 
