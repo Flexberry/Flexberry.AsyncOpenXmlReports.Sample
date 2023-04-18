@@ -19,7 +19,7 @@ export default ListFormController.extend({
 
   actions: {
     BuildCarListReport() {
-      const authToken = this.get('keycloakSession.token');;
+      const authToken = this.get('keycloakSession.token');
 
       $.ajax({
         headers: {

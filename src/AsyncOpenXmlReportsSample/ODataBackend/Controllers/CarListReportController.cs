@@ -6,7 +6,8 @@
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Hosting;
+    using ICSSoft.STORMNET;
+    using ICSSoft.STORMNET.Business;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -21,9 +22,9 @@
         /// </summary>
         private readonly IConfiguration config;
 
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IUserWithRolesAndEmail userService;
 
-        private readonly IHttpContextAccessor contextAccessor;
+        private readonly IDataService dataService;
 
         public const string TemplateName = "CarListTemplate.docx";
 
@@ -31,36 +32,49 @@
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
         /// </summary>
         /// <param name="configuration">App configuration.</param>
-        public CarListReportController(IConfiguration configuration, IHttpContextAccessor contextAccessor, IWebHostEnvironment webHostEnvironment)
+        public CarListReportController(IConfiguration configuration,
+            IUserWithRolesAndEmail userService,
+            IDataService dataService)
         {
             this.config = configuration;
-            this.contextAccessor = contextAccessor;
-            this.webHostEnvironment = webHostEnvironment;
+            this.userService = userService;
+            this.dataService = dataService;
         }
 
         [HttpGet("[action]")]
         public async Task<string> Build()
         {
+            string userName = userService.Login;
+            string userRoles = userService.Roles;
+            string userEmail = userService.Email;
+
+            Guid reportId = Guid.NewGuid();
+
+            UserReport report = new UserReport()
+            {
+                UserName = userName,
+                UserEmail = userEmail,
+                ReportId = reportId,
+                ReportTaskStartTime = DateTime.Now,
+                Status = ReportStatusType.InProgress,
+            };
+
+            dataService.UpdateObject(report);
+
             try
             {
-                var userService = new CurrentHttpUserService(contextAccessor);
-
-                var templatePath = this.webHostEnvironment.ContentRootPath;
-
-                var responseString = string.Empty;
-                var apiUrl = this.config["QuartzUrl"] + "CarListReport";
+                string apiUrl = this.config["QuartzUrl"] + "CarListReport";
 
                 using (var httpClient = new HttpClient())
                 {
                     object input = new
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        TemplatePath = templatePath + @"\" + this.config["TemplatesPath"],
+                        Id = reportId.ToString(),
                         TemplateName = TemplateName,
                         UserInfo = new
                         {
-                            Login = userService.Login,
-                            Roles = "AllAccess", // TODO: Достать роли текущего пользователя
+                            Login = userName,
+                            Roles = userRoles,
                         },
                     };
 
@@ -73,21 +87,25 @@
                     {
                         if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            // TODO: обработать варианты ответов (скачивать/отправлять на e-mail/высылать уведомление)
-                            responseString = "Отчет формируется";
+                            return "Отчет формируется";
                         }
                         else
                         {
-                            responseString = "Что-то пошло не так";
+                            report.Status = ReportStatusType.Unexecuted;
+                            dataService.UpdateObject(report);
+
+                            return "Что-то пошло не так";
                         }
                     }
                 }
-
-                return responseString;
             }
             catch (Exception ex)
             {
-                // TODO: обработать корректно исключение
+                LogService.Log.Error(ex);
+
+                report.Status = ReportStatusType.Unexecuted;
+                dataService.UpdateObject(report);
+
                 return ex.Message;
             }
         }

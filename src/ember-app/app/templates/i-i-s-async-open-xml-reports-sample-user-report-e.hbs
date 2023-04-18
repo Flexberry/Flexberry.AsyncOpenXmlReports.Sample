@@ -35,6 +35,16 @@
     {{flexberry-validationmessage error=(v-get validationModel "userName" "message")}}
   </div>
   <div class="field">
+    {{flexberry-field
+      readonly=readonly
+      value=model.userEmail
+      class=(if (v-get validationModel "userEmail" "isInvalid") "error")
+      label=(t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.userEmail-caption")
+      data-test-i-i-s-async-open-xml-reports-sample-user-report-e-userEmail=true
+    }}
+    {{flexberry-validationmessage error=(v-get validationModel "userEmail" "message")}}
+  </div>
+  <div class="field">
     <label>{{t "forms.i-i-s-async-open-xml-reports-sample-user-report-e.reportTaskStartTime-caption"}}</label>
     {{flexberry-simpledatetime
       type="date"
