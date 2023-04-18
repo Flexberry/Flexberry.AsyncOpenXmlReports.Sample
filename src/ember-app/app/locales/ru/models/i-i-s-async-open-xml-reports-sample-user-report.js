@@ -4,6 +4,12 @@ export default {
       userName: {
         __caption__: 'Пользователь'
       },
+      userEmail: {
+        __caption__: 'Email пользователя'
+      },
+      reportId: {
+        __caption__: ''
+      },
       reportTaskStartTime: {
         __caption__: 'Дата запроса отчета'
       },
@@ -17,6 +23,12 @@ export default {
     UserReportL: {
       userName: {
         __caption__: 'Пользователь'
+      },
+      userEmail: {
+        __caption__: 'Email пользователя'
+      },
+      reportId: {
+        __caption__: ''
       },
       reportTaskStartTime: {
         __caption__: 'Дата запроса отчета'
@@ -33,11 +45,17 @@ export default {
     file: {
       __caption__: 'file'
     },
+    reportId: {
+      __caption__: 'reportId'
+    },
     reportTaskStartTime: {
       __caption__: 'reportTaskStartTime'
     },
     status: {
       __caption__: 'status'
+    },
+    userEmail: {
+      __caption__: 'userEmail'
     },
     userName: {
       __caption__: 'userName'

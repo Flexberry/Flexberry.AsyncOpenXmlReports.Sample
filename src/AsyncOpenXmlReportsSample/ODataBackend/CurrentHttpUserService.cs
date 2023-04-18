@@ -6,7 +6,10 @@ namespace IIS.AsyncOpenXmlReportsSample
     using System.Security.Claims;
     using Microsoft.AspNetCore.Http;
 
-    public class CurrentHttpUserService : ICSSoft.Services.CurrentUserService.IUser
+    /// <summary>
+    /// Реализация сервиса текущего пользователя.
+    /// </summary>
+    public class CurrentHttpUserService : IUserWithRolesAndEmail
     {
         private IHttpContextAccessor contextAccessor;
 
@@ -42,6 +45,18 @@ namespace IIS.AsyncOpenXmlReportsSample
             set { }
         }
 
+        public string Roles
+        {
+            get { return GetRoles(); }
+            set { }
+        }
+
+        public string Email
+        {
+            get { return GetEmail(); }
+            set { }
+        }
+
         private string GetLogin()
         {
             var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
@@ -65,18 +80,5 @@ namespace IIS.AsyncOpenXmlReportsSample
 
             return agentEmail;
         }
-
-        /// <summary>
-        /// Получить имя текущего пользователя из текущего HTTP контекста.
-        /// </summary>
-        /// <returns>
-        /// Имя текущего пользователя.
-        /// </returns>
-        private string GetIdentityName()
-        {
-            string identity = GetLogin();
-            return identity;
-        }
     }
 }
-

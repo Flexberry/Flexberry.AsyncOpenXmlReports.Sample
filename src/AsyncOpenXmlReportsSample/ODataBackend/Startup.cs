@@ -162,8 +162,8 @@
             container.RegisterType<IHttpContextAccessor, HttpContextAccessor>();
 
             // Регистрируем CurrentUserService.
-            ICSSoft.Services.CurrentUserService.IUser userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
-            container.RegisterInstance<ICSSoft.Services.CurrentUserService.IUser>(userServise, InstanceLifetime.Singleton);
+            IUserWithRolesAndEmail userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
+            container.RegisterInstance<IUserWithRolesAndEmail>(userServise, InstanceLifetime.Singleton);
 
             // Регистрируем сервис оповещения пользователей.
             container.RegisterType<IUserNotifier, UsersReportsNotifier>();
