@@ -101,10 +101,10 @@
             }
             catch (Exception ex)
             {
+                LogService.Log.Error(ex);
+
                 report.Status = ReportStatusType.Unexecuted;
                 dataService.UpdateObject(report);
-
-                LogService.Log.Error(ex);
 
                 return ex.Message;
             }
