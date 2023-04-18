@@ -9,6 +9,7 @@
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
     using IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -111,10 +112,11 @@
             }
         }
 
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpPost("[action]")]
         public IActionResult BuildResult([FromBody] ReportResultRequest request)
         {
-            LogService.Log.Debug($"CarListReportController.BuildResult request = {request}");
+            LogService.Log.Info($"CarListReportController.BuildResult request = {request}");
 
             return Ok();
         }

@@ -49,7 +49,6 @@ services:
   quartz:
     image: asyncopenxmlreportssample/quartz
     links:
-      - app:app
       - app-postgres-db:app-postgres-db
     ports:
       - 5001:5001
