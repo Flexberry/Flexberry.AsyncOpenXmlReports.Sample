@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:3.1 AS quartzbuild
 
 COPY /src/AsyncOpenXmlReportsSample/Quartz /WORKDIR/Quartz
 COPY /src/AsyncOpenXmlReportsSample/Objects /WORKDIR/Objects
+COPY /src/AsyncOpenXmlReportsSample/ODataBackend/Templates /WORKDIR/templates
 
 WORKDIR /WORKDIR
 
@@ -15,4 +16,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:3.1
 WORKDIR /app
 
 COPY --from=quartzbuild /WORKDIR/out ./
+COPY --from=quartzbuild /WORKDIR/templates ../var/templates
 ENTRYPOINT ["dotnet", "Flexberry.Quartz.Sample.ConsoleHost.dll"]

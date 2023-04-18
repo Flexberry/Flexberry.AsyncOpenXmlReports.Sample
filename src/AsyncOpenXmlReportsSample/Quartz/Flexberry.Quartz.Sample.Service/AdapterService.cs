@@ -26,19 +26,14 @@
         /// <returns>Task.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // Конфигурация.
-            var conf = new ConfigurationBuilder()
-                .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
-                .Build();
-
             // Настройки.
-            var adapterStartup = new AdapterStartup(conf);
+            var adapterStartup = new AdapterStartup(Adapter.Configuration);
 
             // Построение веб-хоста.
             var builder = WebHost.CreateDefaultBuilder()
 
                 // Добавляем конфигурацию.
-                .UseConfiguration(conf)
+                .UseConfiguration(Adapter.Configuration)
 
                 // Добавляем IIS.
                 .UseIISIntegration()
@@ -55,7 +50,7 @@
             host = builder.Build();
 
             // Запуск веб-хоста.
-            return host.RunAsync();
+            return host.RunAsync(cancellationToken);
         }
 
         /// <summary>
@@ -65,7 +60,7 @@
         /// <returns>Task.</returns>
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            return host.StopAsync();
+            return host.StopAsync(cancellationToken);
         }
     }
 }

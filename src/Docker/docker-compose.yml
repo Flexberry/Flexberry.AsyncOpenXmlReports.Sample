@@ -12,13 +12,15 @@ services:
     ports:
       - 80:80
     environment:
-      - UploadUrl=/var/reports
       - BackendRoot=http://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - AuthorityUrl=http://keycloak:8080/realms/master/
       - QuartzUrl=http://quartz:5001/api/quartz/
+      - UploadUrl=/var/reports
+      - TemplatesPath=/var/templates
     volumes:
-      - COMMON:/var/reports
+      - REPORTS:/var/reports
+      - TEMPLATES:/var/templates
     networks:
       - asyncopenxmlreportssample
 
@@ -51,15 +53,19 @@ services:
     ports:
       - 5001:5001
     environment:
-      - BackendRoot=https://localhost
+      - BackendRoot=http://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - SecurityConnString=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
+      - UploadUrl=/var/reports
+      - TemplatesPath=/var/templates
     volumes:
-      - COMMON:/var/reports
+      - REPORTS:/var/reports
+      - TEMPLATES:/var/templates
     networks:
       - asyncopenxmlreportssample
 
 volumes:
   DB:
   KEYCLOAK:
-  COMMON:
+  REPORTS:
+  TEMPLATES:

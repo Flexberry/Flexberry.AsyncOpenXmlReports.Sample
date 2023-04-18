@@ -3,7 +3,7 @@
   "BackendRoot": "http://localhost",
   "DefConnStr": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
   "SecurityConnString": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
-  "FilesFolder": "/var/reports",
+  "TemplatesPath": "Templates\\",
   "Logging": {
     "LogLevel": {
       "Default": "Information",
@@ -14,7 +14,7 @@
   "AllowedHosts": "*",
   "AllowedReportOperations": {
     "SampleReport": "Reports.SampleReport",
-    "CarListReport":  "Reports.CarListReport"
+    "CarListReport": "Reports.CarListReport"
   },
   "Urls": "http://*:5001"
 }

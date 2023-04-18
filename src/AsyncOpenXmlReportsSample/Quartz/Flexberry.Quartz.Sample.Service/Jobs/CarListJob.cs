@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
+    using ICSSoft.STORMNET.Business.LINQProvider;
     using IIS.AsyncOpenXmlReportsSample;
     using NewPlatform.Flexberry.Reports;
     using Unity;
@@ -74,38 +76,28 @@
 
                 // Инициализация сервисов.
                 var ds = Adapter.Container.Resolve<IDataService>();
+                var conf = Adapter.Configuration;
 
-                Dictionary<string, object> parameters = new Dictionary<string, object>();
+                var allCarsParameters =
+                    ds.Query<Car>(Car.Views.CarL)
+                        .Select(car =>
+                            new Dictionary<string, object>()
+                                {
+                                    { "CarNumber", car.CarNumber },
+                                    { "CarDate", car.CarDate.ToString("dd.MM.yyyy") },
+                                    { "CarBody", EnumCaption.GetCaptionFor(car.CarBody) },
+                                })
+                        .ToList();
 
-                DocxReport template = new DocxReport(request.TemplatePath + @"\" + request.TemplateName);
-
-                var lcs = new LoadingCustomizationStruct(null)
-                {
-                    LoadingTypes = new[] { typeof(Car) },
-                    View = Car.Views.CarL,
-                };
-
-                List<Car> cars = ds.LoadObjects(lcs).Cast<Car>().ToList();
-
-                List<Dictionary<string, object>> allCarsParameters = new List<Dictionary<string, object>>();
-
-                foreach (Car car in cars)
-                {
-                    Dictionary<string, object> singleCarParameters = new Dictionary<string, object>();
-
-                    singleCarParameters.Add("CarNumber", car.CarNumber);
-                    singleCarParameters.Add("CarDate", car.CarDate.ToString("dd.MM.yyyy"));
-                    singleCarParameters.Add("CarBody", EnumCaption.GetCaptionFor(car.CarBody));
-
-                    allCarsParameters.Add(singleCarParameters);
-                }
-
-                parameters.Add("Car", allCarsParameters);
+                var dtValue = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", null);
+                var fileName = JobTools.ReplaceInvalidChars($"{request.TemplateName}_{request.UserInfo.Login}_{request.Id}_{dtValue}.docx");
+                var fullFileName = JobTools.GetFullReportName(fileName);
+                var parameters = new Dictionary<string, object> { { "Car", allCarsParameters } };
+                var fullTamplateName = JobTools.GetFullTemplateName(request.TemplateName);
+                var template = new DocxReport(fullTamplateName);
 
                 template.BuildWithParameters(parameters);
-
-                // TODO: сохранять файл не в папку с шаблонами; генерировать имя файла уникально
-                template.SaveAs(request.TemplatePath + @"\Result-" + request.UserInfo.Login + "-" + DateTime.Now.ToString("dd.MM.yyyy") + ".docx");
+                template.SaveAs(fullFileName);
 
                 return Task.CompletedTask;
             }

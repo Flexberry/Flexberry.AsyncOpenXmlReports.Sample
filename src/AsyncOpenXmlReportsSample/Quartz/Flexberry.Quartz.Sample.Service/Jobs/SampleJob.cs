@@ -1,6 +1,7 @@
 ﻿namespace Flexberry.Quartz.Sample.Service.Jobs
 {
     using System;
+    using System.IO;
     using System.Threading.Tasks;
     using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
@@ -74,10 +75,10 @@
 
             try
             {
-                var fileName = $"{Adapter.Configuration["FilesFolder"]}{request.Id}.txt";
+                var fileName = JobTools.GetFullReportName($"{request.Id}.txt");
 
                 LogService.Log.Debug($"Creating file: {fileName}");
-                System.IO.File.WriteAllText(fileName, request.ToString());
+                File.WriteAllText(fileName, request.ToString());
             }
             catch (Exception ex)
             {

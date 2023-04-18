@@ -1,6 +1,7 @@
 ﻿namespace Flexberry.Quartz.Sample.Service.Jobs
 {
     using System;
+    using System.IO;
     using System.Linq;
     using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
@@ -20,7 +21,51 @@
         /// <summary>
         /// Имя раздела в файле конфигурации, в котором указаны соответствия отчетов и операций.
         /// </summary>
-        private const string ConfigSectionName = "AllowedReportOperations";
+        public const string AllowedReportOperationsConfigSectionName = "AllowedReportOperations";
+
+        /// <summary>
+        /// Имя параметра в файле конфигурации, который содержит путь хранения файлов отчета.
+        /// </summary>
+        public const string UploadUrlConfigParamName = "UploadUrl";
+
+        /// <summary>
+        /// Имя параметра в файле конфигурации, который содержит путь хранения файлов шаблона.
+        /// </summary>
+        public const string TemplatesPathConfigParamName = "TemplatesPath";
+
+        /// <summary>
+        /// Замена недопустимых символов в имени файла на символ "_" (подчеркивание).
+        /// </summary>
+        /// <param name="filename">Имя файла.</param>
+        /// <param name="replaceValue">На что заменить некорректные символы.</param>
+        /// <returns>Имя файла без запрещенных символов.</returns>
+        public static string ReplaceInvalidChars(string filename, string replaceValue = "_")
+        {
+            if (filename == null)
+                return null;
+
+            return string.Join(replaceValue, filename.Split(Path.GetInvalidFileNameChars()));
+        }
+
+        /// <summary>
+        /// Получить полный путь до файла отчета.
+        /// </summary>
+        /// <param name="reportFileName">Имя файла отчета.</param>
+        /// <returns>Путь до файла отчета + имя файла отчета.</returns>
+        public static string GetFullReportName(string reportFileName)
+        {
+            return Path.Combine(Adapter.Configuration[UploadUrlConfigParamName], reportFileName);
+        }
+
+        /// <summary>
+        /// Получить полный путь до файла шаблона.
+        /// </summary>
+        /// <param name="templateFileName">Имя файла шаблона.</param>
+        /// <returns>Путь до файла шаблона + имя файла шаблона.</returns>
+        public static string GetFullTemplateName(string templateFileName)
+        {
+            return Path.Combine(Adapter.Configuration[TemplatesPathConfigParamName], templateFileName);
+        }
 
         /// <summary>
         /// Инициализировать пользователя.
@@ -68,7 +113,7 @@
         public bool AccessCheck(JobDataMap dataMap)
         {
             var reportName = GetParam<string>(dataMap, ReportNameParam);
-            var confSection = Adapter.Configuration.GetSection(ConfigSectionName).GetChildren();
+            var confSection = Adapter.Configuration.GetSection(AllowedReportOperationsConfigSectionName).GetChildren();
             var confElem = confSection.Where(x => x.Key == reportName);
 
             if (confElem.Any())
@@ -79,7 +124,7 @@
             }
             else
             {
-                throw new Exception($"Report {reportName} have no setting for operation! Configuration section name: {ConfigSectionName}");
+                throw new Exception($"Report {reportName} have no setting for operation! Configuration section name: {AllowedReportOperationsConfigSectionName}");
             }
         }
 
