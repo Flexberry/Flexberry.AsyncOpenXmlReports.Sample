@@ -31,6 +31,7 @@ namespace IIS.AsyncOpenXmlReportsSample
     [AccessType(ICSSoft.STORMNET.AccessType.none)]
     [View("UserReportE", new string[] {
             "UserName",
+            "UserEmail",
             "ReportId",
             "ReportTaskStartTime",
             "Status",
@@ -38,6 +39,7 @@ namespace IIS.AsyncOpenXmlReportsSample
             "ReportId"})]
     [View("UserReportL", new string[] {
             "UserName",
+            "UserEmail",
             "ReportId",
             "ReportTaskStartTime",
             "Status",
@@ -47,7 +49,9 @@ namespace IIS.AsyncOpenXmlReportsSample
     {
         
         private string fUserName;
-
+        
+        private string fUserEmail;
+        
         private System.Guid fReportId;
         
         private System.DateTime fReportTaskStartTime = DateTime.Now;
@@ -183,6 +187,38 @@ namespace IIS.AsyncOpenXmlReportsSample
                 // *** Start programmer edit section *** (UserReport.Status Set end)
 
                 // *** End programmer edit section *** (UserReport.Status Set end)
+            }
+        }
+        
+        /// <summary>
+        /// UserEmail.
+        /// </summary>
+        // *** Start programmer edit section *** (UserReport.UserEmail CustomAttributes)
+
+        // *** End programmer edit section *** (UserReport.UserEmail CustomAttributes)
+        [StrLen(255)]
+        public virtual string UserEmail
+        {
+            get
+            {
+                // *** Start programmer edit section *** (UserReport.UserEmail Get start)
+
+                // *** End programmer edit section *** (UserReport.UserEmail Get start)
+                string result = this.fUserEmail;
+                // *** Start programmer edit section *** (UserReport.UserEmail Get end)
+
+                // *** End programmer edit section *** (UserReport.UserEmail Get end)
+                return result;
+            }
+            set
+            {
+                // *** Start programmer edit section *** (UserReport.UserEmail Set start)
+
+                // *** End programmer edit section *** (UserReport.UserEmail Set start)
+                this.fUserEmail = value;
+                // *** Start programmer edit section *** (UserReport.UserEmail Set end)
+
+                // *** End programmer edit section *** (UserReport.UserEmail Set end)
             }
         }
         

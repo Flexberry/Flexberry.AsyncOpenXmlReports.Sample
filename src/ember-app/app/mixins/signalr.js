@@ -38,7 +38,6 @@ export default Mixin.create({
 
       // eslint-disable-next-line no-console
       console.log("SignalR NOT Connected." + err);
-      setTimeout(_this.signalRTryToConnect(), 5000);
     });
   },
 

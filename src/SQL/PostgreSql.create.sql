@@ -40,6 +40,7 @@ CREATE TABLE UserReport (
  ReportId UUID NOT NULL,
  ReportTaskStartTime TIMESTAMP(3) NULL,
  Status VARCHAR(10) NULL,
+ UserEmail VARCHAR(255) NULL,
  UserName VARCHAR(255) NOT NULL,
  PRIMARY KEY (primaryKey));
 

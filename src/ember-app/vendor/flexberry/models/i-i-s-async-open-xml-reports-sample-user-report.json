@@ -43,6 +43,15 @@
       "ordered": false
     },
     {
+      "name": "userEmail",
+      "type": "string",
+      "flexberryType": "string",
+      "notNull": false,
+      "defaultValue": "",
+      "stored": true,
+      "ordered": false
+    },
+    {
       "name": "userName",
       "type": "string",
       "flexberryType": "string",
@@ -66,28 +75,34 @@
           "index": 0
         },
         {
+          "name": "userEmail",
+          "caption": "",
+          "hidden": false,
+          "index": 1
+        },
+        {
           "name": "reportId",
           "caption": "",
           "hidden": true,
-          "index": 1
+          "index": 2
         },
         {
           "name": "reportTaskStartTime",
           "caption": "",
           "hidden": false,
-          "index": 2
+          "index": 3
         },
         {
           "name": "status",
           "caption": "",
           "hidden": false,
-          "index": 3
+          "index": 4
         },
         {
           "name": "file",
           "caption": "",
           "hidden": false,
-          "index": 4
+          "index": 5
         }
       ],
       "belongsTo": [],
@@ -104,28 +119,34 @@
           "index": 0
         },
         {
+          "name": "userEmail",
+          "caption": "",
+          "hidden": false,
+          "index": 1
+        },
+        {
           "name": "reportId",
           "caption": "",
           "hidden": true,
-          "index": 1
+          "index": 2
         },
         {
           "name": "reportTaskStartTime",
           "caption": "",
           "hidden": false,
-          "index": 2
+          "index": 3
         },
         {
           "name": "status",
           "caption": "",
           "hidden": false,
-          "index": 3
+          "index": 4
         },
         {
           "name": "file",
           "caption": "",
           "hidden": false,
-          "index": 4
+          "index": 5
         }
       ],
       "belongsTo": [],

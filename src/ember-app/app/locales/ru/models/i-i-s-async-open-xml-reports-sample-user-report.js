@@ -4,6 +4,9 @@ export default {
       userName: {
         __caption__: 'Пользователь'
       },
+      userEmail: {
+        __caption__: 'Email пользователя'
+      },
       reportId: {
         __caption__: ''
       },
@@ -20,6 +23,9 @@ export default {
     UserReportL: {
       userName: {
         __caption__: 'Пользователь'
+      },
+      userEmail: {
+        __caption__: 'Email пользователя'
       },
       reportId: {
         __caption__: ''
@@ -47,6 +53,9 @@ export default {
     },
     status: {
       __caption__: 'status'
+    },
+    userEmail: {
+      __caption__: 'userEmail'
     },
     userName: {
       __caption__: 'userName'
