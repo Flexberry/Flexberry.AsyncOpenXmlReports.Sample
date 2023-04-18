@@ -99,9 +99,7 @@
             Stop();
 
             // Конфигурация.
-            Configuration = new ConfigurationBuilder()
-                .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
-                .Build();
+            InitConfiguration();
 
             // Настройки адаптера.
             var adapterStartup = new AdapterStartup(Configuration);
@@ -140,6 +138,37 @@
         protected void Stop()
         {
             Close(ref host);
+        }
+
+        /// <summary>
+        /// Инициализация конфигурации.
+        /// </summary>
+        private void InitConfiguration()
+        {
+            // Конфигурация.
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
+                .Build();
+
+            InitEnvironmentParam("BackendRoot");
+            InitEnvironmentParam("DefConnStr");
+            InitEnvironmentParam("SecurityConnString");
+        }
+
+        /// <summary>
+        /// Инициализация свойства конфигурации.
+        /// </summary>
+        /// <param name="paramName">Имя параметра.</param>
+        private void InitEnvironmentParam(string paramName)
+        {
+            string paramValue = Environment.GetEnvironmentVariable(paramName);
+
+            if (paramValue != null)
+            {
+                Configuration[paramName] = paramValue;
+            }
+
+            LogService.Log.Debug($"Param: {paramName} = {Configuration[paramName]}");
         }
     }
 }
