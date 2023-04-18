@@ -34,6 +34,11 @@
         public const string TemplatesPathConfigParamName = "TemplatesPath";
 
         /// <summary>
+        /// Имя параметра в файле конфигурации, который содержит url к бэкенду.
+        /// </summary>
+        public const string BackendRootConfigParamName = "BackendRoot";
+
+        /// <summary>
         /// Замена недопустимых символов в имени файла на символ "_" (подчеркивание).
         /// </summary>
         /// <param name="filename">Имя файла.</param>
@@ -65,6 +70,33 @@
         public static string GetFullTemplateName(string templateFileName)
         {
             return Path.Combine(Adapter.Configuration[TemplatesPathConfigParamName], templateFileName);
+        }
+
+        /// <summary>
+        /// Сформировать имя файла отчета.
+        /// </summary>
+        /// <param name="templateName">Наименование шаблона.</param>
+        /// <param name="reportId">Идентификатор отчета.</param>
+        /// <param name="userLogin">Логин пользователя.</param>
+        /// <returns>Имя отчета.</returns>
+        public static string GetReportName(string templateName, string reportId, string userLogin)
+        {
+            var dtValue = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", null);
+
+            return ReplaceInvalidChars($"{userLogin}_{reportId}_{dtValue}_{templateName}");
+        }
+
+        /// <summary>
+        /// Получить полный путь до API метода бекенда.
+        /// </summary>
+        /// <param name="apiPath">Относительный путь к API.</param>
+        /// <param name="methodName">Имя метода.</param>
+        /// <returns>Путь до файла шаблона + имя файла шаблона.</returns>
+        public static Uri GetFullUrlPath(string apiPath, string methodName)
+        {
+            var baseUrl = new Uri(Adapter.Configuration[BackendRootConfigParamName]);
+
+            return new Uri(baseUrl, $"{apiPath}/{methodName}");
         }
 
         /// <summary>

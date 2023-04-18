@@ -1,7 +1,6 @@
 ﻿namespace Flexberry.Quartz.Sample.Service
 {
     using System;
-    using System.Collections;
     using Flexberry.Quartz.Sample.Service.Jobs;
     using ICSSoft.STORMNET;
     using Microsoft.AspNetCore.Builder;
@@ -153,11 +152,11 @@
                 .AddEnvironmentVariables()
                 .Build();
 
-            LogConfigurationValue("BackendRoot");
             LogConfigurationValue("DefConnStr");
             LogConfigurationValue("SecurityConnString");
             LogConfigurationValue(JobTools.UploadUrlConfigParamName);
             LogConfigurationValue(JobTools.TemplatesPathConfigParamName);
+            LogConfigurationValue(JobTools.BackendRootConfigParamName);
         }
 
         /// <summary>

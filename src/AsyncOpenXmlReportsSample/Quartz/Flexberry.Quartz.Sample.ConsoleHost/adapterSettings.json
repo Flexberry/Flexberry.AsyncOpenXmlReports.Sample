@@ -1,9 +1,9 @@
 {
-  "UploadUrl": "Uploads",
+  "UploadUrl": "",
   "BackendRoot": "http://localhost",
   "DefConnStr": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
   "SecurityConnString": "SERVER=localhost;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;",
-  "TemplatesPath": "Templates\\",
+  "TemplatesPath": "..\\..\\..\\..\\..\\ODataBackend\\Templates\\",
   "Logging": {
     "LogLevel": {
       "Default": "Information",

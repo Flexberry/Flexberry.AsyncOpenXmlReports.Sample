@@ -110,7 +110,7 @@
         /// </returns>
         public bool AccessCheck(string operationId)
         {
-            var userRoles = UserRoleList();
+            var userRoles = GetUserRoleList();
 
             if (!(userRoles?.Any() ?? false))
                 return false;
@@ -183,7 +183,7 @@
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            var userRoles = UserRoleList();
+            var userRoles = GetUserRoleList();
 
             if (!(userRoles?.Any() ?? false))
                 return false;
@@ -360,7 +360,7 @@
         /// <summary>
         /// Перечень ролей пользователя.
         /// </summary>
-        private List<string> UserRoleList()
+        private List<string> GetUserRoleList()
         {
             if (string.IsNullOrWhiteSpace(currentUser?.Roles))
                 return null;

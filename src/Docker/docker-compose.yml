@@ -49,11 +49,12 @@ services:
   quartz:
     image: asyncopenxmlreportssample/quartz
     links:
+      - app:app
       - app-postgres-db:app-postgres-db
     ports:
       - 5001:5001
     environment:
-      - BackendRoot=http://localhost
+      - BackendRoot=http://app
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - SecurityConnString=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - UploadUrl=/var/reports

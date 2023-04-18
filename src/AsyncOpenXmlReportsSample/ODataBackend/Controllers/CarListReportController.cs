@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
+    using IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -108,6 +109,14 @@
 
                 return ex.Message;
             }
+        }
+
+        [HttpPost]
+        public IActionResult BuildResult([FromBody] ReportResultRequest request)
+        {
+            LogService.Log.Debug($"CarListReportController.BuildResult request = {request}");
+
+            return Ok();
         }
 
         [HttpPost]

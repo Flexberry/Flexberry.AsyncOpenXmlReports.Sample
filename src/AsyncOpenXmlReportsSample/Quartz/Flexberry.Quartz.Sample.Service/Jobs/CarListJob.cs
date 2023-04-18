@@ -2,8 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
+    using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
     using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
@@ -12,6 +13,7 @@
     using ICSSoft.STORMNET.Business.LINQProvider;
     using IIS.AsyncOpenXmlReportsSample;
     using NewPlatform.Flexberry.Reports;
+    using Newtonsoft.Json;
     using Unity;
 
     /// <summary>
@@ -80,6 +82,7 @@
 
                 var allCarsParameters =
                     ds.Query<Car>(Car.Views.CarL)
+                        .ToList()
                         .Select(car =>
                             new Dictionary<string, object>()
                                 {
@@ -89,8 +92,7 @@
                                 })
                         .ToList();
 
-                var dtValue = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", null);
-                var fileName = JobTools.ReplaceInvalidChars($"{request.TemplateName}_{request.UserInfo.Login}_{request.Id}_{dtValue}.docx");
+                var fileName = JobTools.GetReportName(request.TemplateName, request.UserInfo.Login, request.Id);
                 var fullFileName = JobTools.GetFullReportName(fileName);
                 var parameters = new Dictionary<string, object> { { "Car", allCarsParameters } };
                 var fullTamplateName = JobTools.GetFullTemplateName(request.TemplateName);
@@ -98,6 +100,35 @@
 
                 template.BuildWithParameters(parameters);
                 template.SaveAs(fullFileName);
+
+                // Дергаем бекенд.
+                var url = JobTools.GetFullUrlPath("api/CarListReportController", "BuildResult");
+
+                object input = new
+                {
+                    Id = request.Id,
+                    FileName = fullFileName,
+                    Status = "OK",
+                };
+                var msg = JsonConvert.SerializeObject(input);
+
+                LogService.Log.Debug($"CarListJob: Sending {msg} to {url}.");
+
+                var buffer = Encoding.UTF8.GetBytes(msg);
+
+                using (var byteContent = new ByteArrayContent(buffer))
+                {
+                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        var postTask = httpClient.PostAsync(url, byteContent);
+
+                        postTask.Wait();
+
+                        LogService.Log.Debug($"CarListJob: Sending status = {postTask.Status}.");
+                    }
+                }
 
                 return Task.CompletedTask;
             }
