@@ -13,10 +13,16 @@
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Контроллер построения демонстрационных отчетов для списковой формы Cars.
+    /// Также предоставляет функции загрузки(изменения) и выгрузки шаблона для этого отчета.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CarListReportController : ControllerBase
     {
+        public const string TemplateName = "CarListTemplate.docx";
+
         /// <summary>
         /// App configuration.
         /// </summary>
@@ -26,27 +32,33 @@
 
         private readonly IDataService dataService;
 
-        public const string TemplateName = "CarListTemplate.docx";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
         /// </summary>
         /// <param name="configuration">App configuration.</param>
-        public CarListReportController(IConfiguration configuration,
+        /// <param name="userService">Экземпляр текущего UserService.</param>
+        /// <param name="dataService">Экземпляр текущего DataService.</param>
+        public CarListReportController(
+            IConfiguration configuration,
             IUserWithRolesAndEmail userService,
             IDataService dataService)
         {
             this.config = configuration;
             this.userService = userService;
             this.dataService = dataService;
+
+            this.CheckAndCreateTemplateFile();
         }
 
+        /// <summary>
+        /// Запуск построения отчета.
+        /// </summary>
         [HttpGet("[action]")]
         public async Task<string> Build()
         {
-            string userName = userService.Login;
-            string userRoles = userService.Roles;
-            string userEmail = userService.Email;
+            string userName = this.userService.Login;
+            string userRoles = this.userService.Roles;
+            string userEmail = this.userService.Email;
 
             Guid reportId = Guid.NewGuid();
 
@@ -59,7 +71,7 @@
                 Status = ReportStatusType.InProgress,
             };
 
-            dataService.UpdateObject(report);
+            this.dataService.UpdateObject(report);
 
             try
             {
@@ -92,7 +104,7 @@
                         else
                         {
                             report.Status = ReportStatusType.Unexecuted;
-                            dataService.UpdateObject(report);
+                            this.dataService.UpdateObject(report);
 
                             return "Что-то пошло не так";
                         }
@@ -104,12 +116,18 @@
                 LogService.Log.Error(ex);
 
                 report.Status = ReportStatusType.Unexecuted;
-                dataService.UpdateObject(report);
+                this.dataService.UpdateObject(report);
 
                 return ex.Message;
             }
         }
 
+        /// <summary>
+        /// Згрузить файл-шаблона. Содержимое базового шаблона меняется на содержимое загружаемого файла.
+        /// Таким образом изменяется стандартный шаблон.
+        /// </summary>
+        /// <param name="file">Файл шаблона.</param>
+        /// <returns>Результат выполнения операции.</returns>
         [HttpPost]
         public IActionResult UploadTemplate(IFormFile file)
         {
@@ -133,27 +151,72 @@
             }
         }
 
+        /// <summary>
+        /// Скачать текущий файл-шаблона.
+        /// </summary>
+        /// <returns>Файл шаблона.</returns>
         [HttpGet("[action]")]
         public IActionResult DownloadTemplate()
         {
             try
             {
-                string fullPath = this.config["TemplatesPath"] + TemplateName;
+                string templateFileFullPath = this.config["TemplatesPath"] + TemplateName;
+                MemoryStream memoryStream = LoadFile(templateFileFullPath);
 
-                MemoryStream memoryStream = new MemoryStream();
-
-                using (FileStream fileStream = new FileStream(fullPath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    fileStream.CopyTo(memoryStream);
-                }
-
-                memoryStream.Position = 0;
                 return this.File(memoryStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
             }
             catch (Exception ex)
             {
                 return this.StatusCode(500);
             }
+        }
+
+        /// <summary>
+        /// Проверить, есть ли файл шаблона в папке, указанной в конфиге, если нет то создать. Это нужно например для докера, т.к
+        /// файл шаблона общий для нескольких сервисов, и должен храниться по определенному пути.
+        /// </summary>
+        private void CheckAndCreateTemplateFile()
+        {
+            char separator = Path.DirectorySeparatorChar;
+            string templateDirectory = this.config["TemplatesPath"];
+            string templateFileFullPath = $"{templateDirectory}{separator}{TemplateName}";
+
+            if (!System.IO.File.Exists(templateFileFullPath))
+            {
+                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                string defaultProjectTemplateFile = $"{baseDirectory}{separator}Templates{separator}{TemplateName}";
+
+                MemoryStream memoryStream = LoadFile(defaultProjectTemplateFile);
+
+                Directory.CreateDirectory(templateDirectory);
+
+                using (FileStream fileStream = new FileStream(templateFileFullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    Console.WriteLine(templateFileFullPath);
+                    memoryStream.WriteTo(fileStream);
+                }
+
+                memoryStream.Close();
+            }
+        }
+
+        /// <summary>
+        /// Загрузить файл по указанному пути.
+        /// </summary>
+        /// <param name="path">Путь к файлу.</param>
+        /// <returns>Содержимое файла в виде memorySrtream.</returns>
+        private MemoryStream LoadFile(string path)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+
+            using (FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                fileStream.CopyTo(memoryStream);
+            }
+
+            memoryStream.Position = 0;
+
+            return memoryStream;
         }
     }
 }
