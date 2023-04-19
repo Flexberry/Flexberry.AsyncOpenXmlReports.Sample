@@ -8,7 +8,7 @@
     public class CarListReportRequest
     {
         /// <summary>
-        /// Идентификатор апроса.
+        /// Идентификатор запроса.
         /// </summary>
         public string Id { get; set; }
 
@@ -16,11 +16,6 @@
         /// Информация о пользователе.
         /// </summary>
         public UserInfo UserInfo { get; set; }
-
-        /// <summary>
-        /// Путь до шаблона.
-        /// </summary>
-        public string TemplatePath { get; set; }
 
         /// <summary>
         /// Имя шаблона.

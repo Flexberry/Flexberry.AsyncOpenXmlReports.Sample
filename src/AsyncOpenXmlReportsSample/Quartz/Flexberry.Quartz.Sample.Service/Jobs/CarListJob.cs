@@ -61,10 +61,26 @@
         /// <returns>Task.</returns>
         public Task Execute(IJobExecutionContext context)
         {
+            JobDataMap dataMap = null;
+            CarListReportRequest request = null;
+
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             try
             {
-                var dataMap = context.JobDetail.JobDataMap;
-                var request = jobTools.GetParam<CarListReportRequest>(dataMap, "CarListReportRequest");
+                dataMap = context.JobDetail.JobDataMap;
+                request = jobTools.GetParam<CarListReportRequest>(dataMap, "CarListReportRequest");
+            }
+            catch (Exception ex)
+            {
+                LogService.Log.Error(ex);
+
+                throw;
+            }
+
+            try
+            {
                 var user = Adapter.Container.Resolve<IUserWithRoles>();
 
                 jobTools.InitUserInfo(request.UserInfo, user);
@@ -101,41 +117,49 @@
                 template.BuildWithParameters(parameters);
                 template.SaveAs(fullFileName);
 
-                // Дергаем бекенд.
-                var url = JobTools.GetFullUrlPath("api/CarListReportController", "BuildResult");
-
-                object input = new
-                {
-                    Id = request.Id,
-                    FileName = fullFileName,
-                    Status = "OK",
-                };
-                var msg = JsonConvert.SerializeObject(input);
-
-                LogService.Log.Debug($"CarListJob: Sending {msg} to {url}.");
-
-                var buffer = Encoding.UTF8.GetBytes(msg);
-
-                using (var byteContent = new ByteArrayContent(buffer))
-                {
-                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-                    using (var httpClient = new HttpClient())
-                    {
-                        var postTask = httpClient.PostAsync(url, byteContent);
-
-                        postTask.Wait();
-
-                        LogService.Log.Debug($"CarListJob: Sending status = {postTask.Status}.");
-                    }
-                }
-
-                return Task.CompletedTask;
+                return SendResultAsync(request.Id, fullFileName, "Executed");
             }
             catch (Exception ex)
             {
                 LogService.Log.Error(ex);
-                return Task.CompletedTask; // TODO: вернуть что-то подходящее
+
+                return SendResultAsync(request.Id, string.Empty, "Unexecuted");
+            }
+        }
+
+        /// <summary>
+        /// Отправить результат обработки файла.
+        /// </summary>
+        /// <param name="requestId">Идентификатор запроса.</param>
+        /// <param name="fullFileName">Имя файла отчета.</param>
+        /// <param name="status">Статус обработки. InProgress, Unexecuted, Executed.</param>
+        private static async Task SendResultAsync(string requestId, string fullFileName, string status)
+        {
+            var sendResultUrl = JobTools.GetFullUrlPath("api/CarListReport", "BuildResult");
+
+            object input = new
+            {
+                Id = requestId,
+                FileName = fullFileName,
+                Status = status,
+            };
+            var msg = JsonConvert.SerializeObject(input);
+
+            LogService.Log.Debug($"CarListJob: Sending {msg} to {sendResultUrl}.");
+
+            var buffer = Encoding.UTF8.GetBytes(msg);
+
+            using (var byteContent = new ByteArrayContent(buffer))
+            {
+                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                using (var httpClient = new HttpClient())
+                {
+                    using (var response = await httpClient.PostAsync(sendResultUrl, byteContent).ConfigureAwait(true))
+                    {
+                        LogService.Log.Debug($"CarListJob: Sending status = {response.StatusCode}.");
+                    }
+                }
             }
         }
     }

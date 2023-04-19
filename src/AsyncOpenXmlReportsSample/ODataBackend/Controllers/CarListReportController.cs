@@ -58,22 +58,35 @@
         [HttpGet("[action]")]
         public async Task<string> Build()
         {
-            string userName = this.userService.Login;
-            string userRoles = this.userService.Roles;
-            string userEmail = this.userService.Email;
-
             Guid reportId = Guid.NewGuid();
+            string userName;
+            string userRoles;
+            string userEmail;
+            UserReport report;
 
-            UserReport report = new UserReport()
+            try
             {
-                UserName = userName,
-                UserEmail = userEmail,
-                ReportId = reportId,
-                ReportTaskStartTime = DateTime.Now,
-                Status = ReportStatusType.InProgress,
-            };
+                userName = this.userService.Login;
+                userRoles = this.userService.Roles;
+                userEmail = this.userService.Email;
 
-            this.dataService.UpdateObject(report);
+                report = new UserReport()
+                {
+                    UserName = userName,
+                    UserEmail = userEmail,
+                    ReportId = reportId,
+                    ReportTaskStartTime = DateTime.Now,
+                    Status = ReportStatusType.InProgress,
+                };
+
+                this.dataService.UpdateObject(report);
+            }
+            catch (Exception ex)
+            {
+                LogService.Log.Error(ex);
+
+                throw;
+            }
 
             try
             {
