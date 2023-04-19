@@ -1,6 +1,7 @@
 ﻿namespace Flexberry.Quartz.Sample.Service
 {
     using System;
+    using Flexberry.Quartz.Sample.Service.Jobs;
     using ICSSoft.STORMNET;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -148,26 +149,22 @@
             // Конфигурация.
             Configuration = new ConfigurationBuilder()
                 .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
+                .AddEnvironmentVariables()
                 .Build();
 
-            InitEnvironmentParam("BackendRoot");
-            InitEnvironmentParam("DefConnStr");
-            InitEnvironmentParam("SecurityConnString");
+            LogConfigurationValue("DefConnStr");
+            LogConfigurationValue("SecurityConnString");
+            LogConfigurationValue(JobTools.UploadUrlConfigParamName);
+            LogConfigurationValue(JobTools.TemplatesPathConfigParamName);
+            LogConfigurationValue(JobTools.BackendRootConfigParamName);
         }
 
         /// <summary>
-        /// Инициализация свойства конфигурации.
+        /// Записать в лог значение параметра конфигурации.
         /// </summary>
         /// <param name="paramName">Имя параметра.</param>
-        private void InitEnvironmentParam(string paramName)
+        private void LogConfigurationValue(string paramName)
         {
-            string paramValue = Environment.GetEnvironmentVariable(paramName);
-
-            if (paramValue != null)
-            {
-                Configuration[paramName] = paramValue;
-            }
-
             LogService.Log.Debug($"Param: {paramName} = {Configuration[paramName]}");
         }
     }
