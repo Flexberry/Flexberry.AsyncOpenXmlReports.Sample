@@ -7,6 +7,7 @@
     <AssemblyName>AsyncOpenXmlReportsSample.ODataBackend</AssemblyName>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
+    <CodeAnalysisRuleSet>..\Flexberry.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="App.config" />

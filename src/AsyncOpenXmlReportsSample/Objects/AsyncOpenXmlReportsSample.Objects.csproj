@@ -7,6 +7,7 @@
     <AssemblyName>AsyncOpenXmlReportsSample.Objects</AssemblyName>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
+    <CodeAnalysisRuleSet>..\Flexberry.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
