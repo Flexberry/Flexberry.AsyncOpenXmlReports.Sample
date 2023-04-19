@@ -64,6 +64,9 @@
             JobDataMap dataMap = null;
             CarListReportRequest request = null;
 
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             try
             {
                 dataMap = context.JobDetail.JobDataMap;
@@ -152,7 +155,7 @@
 
                 using (var httpClient = new HttpClient())
                 {
-                    using (var response = await httpClient.PostAsync(sendResultUrl, byteContent))
+                    using (var response = await httpClient.PostAsync(sendResultUrl, byteContent).ConfigureAwait(true))
                     {
                         LogService.Log.Debug($"CarListJob: Sending status = {response.StatusCode}.");
                     }
