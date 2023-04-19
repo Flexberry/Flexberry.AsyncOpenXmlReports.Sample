@@ -9,6 +9,9 @@
     <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Templates\MailTemplates\T4MailTemplate.tt" />
   </ItemGroup>
   <ItemGroup>
@@ -16,6 +19,9 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>T4MailTemplate.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
