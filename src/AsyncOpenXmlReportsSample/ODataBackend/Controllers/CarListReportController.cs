@@ -147,6 +147,8 @@
             }
             catch (Exception ex)
             {
+                LogService.Log.Error(ex);
+
                 return this.StatusCode(500);
             }
         }
@@ -160,7 +162,8 @@
         {
             try
             {
-                string templateFileFullPath = this.config["TemplatesPath"] + TemplateName;
+                string templateDirectory = this.config["TemplatesPath"];
+                string templateFileFullPath = Path.Combine(templateDirectory, TemplateName);
                 MemoryStream memoryStream = LoadFile(templateFileFullPath);
 
                 return this.File(memoryStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
