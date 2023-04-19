@@ -167,6 +167,8 @@
             }
             catch (Exception ex)
             {
+                LogService.LogError(ex);
+
                 return this.StatusCode(500);
             }
         }
@@ -177,14 +179,13 @@
         /// </summary>
         private void CheckAndCreateTemplateFile()
         {
-            char separator = Path.DirectorySeparatorChar;
             string templateDirectory = this.config["TemplatesPath"];
-            string templateFileFullPath = $"{templateDirectory}{separator}{TemplateName}";
+            string templateFileFullPath = Path.Combine(templateDirectory, TemplateName);
 
             if (!System.IO.File.Exists(templateFileFullPath))
             {
                 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string defaultProjectTemplateFile = $"{baseDirectory}{separator}Templates{separator}{TemplateName}";
+                string defaultProjectTemplateFile = Path.Combine(baseDirectory, "Templates", TemplateName);
 
                 MemoryStream memoryStream = LoadFile(defaultProjectTemplateFile);
 
@@ -192,7 +193,6 @@
 
                 using (FileStream fileStream = new FileStream(templateFileFullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
-                    Console.WriteLine(templateFileFullPath);
                     memoryStream.WriteTo(fileStream);
                 }
 
