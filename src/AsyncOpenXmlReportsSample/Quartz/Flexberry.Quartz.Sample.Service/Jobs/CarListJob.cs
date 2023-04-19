@@ -135,7 +135,7 @@
         /// <param name="status">Статус обработки. InProgress, Unexecuted, Executed.</param>
         private static async void SendResult(string requestId, string fullFileName, string status)
         {
-            var sendResultUrl = JobTools.GetFullUrlPath("api/CarListReportController", "BuildResult");
+            var sendResultUrl = JobTools.GetFullUrlPath("api/CarListReport", "BuildResult");
 
             object input = new
             {
