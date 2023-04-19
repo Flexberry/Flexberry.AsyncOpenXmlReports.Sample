@@ -13,6 +13,7 @@ services:
       - 80:80
     environment:
       - UploadUrl=/var/reports
+      - TemplatesPath=/var/templates
       - BackendRoot=http://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
       - AuthorityUrl=http://keycloak:8080/realms/master/
