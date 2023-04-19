@@ -9,6 +9,11 @@
     <XunitStartupFullName>IIS.AsyncOpenXmlReportsSample.Startup</XunitStartupFullName>
   </PropertyGroup>
   <ItemGroup>
+    <SonarQubeSetting Include="sonar.exclusions">
+      <Value>**/*.*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="App.config" />
   </ItemGroup>
   <ItemGroup>
