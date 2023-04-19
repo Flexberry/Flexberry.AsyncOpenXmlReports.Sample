@@ -114,14 +114,14 @@
                 template.BuildWithParameters(parameters);
                 template.SaveAs(fullFileName);
 
-                SendResult(request.Id, fullFileName, "Executed");
+                SendResultAsync(request.Id, fullFileName, "Executed");
 
                 return Task.CompletedTask;
             }
             catch (Exception ex)
             {
                 LogService.Log.Error(ex);
-                SendResult(request.Id, string.Empty, "Unexecuted");
+                SendResultAsync(request.Id, string.Empty, "Unexecuted");
 
                 return Task.CompletedTask;
             }
@@ -133,7 +133,7 @@
         /// <param name="requestId">Идентификатор запроса.</param>
         /// <param name="fullFileName">Имя файла отчета.</param>
         /// <param name="status">Статус обработки. InProgress, Unexecuted, Executed.</param>
-        private static async void SendResult(string requestId, string fullFileName, string status)
+        private static async void SendResultAsync(string requestId, string fullFileName, string status)
         {
             var sendResultUrl = JobTools.GetFullUrlPath("api/CarListReport", "BuildResult");
 
