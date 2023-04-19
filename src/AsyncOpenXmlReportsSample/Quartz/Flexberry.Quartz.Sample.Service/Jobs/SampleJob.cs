@@ -54,6 +54,9 @@
         /// <returns>Task.</returns>
         public Task Execute(IJobExecutionContext context)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             var dataMap = context.JobDetail.JobDataMap;
             var request = jobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
             var user = Adapter.Container.Resolve<IUserWithRoles>();
