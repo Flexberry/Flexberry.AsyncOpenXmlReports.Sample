@@ -160,7 +160,7 @@
         }
 
         /// <summary>
-        /// Инициализация свойства конфигурации.
+        /// Записать в лог значение параметра конфигурации.
         /// </summary>
         /// <param name="paramName">Имя параметра.</param>
         private void LogConfigurationValue(string paramName)
