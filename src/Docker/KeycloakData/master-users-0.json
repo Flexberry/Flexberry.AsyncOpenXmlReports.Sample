@@ -1,0 +1,29 @@
+{
+  "realm" : "master",
+  "users" : [ {
+    "id" : "6b60467e-9869-428e-83c0-331f10d19937",
+    "createdTimestamp" : 1681883826990,
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "",
+    "lastName" : "",
+    "email" : "admin@admin.ru",
+    "credentials" : [ {
+      "id" : "d379651a-8859-4456-a936-d446c4cc9f91",
+      "type" : "password",
+      "createdDate" : 1681883827311,
+      "secretData" : "{\"value\":\"eElrrevVNQNiw4hrrVAqwuzfqDxfEGzY2nzMfH4Y12YN3tqmRv2iK2ax2HBB7JTIczL6xBDuvhhSZu59xRp5dQ==\",\"salt\":\"wuNmuiVog4WbJbOgTRJ6RQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "admin", "default-roles-master" ],
+    "clientRoles" : {
+      "ember-app" : [ "AllAccess" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
