@@ -10,14 +10,12 @@
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
     using ICSSoft.STORMNET.Business.LINQProvider;
-    using ICSSoft.STORMNET.FunctionalLanguage;
     using ICSSoft.STORMNET.UserDataTypes;
     using IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
-    using NewPlatform.Flexberry.ORM.ODataService.Files;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -39,8 +37,6 @@
 
         private readonly IDataService dataService;
 
-        private readonly IDataObjectFileAccessor fileAccessor;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
         /// </summary>
@@ -50,13 +46,11 @@
         public CarListReportController(
             IConfiguration configuration,
             IUserWithRolesAndEmail userService,
-            IDataService dataService,
-            IDataObjectFileAccessor fileAccessor)
+            IDataService dataService)
         {
             this.config = configuration;
             this.userService = userService;
             this.dataService = dataService;
-            this.fileAccessor = fileAccessor;
 
             this.CheckAndCreateTemplateFile();
         }
