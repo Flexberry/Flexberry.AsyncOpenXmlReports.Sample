@@ -51,7 +51,7 @@
 
             if (delaySeconds > 0)
             {
-                triggerBuilder.StartAt(DateTime.Now.AddSeconds(delaySeconds));
+                triggerBuilder.StartAt(DateTime.UtcNow.AddSeconds(delaySeconds));
             }
             else
             {

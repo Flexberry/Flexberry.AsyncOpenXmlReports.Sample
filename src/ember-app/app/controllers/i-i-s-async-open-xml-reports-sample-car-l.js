@@ -2,7 +2,7 @@ import ListFormController from 'ember-flexberry/controllers/list-form';
 import $ from 'jquery';
 import config from '../config/environment';
 import { inject as service } from '@ember/service';
-import { isEmpty } from '@ember/utils';
+import { isEmpty, typeOf } from '@ember/utils';
 
 export default ListFormController.extend({
   /**
