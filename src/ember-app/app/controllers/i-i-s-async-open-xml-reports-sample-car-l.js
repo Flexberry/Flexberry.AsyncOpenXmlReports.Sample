@@ -2,6 +2,7 @@ import ListFormController from 'ember-flexberry/controllers/list-form';
 import $ from 'jquery';
 import config from '../config/environment';
 import { inject as service } from '@ember/service';
+import { isEmpty } from '@ember/utils';
 
 export default ListFormController.extend({
   /**
@@ -18,8 +19,10 @@ export default ListFormController.extend({
   keycloakSession: service(),
 
   actions: {
-    BuildCarListReport() {
+    BuildCarListReport(delaySeconds) {
       const authToken = this.get('keycloakSession.token');
+
+      if (isEmpty(delaySeconds) || typeOf(delaySeconds) !== 'number') delaySeconds = 0;
 
       $.ajax({
         headers: {
@@ -28,7 +31,7 @@ export default ListFormController.extend({
         async: true,
         cache: false,
         type: 'GET',
-        url: `${config.APP.backendUrls.root}/api/CarListReport/Build`,
+        url: `${config.APP.backendUrls.root}/api/CarListReport/Build?delaySeconds=` + delaySeconds.toString(),
         dataType: 'json',
       });
     },

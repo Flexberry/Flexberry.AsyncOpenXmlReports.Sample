@@ -43,13 +43,22 @@
         /// </summary>
         /// <param name="name">Имя задания.</param>
         /// <param name="group">Группа задания.</param>
+        /// <param name="delaySeconds">Задержка перед выполнением в секундах.</param>
         /// <returns>Триггер для данного экземпляра задания.</returns>
-        public static ITrigger GetTrigger(string name, string group)
+        public static ITrigger GetTrigger(string name, string group, int delaySeconds = 0)
         {
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity(name, group)
-                .StartNow()
-                .Build();
+            var triggerBuilder = TriggerBuilder.Create().WithIdentity(name, group);
+
+            if (delaySeconds > 0)
+            {
+                triggerBuilder.StartAt(DateTime.Now.AddSeconds(delaySeconds));
+            }
+            else
+            {
+                triggerBuilder.StartNow();
+            }
+
+            ITrigger trigger = triggerBuilder.Build();
 
             return trigger;
         }
