@@ -10,6 +10,11 @@
     <CodeAnalysisRuleSet>..\Flexberry.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+      <Value>**/*.*</Value>
+    </SonarQubeSetting>
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="App.config" />
   </ItemGroup>
   <ItemGroup>
