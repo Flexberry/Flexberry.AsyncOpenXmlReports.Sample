@@ -31,7 +31,7 @@ export default ListFormController.extend({
         async: true,
         cache: false,
         type: 'GET',
-        url: `${config.APP.backendUrls.root}/api/CarListReport/Build?delaySeconds=` + delaySeconds.toString(),
+        url: `${config.APP.backendUrls.root}/api/CarListReport/Build?delaySeconds=${delaySeconds}`,
         dataType: 'json',
       });
     },
