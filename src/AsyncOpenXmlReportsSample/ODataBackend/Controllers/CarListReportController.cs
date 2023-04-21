@@ -26,6 +26,9 @@
     [Route("api/[controller]")]
     public class CarListReportController : ControllerBase
     {
+        /// <summary>
+        /// Имя шаблона отчета.
+        /// </summary>
         public const string TemplateName = "CarListTemplate.docx";
 
         /// <summary>
@@ -33,8 +36,14 @@
         /// </summary>
         private readonly IConfiguration config;
 
+        /// <summary>
+        /// Сервис текущего пользователя.
+        /// </summary>
         private readonly IUserWithRolesAndEmail userService;
 
+        /// <summary>
+        /// Сервис данных.
+        /// </summary>
         private readonly IDataService dataService;
 
         /// <summary>
@@ -48,18 +57,20 @@
             IUserWithRolesAndEmail userService,
             IDataService dataService)
         {
-            this.config = configuration;
+            config = configuration;
             this.userService = userService;
             this.dataService = dataService;
 
-            this.CheckAndCreateTemplateFile();
+            CheckAndCreateTemplateFile();
         }
 
         /// <summary>
         /// Запуск построения отчета.
         /// </summary>
+        /// <param name="delaySeconds">Задержка перед выполнением в секундах.</param>
+        /// <returns>Состояние выполнения.</returns>
         [HttpGet("[action]")]
-        public async Task<string> Build()
+        public async Task<string> Build([FromQuery] string delaySeconds)
         {
             Guid reportId = Guid.NewGuid();
             string userName;
@@ -69,9 +80,9 @@
 
             try
             {
-                userName = this.userService.Login;
-                userRoles = this.userService.Roles;
-                userEmail = this.userService.Email;
+                userName = userService.Login;
+                userRoles = userService.Roles;
+                userEmail = userService.Email;
 
                 report = new UserReport()
                 {
@@ -82,7 +93,7 @@
                     Status = ReportStatusType.InProgress,
                 };
 
-                this.dataService.UpdateObject(report);
+                dataService.UpdateObject(report);
             }
             catch (Exception ex)
             {
@@ -93,14 +104,15 @@
 
             try
             {
-                string apiUrl = this.config["QuartzUrl"] + "CarListReport";
+                string apiUrl = config["QuartzUrl"] + "CarListReport";
 
                 using (var httpClient = new HttpClient())
                 {
                     object input = new
                     {
                         Id = reportId.ToString(),
-                        TemplateName = TemplateName,
+                        TemplateName,
+                        DelaySeconds = delaySeconds,
                         UserInfo = new
                         {
                             Login = userName,

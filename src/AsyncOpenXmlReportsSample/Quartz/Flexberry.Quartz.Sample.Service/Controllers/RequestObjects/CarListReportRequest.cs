@@ -23,6 +23,11 @@
         public string TemplateName { get; set; }
 
         /// <summary>
+        /// Задержка перед выполнением в секундах.
+        /// </summary>
+        public int DelaySeconds { get; set; }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
