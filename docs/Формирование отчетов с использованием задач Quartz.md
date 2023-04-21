@@ -14,7 +14,35 @@
 
 Регистрация сервисов описана в [настройках](https://github.com/Flexberry/Flexberry.AsyncOpenXmlReports.Sample/blob/01763d9c36401243b9120a15bebd33dd56bca27d/src/AsyncOpenXmlReportsSample/Quartz/Flexberry.Quartz.Sample.Service/AdapterStartup.cs#L74) хоста [в статье](/docs/%D0%A0%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F%20Host%2BWebHost%20%D0%B2%20%D0%BA%D0%BE%D0%BD%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%BE%D0%BC%20%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B8.md). Все они регистрируются в едином контейнере **Unity.IUnityContainer**.
 
-Пример получения сервисов для использования:
+```C#
+IDataService securityDataService = new PostgresDataService(new EmptySecurityManager()) { CustomizationString = securityConnStr };
+IDataService mainDataService = new PostgresDataService() { CustomizationString = mainConnStr };
+
+container.RegisterInstance(Configuration);
+container.RegisterInstance<IDataService>("SecurityDataService", securityDataService, InstanceLifetime.Singleton);
+container.RegisterInstance<IDataService>(mainDataService, InstanceLifetime.Singleton);
+
+container.RegisterFactory<IUserWithRoles>((cont) => new AdapterUserService(), FactoryLifetime.PerThread);
+container.RegisterFactory<ISecurityManager>(
+    (cont) =>
+    {
+        var dataService = cont.Resolve<IDataService>("SecurityDataService");
+        var cacheManager = cont.Resolve<ICacheService>();
+        var userService = cont.Resolve<IUserWithRoles>();
+
+        return new RoleSecurityManager(dataService, cacheManager, userService);
+    },
+    FactoryLifetime.PerThread);
+
+container.RegisterSingleton<ICacheService, MemoryCacheService>();
+```
+- **securityDataService** - сервис данных для системы полномочий, чтобы она могла без ограничений вычитывать объекты полномочий для проверки. Регистрируется как **Singleton Instance**, т.е. он один на все приложение;
+- **mainDataService** - главный сервис данных. Регистрируется как **Singleton Instance**, т.е. он один на все приложение;
+- **IUserWithRoles** - сервис текущего пользователя. Регистрируется как **PerThread Factory**, т.е. будет создаваться новый объект на каждый поток в приложении, поэтому в параметрах указывается конструктор **new AdapterUserService()**.
+- **ISecurityManager** - главный сервис полномочий. Регистрируется как **PerThread Factory**, т.е. будет создаваться новый объект на каждый поток в приложении, согласно указанному конструктору, в котором указывается севрис данных для полномочий, сервис кэша и сервис текущего пользователя.
+- **ICacheService** - сервис кэша данных. Регистрируется как **Singleton Instance**, т.е. он один на все приложение.
+
+### Пример получения сервисов для использования:
 ```C#
 // Инициализация сервисов.
 var ds = Adapter.Container.Resolve<IDataService>();
@@ -23,6 +51,21 @@ var securityManager = Adapter.Container.Resolve<ISecurityManager>();
 ```
 
 Вместо статического **Adapter.Container** можно использовать **ICSSoft.Services.UnityFactory.GetContainer()**.
+
+### Пример использования сервиса полномочий
+```C#
+/// <summary>
+/// Проверить доступность отчета в системе полномочий.
+/// </summary>
+/// <param name="operationName">Имя операции.</param>
+/// <returns>Доступность отчета.</returns>
+public bool AccessCheck(string operationName)
+{
+    var securityManager = Adapter.Container.Resolve<ISecurityManager>();
+
+    return securityManager.AccessCheck(operationName);
+}
+```
 
 ## Пример реализации, отчет список машин
 
