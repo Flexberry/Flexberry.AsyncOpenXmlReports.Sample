@@ -60,16 +60,15 @@ namespace IIS.AsyncOpenXmlReportsSample
         private string GetLogin()
         {
             var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
-            string agentClaim = currentClaims?.FirstOrDefault(p => p.Type == "preferred_username").Value;
+            string agentClaim = currentClaims?.First(p => p.Type == "preferred_username").Value;
 
             return agentClaim;
         }
 
         private string GetRoles()
         {
-            //var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
-            //string roles = currentClaims?.FirstOrDefault(p => p.Type == "resource_access").Value;
-            string roles = "AllAccess";
+            var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
+            string roles = currentClaims?.First(p => p.Type == "resource_access").Value;
 
             return roles;
         }
@@ -77,7 +76,7 @@ namespace IIS.AsyncOpenXmlReportsSample
         private string GetEmail()
         {
             var currentClaims = (contextAccessor.HttpContext.User?.Identity as ClaimsIdentity)?.Claims;
-            string agentEmail = currentClaims?.FirstOrDefault(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value;
+            string agentEmail = currentClaims?.First(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").Value;
 
             return agentEmail;
         }

@@ -55,6 +55,7 @@
         /// <summary>
         /// Получить полный путь до файла отчета.
         /// </summary>
+        /// <param name="reportFileDirectory">Директория файла отчета.</param>
         /// <param name="reportFileName">Имя файла отчета.</param>
         /// <returns>Путь до файла отчета + имя файла отчета.</returns>
         public static string GetFullReportName(string reportFileDirectory, string reportFileName)
@@ -76,7 +77,6 @@
         /// Сформировать имя файла отчета.
         /// </summary>
         /// <param name="templateName">Наименование шаблона.</param>
-        /// <param name="reportId">Идентификатор отчета.</param>
         /// <param name="userLogin">Логин пользователя.</param>
         /// <returns>Имя отчета.</returns>
         public static string GetReportName(string templateName, string userLogin)
