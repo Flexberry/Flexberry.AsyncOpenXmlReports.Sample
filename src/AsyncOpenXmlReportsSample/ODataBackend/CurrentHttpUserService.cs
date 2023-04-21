@@ -73,7 +73,7 @@ namespace IIS.AsyncOpenXmlReportsSample
         /// <summary>
         /// Получить логин пользователя.
         /// </summary>
-        /// <returns>Логин пользователя</returns>
+        /// <returns>Логин пользователя.</returns>
         private string GetLogin()
         {
             var currentClaims = GetCurrentClaims();
@@ -85,7 +85,7 @@ namespace IIS.AsyncOpenXmlReportsSample
         /// <summary>
         /// Получить список ролей пользоватля.
         /// </summary>
-        /// <returns>Список ролей пользоватля</returns>
+        /// <returns>Список ролей пользоватля.</returns>
         private string GetRoles()
         {
             var currentClaims = GetCurrentClaims();
