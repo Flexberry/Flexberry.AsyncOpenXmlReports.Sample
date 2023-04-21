@@ -78,7 +78,8 @@
 
             try
             {
-                var fileName = JobTools.GetFullReportName($"{request.Id}.txt");
+                var fileDirectory = JobTools.CreateReportDirectory(request.Id);
+                var fileName = JobTools.GetFullReportName(fileDirectory , $"{request.Id}.txt");
 
                 LogService.Log.Debug($"Creating file: {fileName}");
                 File.WriteAllText(fileName, request.ToString());

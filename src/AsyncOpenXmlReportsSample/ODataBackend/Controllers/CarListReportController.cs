@@ -2,12 +2,15 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
+    using ICSSoft.STORMNET.Business.LINQProvider;
+    using ICSSoft.STORMNET.UserDataTypes;
     using IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -143,7 +146,49 @@
         {
             LogService.Log.Info($"CarListReportController.BuildResult request = {request}");
 
-            return Ok();
+            try
+            {
+                Guid reportId = new Guid(request.Id);
+                UserReport report = dataService.Query<UserReport>(UserReport.Views.UserReportE).First(x => x.ReportId.Equals(reportId));
+                ReportStatusType reportResultStatus = (ReportStatusType)Enum.Parse(typeof(ReportStatusType), request.Status, true);
+
+                // Проверяем результат выполнения джоба в сервисе Quartz.
+                switch (reportResultStatus)
+                {
+                    case ReportStatusType.Executed:
+
+                        // Если отчет успешно сформировался, размещаем ссылку на файл отчета в БД.
+                        string fileDirectory = Path.Combine(this.config["UploadUrl"], reportId.ToString());
+                        string fileName = request.FileName;
+                        string fileUrl = Path.Combine(fileDirectory, fileName);
+
+                        WebFile webFile = new WebFile();
+                        webFile.Name = fileName;
+                        webFile.Url = $"{this.config["BackendRoot"]}?fileUploadKey={reportId}&fileName={fileName}";
+
+                        report.Status = ReportStatusType.Executed;
+                        report.File = webFile;
+                        break;
+
+                    case ReportStatusType.Unexecuted:
+                        report.Status = ReportStatusType.Unexecuted;
+                        break;
+
+                    default:
+                        report.Status = ReportStatusType.InProgress;
+                        break;
+                }
+
+                dataService.UpdateObject(report);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                LogService.Log.Info($"CarListReportController.BuildResult error = {ex.Message}");
+
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>

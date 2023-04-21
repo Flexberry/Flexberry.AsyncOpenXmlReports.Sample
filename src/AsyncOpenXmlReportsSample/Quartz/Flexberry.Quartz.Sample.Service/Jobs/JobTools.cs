@@ -55,11 +55,12 @@
         /// <summary>
         /// Получить полный путь до файла отчета.
         /// </summary>
+        /// <param name="reportFileDirectory">Директория файла отчета.</param>
         /// <param name="reportFileName">Имя файла отчета.</param>
         /// <returns>Путь до файла отчета + имя файла отчета.</returns>
-        public static string GetFullReportName(string reportFileName)
+        public static string GetFullReportName(string reportFileDirectory, string reportFileName)
         {
-            return Path.Combine(Adapter.Configuration[UploadUrlConfigParamName], reportFileName);
+            return Path.Combine(reportFileDirectory, reportFileName);
         }
 
         /// <summary>
@@ -76,14 +77,28 @@
         /// Сформировать имя файла отчета.
         /// </summary>
         /// <param name="templateName">Наименование шаблона.</param>
-        /// <param name="reportId">Идентификатор отчета.</param>
         /// <param name="userLogin">Логин пользователя.</param>
         /// <returns>Имя отчета.</returns>
-        public static string GetReportName(string templateName, string reportId, string userLogin)
+        public static string GetReportName(string templateName, string userLogin)
         {
             var dtValue = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff", null);
 
-            return ReplaceInvalidChars($"{userLogin}_{reportId}_{dtValue}_{templateName}");
+            return ReplaceInvalidChars($"{userLogin}_{dtValue}_{templateName}");
+        }
+
+        /// <summary>
+        /// Создать папку для файла jnxtnf. Итоговый файл будт располагаться по пути UploadUrl/guid/reportName
+        /// </summary>
+        /// <param name="fileId">ID отчета.</param>
+        /// <returns>Путь до созданной директории.</returns>
+        public static string CreateReportDirectory(string fileId)
+        {
+            string baseDirectory = Adapter.Configuration[UploadUrlConfigParamName];
+            string directoryPath = Path.Combine(baseDirectory, fileId);
+
+            Directory.CreateDirectory(directoryPath);
+
+            return directoryPath;
         }
 
         /// <summary>

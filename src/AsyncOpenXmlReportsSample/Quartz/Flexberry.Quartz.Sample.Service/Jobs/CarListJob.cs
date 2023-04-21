@@ -108,8 +108,9 @@
                                 })
                         .ToList();
 
-                var fileName = JobTools.GetReportName(request.TemplateName, request.UserInfo.Login, request.Id);
-                var fullFileName = JobTools.GetFullReportName(fileName);
+                var fileDirectory = JobTools.CreateReportDirectory(request.Id);
+                var fileName = JobTools.GetReportName(request.TemplateName, request.UserInfo.Login);
+                var fullFileName = JobTools.GetFullReportName(fileDirectory, fileName);
                 var parameters = new Dictionary<string, object> { { "Car", allCarsParameters } };
                 var fullTamplateName = JobTools.GetFullTemplateName(request.TemplateName);
                 var template = new DocxReport(fullTamplateName);
@@ -117,7 +118,7 @@
                 template.BuildWithParameters(parameters);
                 template.SaveAs(fullFileName);
 
-                return SendResultAsync(request.Id, fullFileName, "Executed");
+                return SendResultAsync(request.Id, fileName, "Executed");
             }
             catch (Exception ex)
             {
@@ -131,16 +132,16 @@
         /// Отправить результат обработки файла.
         /// </summary>
         /// <param name="requestId">Идентификатор запроса.</param>
-        /// <param name="fullFileName">Имя файла отчета.</param>
+        /// <param name="fileName">Имя файла отчета.</param>
         /// <param name="status">Статус обработки. InProgress, Unexecuted, Executed.</param>
-        private static async Task SendResultAsync(string requestId, string fullFileName, string status)
+        private static async Task SendResultAsync(string requestId, string fileName, string status)
         {
             var sendResultUrl = JobTools.GetFullUrlPath("api/CarListReport", "BuildResult");
 
             object input = new
             {
                 Id = requestId,
-                FileName = fullFileName,
+                FileName = fileName,
                 Status = status,
             };
             var msg = JsonConvert.SerializeObject(input);

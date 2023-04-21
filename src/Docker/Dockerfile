@@ -26,8 +26,8 @@ WORKDIR /AsyncOpenXmlReportsSample
 
 RUN \
  dotnet restore AsyncOpenXmlReportsSample.sln;\
- dotnet build AsyncOpenXmlReportsSample.sln -c Release;\
- dotnet publish ODataBackend/AsyncOpenXmlReportsSample.ODataBackend.csproj -c Release -o out -f netcoreapp3.1
+ dotnet build AsyncOpenXmlReportsSample.sln -c Debug;\
+ dotnet publish ODataBackend/AsyncOpenXmlReportsSample.ODataBackend.csproj -c Debug -o out -f netcoreapp3.1
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1
 
