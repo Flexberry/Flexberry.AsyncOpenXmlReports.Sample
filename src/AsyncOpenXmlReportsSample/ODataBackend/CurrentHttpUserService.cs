@@ -113,7 +113,7 @@ namespace IIS.AsyncOpenXmlReportsSample
         private string GetEmail()
         {
             var currentClaims = GetCurrentClaims();
-            string agentEmail = currentClaims?.First(p => p.Type.EndsWith("/emailaddress", StringComparison.InvariantCultureIgnoreCase)).Value;
+            string agentEmail = currentClaims?.First(p => p.Type.EndsWith("identity/claims/emailaddress", StringComparison.InvariantCultureIgnoreCase)).Value;
 
             return agentEmail;
         }
