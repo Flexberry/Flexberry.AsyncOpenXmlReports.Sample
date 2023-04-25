@@ -12,6 +12,7 @@
     using ICSSoft.STORMNET.Business.LINQProvider;
     using ICSSoft.STORMNET.UserDataTypes;
     using IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects;
+    using IIS.AsyncOpenXmlReportsSample.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -47,19 +48,27 @@
         private readonly IDataService dataService;
 
         /// <summary>
+        /// Сервис уведомления пользователя.
+        /// </summary>
+        private readonly IUserNotifier userNotifier;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CarListReportController"/> class.
         /// </summary>
         /// <param name="configuration">App configuration.</param>
         /// <param name="userService">Экземпляр текущего UserService.</param>
         /// <param name="dataService">Экземпляр текущего DataService.</param>
+        /// <param name="userNotifier">Экземпляр текущего UserNotifier.</param>
         public CarListReportController(
             IConfiguration configuration,
             IUserWithRolesAndEmail userService,
-            IDataService dataService)
+            IDataService dataService,
+            IUserNotifier userNotifier)
         {
             config = configuration;
             this.userService = userService;
             this.dataService = dataService;
+            this.userNotifier = userNotifier;
 
             CheckAndCreateTemplateFile();
         }
@@ -156,6 +165,9 @@
         [HttpPost("[action]")]
         public IActionResult BuildResult([FromBody] ReportResultRequest request)
         {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
             LogService.Log.Info($"CarListReportController.BuildResult request = {request}");
 
             try
@@ -163,6 +175,7 @@
                 Guid reportId = new Guid(request.Id);
                 UserReport report = dataService.Query<UserReport>(UserReport.Views.UserReportE).First(x => x.ReportId.Equals(reportId));
                 ReportStatusType reportResultStatus = (ReportStatusType)Enum.Parse(typeof(ReportStatusType), request.Status, true);
+                string notifyMessage = string.Empty;
 
                 // Проверяем результат выполнения джоба в сервисе Quartz.
                 switch (reportResultStatus)
@@ -180,10 +193,13 @@
 
                         report.Status = ReportStatusType.Executed;
                         report.File = webFile;
+
+                        notifyMessage = $"Отчет {reportId} успешно сформирован. Создан файл отчета {fileName}.";
                         break;
 
                     case ReportStatusType.Unexecuted:
                         report.Status = ReportStatusType.Unexecuted;
+                        notifyMessage = $"Отчет {reportId} не сформирован. Произошла ошибка.";
                         break;
 
                     default:
@@ -192,6 +208,11 @@
                 }
 
                 dataService.UpdateObject(report);
+
+                if (!string.IsNullOrWhiteSpace(notifyMessage))
+                {
+                    userNotifier.SendReportCompleteMessage(report.UserName, notifyMessage, report.UserEmail);
+                }
 
                 return Ok();
             }

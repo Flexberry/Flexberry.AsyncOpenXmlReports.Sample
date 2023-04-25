@@ -9,25 +9,54 @@
     /// </summary>
     public class UsersReportsNotifier : IUserNotifier
     {
-        private IHubContext<SignalRHub> hubContext;
+        /// <summary>
+        /// От кого отправляются уведомления.
+        /// </summary>
+        private const string EmailFromValue = "vchurekov@neoplatform.ru";
+
+        private readonly IHubContext<SignalRHub> hubContext;
+
+        private readonly IEmailSender emailSender;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UsersReportsNotifier"/> class.
         /// </summary>
         /// <param name="hubContext">Зависимость SignalR. Разрешается автоматически, без Unity.</param>
-        public UsersReportsNotifier(IHubContext<SignalRHub> hubContext)
+        /// <param name="emailSender">Сервис отправки почты.</param>
+        public UsersReportsNotifier(IHubContext<SignalRHub> hubContext, IEmailSender emailSender)
         {
             this.hubContext = hubContext;
+            this.emailSender = emailSender;
         }
 
-        /// <summary>
-        /// Отправить оповещение пользователю.
-        /// </summary>
-        /// <param name="username">Имя пользователя, которого нужно оповестить.</param>
-        /// <param name="message">Текст оповещения.</param>
+        /// <inheritdoc/>
         public Task SendNotifyMessage(string username, string message)
         {
-            throw new NotImplementedException();
+            var signalID = SignalRHub.GetUserID(username);
+
+            if (signalID != null)
+            {
+                return hubContext.Clients.Client(signalID).SendAsync("NotifyUser", $"{username}! {message}");
+            }
+
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public Task SendReportCompleteMessage(string username, string message, string email)
+        {
+            var signalID = SignalRHub.GetUserID(username);
+
+            if (signalID != null)
+            {
+                return hubContext.Clients.Client(signalID).SendAsync("ReportComplete", $"{username}! {message}");
+            }
+            else
+            {
+                emailSender.SendEmail(EmailFromValue, email, null, message, message, null, null, null);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

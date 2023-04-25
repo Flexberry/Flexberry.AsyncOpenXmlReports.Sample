@@ -12,6 +12,9 @@
     {
         private static ConcurrentDictionary<string, string> users;
 
+        /// <summary>
+        /// Инициализация SignalR.
+        /// </summary>
         public SignalRHub()
         {
             if (users == null)
@@ -21,9 +24,22 @@
         }
 
         /// <summary>
+        /// Получить ID пользователя.
+        /// </summary>
+        /// <param name="userName">Имя пользователя.</param>
+        /// <returns>ID пользователя.</returns>
+        public static string GetUserID(string userName)
+        {
+            if (users.Values.Contains(userName))
+                return users.First(p => p.Value == userName).Key;
+
+            return null;
+        }
+
+        /// <summary>
         /// Подключение пользователя.
         /// </summary>
-        /// <param name="userName">Имя пользователя</param>
+        /// <param name="userName">Имя пользователя.</param>
         public void AddUser(string userName)
         {
             var id = Context.ConnectionId;
@@ -44,6 +60,20 @@
             {
                 string id = users.Where(p => p.Value == username).FirstOrDefault().Key;
                 await Clients.Client(id).SendAsync("NotifyUser", $"{username}! {message}");
+            }
+        }
+
+        /// <summary>
+        /// Метод вызывается из клиента (ember-фронтенда) SignalR. Выполняет вызов метода на стороне клиента.
+        /// </summary>
+        /// <param name="username">Имя пользователя.</param>
+        /// <param name="message">Сообщение для пользователя.</param>
+        public async Task SendReportCompleteMessage(string username, string message)
+        {
+            if (users.Values.Contains(username))
+            {
+                string id = users.Where(p => p.Value == username).FirstOrDefault().Key;
+                await Clients.Client(id).SendAsync("ReportComplete", $"{username}! {message}");
             }
         }
 
