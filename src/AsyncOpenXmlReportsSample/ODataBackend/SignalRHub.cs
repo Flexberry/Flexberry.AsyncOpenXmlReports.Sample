@@ -3,6 +3,7 @@
     using System.Collections.Concurrent;
     using System.Linq;
     using System.Threading.Tasks;
+    using IIS.AsyncOpenXmlReportsSample.Services;
     using Microsoft.AspNetCore.SignalR;
 
     /// <summary>
@@ -10,30 +11,15 @@
     /// </summary>
     public class SignalRHub : Hub
     {
-        private static ConcurrentDictionary<string, string> users;
+        private readonly ISignarRClientsService signarRClientsService;
 
         /// <summary>
         /// Инициализация SignalR.
         /// </summary>
-        public SignalRHub()
+        /// <param name="signarRClientsService">Сервис сессий пользователей.</param>
+        public SignalRHub(ISignarRClientsService signarRClientsService)
         {
-            if (users == null)
-            {
-                users = new ConcurrentDictionary<string, string>();
-            }
-        }
-
-        /// <summary>
-        /// Получить ID пользователя.
-        /// </summary>
-        /// <param name="userName">Имя пользователя.</param>
-        /// <returns>ID пользователя.</returns>
-        public static string GetUserID(string userName)
-        {
-            if (users.Values.Contains(userName))
-                return users.First(p => p.Value == userName).Key;
-
-            return null;
+            this.signarRClientsService = signarRClientsService;
         }
 
         /// <summary>
@@ -43,10 +29,8 @@
         public void AddUser(string userName)
         {
             var id = Context.ConnectionId;
-            if (!users.ContainsKey(id))
-            {
-                users.TryAdd(id, userName);
-            }
+
+            signarRClientsService.AddUser(id, userName);
         }
 
         /// <summary>
@@ -57,26 +41,9 @@
         /// <returns>Task.</returns>
         public async Task SendNotifyUserMessage(string username, string message)
         {
-            if (users.Values.Contains(username))
-            {
-                string id = users.FirstOrDefault(p => p.Value == username).Key;
-                await Clients.Client(id).SendAsync("NotifyUser", $"{username}! {message}").ConfigureAwait(false);
-            }
-        }
+            var userId = signarRClientsService.GetUserID(username);
 
-        /// <summary>
-        /// Метод вызывается из клиента (ember-фронтенда) SignalR. Выполняет вызов метода на стороне клиента.
-        /// </summary>
-        /// <param name="username">Имя пользователя.</param>
-        /// <param name="message">Сообщение для пользователя.</param>
-        /// <returns>Task.</returns>
-        public async Task SendReportCompleteMessage(string username, string message)
-        {
-            if (users.Values.Contains(username))
-            {
-                string id = users.FirstOrDefault(p => p.Value == username).Key;
-                await Clients.Client(id).SendAsync("ReportComplete", $"{username}! {message}").ConfigureAwait(false);
-            }
+            await Clients.Client(userId).SendAsync("NotifyUser", $"{username}! {message}").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -87,10 +54,7 @@
         {
             var id = Context.ConnectionId;
 
-            if (users.ContainsKey(id))
-            {
-                users.TryRemove(id, out _);
-            }
+            signarRClientsService.RemoveUser(id);
 
             return base.OnDisconnectedAsync(exception);
         }

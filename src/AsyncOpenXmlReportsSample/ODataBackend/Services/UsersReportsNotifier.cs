@@ -18,21 +18,25 @@
 
         private readonly IEmailSender emailSender;
 
+        private readonly ISignarRClientsService signarRClientsService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UsersReportsNotifier"/> class.
         /// </summary>
         /// <param name="hubContext">Зависимость SignalR. Разрешается автоматически, без Unity.</param>
         /// <param name="emailSender">Сервис отправки почты.</param>
-        public UsersReportsNotifier(IHubContext<SignalRHub> hubContext, IEmailSender emailSender)
+        /// <param name="signarRClientsService">Сервис сессий пользователей.</param>
+        public UsersReportsNotifier(IHubContext<SignalRHub> hubContext, IEmailSender emailSender, ISignarRClientsService signarRClientsService)
         {
             this.hubContext = hubContext;
             this.emailSender = emailSender;
+            this.signarRClientsService = signarRClientsService;
         }
 
         /// <inheritdoc/>
         public Task SendNotifyMessage(string username, string message)
         {
-            var signalID = SignalRHub.GetUserID(username);
+            var signalID = signarRClientsService.GetUserID(username);
 
             if (signalID != null)
             {
@@ -45,11 +49,12 @@
         /// <inheritdoc/>
         public Task SendReportCompleteMessage(string username, string message, string email)
         {
-            var signalID = SignalRHub.GetUserID(username);
+            var signalID = signarRClientsService.GetUserID(username);
 
             if (signalID != null)
             {
                 return hubContext.Clients.Client(signalID).SendAsync("ReportComplete", $"{username}! {message}");
+
             }
             else
             {
