@@ -54,12 +54,13 @@
         /// </summary>
         /// <param name="username">Имя пользователя.</param>
         /// <param name="message">Сообщение для пользователя.</param>
+        /// <returns>Task.</returns>
         public async Task SendNotifyUserMessage(string username, string message)
         {
             if (users.Values.Contains(username))
             {
-                string id = users.Where(p => p.Value == username).FirstOrDefault().Key;
-                await Clients.Client(id).SendAsync("NotifyUser", $"{username}! {message}");
+                string id = users.FirstOrDefault(p => p.Value == username).Key;
+                await Clients.Client(id).SendAsync("NotifyUser", $"{username}! {message}").ConfigureAwait(false);
             }
         }
 
@@ -68,12 +69,13 @@
         /// </summary>
         /// <param name="username">Имя пользователя.</param>
         /// <param name="message">Сообщение для пользователя.</param>
+        /// <returns>Task.</returns>
         public async Task SendReportCompleteMessage(string username, string message)
         {
             if (users.Values.Contains(username))
             {
-                string id = users.Where(p => p.Value == username).FirstOrDefault().Key;
-                await Clients.Client(id).SendAsync("ReportComplete", $"{username}! {message}");
+                string id = users.FirstOrDefault(p => p.Value == username).Key;
+                await Clients.Client(id).SendAsync("ReportComplete", $"{username}! {message}").ConfigureAwait(false);
             }
         }
 
