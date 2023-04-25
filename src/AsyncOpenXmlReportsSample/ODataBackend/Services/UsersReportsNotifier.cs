@@ -12,7 +12,7 @@
         /// <summary>
         /// От кого отправляются уведомления.
         /// </summary>
-        private const string EmailFromValue = "vchurekov@neoplatform.ru";
+        private const string EmailFromValue = "asyncopenxmlreportssample@mail.ru";
 
         private readonly IHubContext<SignalRHub> hubContext;
 
