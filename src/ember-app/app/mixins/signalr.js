@@ -33,6 +33,7 @@ export default Mixin.create({
 
       signalr.connection.onclose( _this._signalROnDisconnected.bind(_this));
       signalr.connection.on('NotifyUser', _this._notifyUser.bind(_this));
+      signalr.connection.on('ReportComplete', _this._reportComplete.bind(_this));
       signalr.connection.invoke("AddUser", _this.userName);
     }).catch(function (err) {
 
@@ -67,6 +68,13 @@ export default Mixin.create({
 
   _notifyUser(message) {
     const modalSignalRMessage = "SignalR notify User and send message - " + message;
+    this.set('modalSignalRMessage', modalSignalRMessage);
+    this.set('callSignarRTestNotificationModalOpen', true);
+  },
+
+  _reportComplete(message) {
+    const modalSignalRMessage = message;
+    this.set('modalSignalRTitle', "Формирование отчета");
     this.set('modalSignalRMessage', modalSignalRMessage);
     this.set('callSignarRTestNotificationModalOpen', true);
   }

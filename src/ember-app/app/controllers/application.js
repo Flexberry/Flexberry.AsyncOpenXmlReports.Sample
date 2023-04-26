@@ -123,6 +123,8 @@ export default Controller.extend(SignalRMixin, {
   */
   appState: service(),
 
+  modalSignalRTitle: "SignalR Message",
+
   modalSignalRMessage: undefined,
 
   callSignarRTestNotificationModalOpen: false,
@@ -191,6 +193,10 @@ export default Controller.extend(SignalRMixin, {
       if (signalR) {
         signalR.connection.invoke("SendNotifyUserMessage", this.userName, "Hi!");
       }
+    },
+
+    openReportsList() {
+      this.get('target').transitionTo('i-i-s-async-open-xml-reports-sample-user-report-l');
     },
   }
 });

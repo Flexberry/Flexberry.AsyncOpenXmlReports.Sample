@@ -64,10 +64,11 @@
   {{outlet "modal"}}
   {{#if callSignarRTestNotificationModalOpen}}
     {{#modal-dialog
-      title="SignalR Message"
+      title=modalSignalRTitle
       useOkButton=true
       useCloseButton=true
       close=(action set "callSignarRTestNotificationModalOpen" false)
+      ok=(action "openReportsList")
       settings=(hash
         context=".stackable.grid.container"
       )
