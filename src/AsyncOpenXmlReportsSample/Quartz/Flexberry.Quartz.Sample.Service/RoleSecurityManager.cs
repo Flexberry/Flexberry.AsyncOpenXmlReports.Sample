@@ -110,14 +110,16 @@
         /// </returns>
         public bool AccessCheck(string operationId)
         {
-            if (!(currentUser?.RolesList?.Any() ?? false))
+            var userRoles = GetUserRoleList();
+
+            if (!(userRoles?.Any() ?? false))
                 return false;
 
             bool totalResult = false;
 
             try
             {
-                foreach (var roleName in currentUser.RolesList)
+                foreach (var roleName in userRoles)
                 {
                     var result = false;
                     string cacheKey = $"{nameof(AccessCheck)}_RoleName_{roleName}_{operationId}";
@@ -181,7 +183,9 @@
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            if (!(currentUser?.RolesList?.Any() ?? false))
+            var userRoles = GetUserRoleList();
+
+            if (!(userRoles?.Any() ?? false))
                 return false;
 
             AccessTypeAttribute accessTypeAttribute = GetAccessTypeAttribute(type);
@@ -191,7 +195,7 @@
 
             bool totalResult = false;
 
-            foreach (var roleName in currentUser.RolesList)
+            foreach (var roleName in userRoles)
             {
                 IEnumerable<Agent> roles = GetRolesByName(roleName);
 
@@ -351,6 +355,17 @@
                 return null;
 
             throw new InvalidOperationException($"Multiple [AccessTypeAttribute] detected for type {type.FullName}.");
+        }
+
+        /// <summary>
+        /// Перечень ролей пользователя.
+        /// </summary>
+        private List<string> GetUserRoleList()
+        {
+            if (string.IsNullOrWhiteSpace(currentUser?.Roles))
+                return null;
+
+            return new List<string>(currentUser.Roles.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()));
         }
 
         /// <summary>

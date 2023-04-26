@@ -19,6 +19,16 @@
 2. Заполняем Username и Email (нужен для отчетов), нажимаем Create.
 3. Открываются настройки созданного пользователя. Переходим во вкладку `Credentials`, нажимаем Set password. Задаем пароль. Нажимаем Save, затем подтверждаем еще раз.
 
+## Включаем email в клаймы
+
+Заходим в Clients, выбираем ember-app. Далее
+
+![Keycloack welcome page](images/keycloack_email_claim1.png)
+
+![Keycloack welcome page](images/keycloack_email_claim2.png)
+
+![Keycloack welcome page](images/keycloack_email_claim3.png)
+
 ## Задаем роли
 
 1. В меню `Clients` заходим в созданного клиента, открываем вкладку `Roles`

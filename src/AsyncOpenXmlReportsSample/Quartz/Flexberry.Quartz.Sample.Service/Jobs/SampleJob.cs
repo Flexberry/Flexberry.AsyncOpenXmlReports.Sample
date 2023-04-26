@@ -1,6 +1,7 @@
 ﻿namespace Flexberry.Quartz.Sample.Service.Jobs
 {
     using System;
+    using System.IO;
     using System.Threading.Tasks;
     using Flexberry.Quartz.Sample.Service.Controllers.RequestObjects;
     using global::Quartz;
@@ -53,6 +54,9 @@
         /// <returns>Task.</returns>
         public Task Execute(IJobExecutionContext context)
         {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
             var dataMap = context.JobDetail.JobDataMap;
             var request = jobTools.GetParam<SampleReportRequest>(dataMap, "SampleReportRequest");
             var user = Adapter.Container.Resolve<IUserWithRoles>();
@@ -71,6 +75,19 @@
             var user2 = Adapter.Container.Resolve<IUserWithRoles>();
 
             LogService.Log.Info($"SampleJob: request = {request}; user = {user2.Login}; ds = {ds.CustomizationString}");
+
+            try
+            {
+                var fileDirectory = JobTools.CreateReportDirectory(request.Id);
+                var fileName = JobTools.GetFullReportName(fileDirectory , $"{request.Id}.txt");
+
+                LogService.Log.Debug($"Creating file: {fileName}");
+                File.WriteAllText(fileName, request.ToString());
+            }
+            catch (Exception ex)
+            {
+                LogService.Log.Error(ex);
+            }
 
             return Task.CompletedTask;
         }

@@ -1,31 +1,26 @@
-﻿namespace Flexberry.Quartz.Sample.Service.Controllers.RequestObjects
+﻿namespace IIS.AsyncOpenXmlReportsSample.Controllers.RequestObjects
 {
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Данные для запроса списка автомобилей.
+    /// Результат обработки отчета.
     /// </summary>
-    public class CarListReportRequest
+    public class ReportResultRequest
     {
         /// <summary>
-        /// Идентификатор запроса.
+        /// Идентификатор апроса.
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        /// Информация о пользователе.
+        /// Имя файла.
         /// </summary>
-        public UserInfo UserInfo { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
-        /// Имя шаблона.
+        /// Статус обработки.
         /// </summary>
-        public string TemplateName { get; set; }
-
-        /// <summary>
-        /// Задержка перед выполнением в секундах.
-        /// </summary>
-        public int DelaySeconds { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Returns a string that represents the current object.

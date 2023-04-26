@@ -12,9 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncOpenXmlReportsSample.IntegrationTests", "IntegrationTests\AsyncOpenXmlReportsSample.IntegrationTests.csproj", "{33A13832-D61C-487E-BAAC-4EB72AC84F12}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flexberry.Quartz.Sample.Service", "Quartz\Flexberry.Quartz.Sample.Service\Flexberry.Quartz.Sample.Service.csproj", "{7D14264B-EDFD-4818-B361-FE7AA16FC6C9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{42F286FA-2A6F-458F-B8D3-2A26504A7B4D} = {42F286FA-2A6F-458F-B8D3-2A26504A7B4D}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flexberry.Quartz.Sample.ConsoleHost", "Quartz\Flexberry.Quartz.Sample.ConsoleHost\Flexberry.Quartz.Sample.ConsoleHost.csproj", "{EA22C9A6-4D62-4447-871D-63DC31229047}"
 EndProject

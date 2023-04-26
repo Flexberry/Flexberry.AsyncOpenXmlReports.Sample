@@ -3,6 +3,7 @@
     using System.Collections.Concurrent;
     using System.Linq;
     using System.Threading.Tasks;
+    using IIS.AsyncOpenXmlReportsSample.Services;
     using Microsoft.AspNetCore.SignalR;
 
     /// <summary>
@@ -10,27 +11,26 @@
     /// </summary>
     public class SignalRHub : Hub
     {
-        private static ConcurrentDictionary<string, string> users;
+        private readonly ISignarRClientsService signarRClientsService;
 
-        public SignalRHub()
+        /// <summary>
+        /// Инициализация SignalR.
+        /// </summary>
+        /// <param name="signarRClientsService">Сервис сессий пользователей.</param>
+        public SignalRHub(ISignarRClientsService signarRClientsService)
         {
-            if (users == null)
-            {
-                users = new ConcurrentDictionary<string, string>();
-            }
+            this.signarRClientsService = signarRClientsService;
         }
 
         /// <summary>
         /// Подключение пользователя.
         /// </summary>
-        /// <param name="userName">Имя пользователя</param>
+        /// <param name="userName">Имя пользователя.</param>
         public void AddUser(string userName)
         {
             var id = Context.ConnectionId;
-            if (!users.ContainsKey(id))
-            {
-                users.TryAdd(id, userName);
-            }
+
+            signarRClientsService.AddUser(id, userName);
         }
 
         /// <summary>
@@ -38,13 +38,12 @@
         /// </summary>
         /// <param name="username">Имя пользователя.</param>
         /// <param name="message">Сообщение для пользователя.</param>
+        /// <returns>Task.</returns>
         public async Task SendNotifyUserMessage(string username, string message)
         {
-            if (users.Values.Contains(username))
-            {
-                string id = users.Where(p => p.Value == username).FirstOrDefault().Key;
-                await Clients.Client(id).SendAsync("NotifyUser", $"{username}! {message}");
-            }
+            var userId = signarRClientsService.GetUserID(username);
+
+            await Clients.Client(userId).SendAsync("NotifyUser", $"{username}! {message}").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -55,10 +54,7 @@
         {
             var id = Context.ConnectionId;
 
-            if (users.ContainsKey(id))
-            {
-                users.TryRemove(id, out _);
-            }
+            signarRClientsService.RemoveUser(id);
 
             return base.OnDisconnectedAsync(exception);
         }

@@ -1,6 +1,7 @@
 ﻿namespace Flexberry.Quartz.Sample.Service
 {
     using System;
+    using Flexberry.Quartz.Sample.Service.Jobs;
     using ICSSoft.STORMNET;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -99,9 +100,7 @@
             Stop();
 
             // Конфигурация.
-            Configuration = new ConfigurationBuilder()
-                .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
-                .Build();
+            InitConfiguration();
 
             // Настройки адаптера.
             var adapterStartup = new AdapterStartup(Configuration);
@@ -140,6 +139,33 @@
         protected void Stop()
         {
             Close(ref host);
+        }
+
+        /// <summary>
+        /// Инициализация конфигурации.
+        /// </summary>
+        private void InitConfiguration()
+        {
+            // Конфигурация.
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("adapterSettings.json", optional: false, reloadOnChange: false)
+                .AddEnvironmentVariables()
+                .Build();
+
+            LogConfigurationValue("DefConnStr");
+            LogConfigurationValue("SecurityConnString");
+            LogConfigurationValue(JobTools.UploadUrlConfigParamName);
+            LogConfigurationValue(JobTools.TemplatesPathConfigParamName);
+            LogConfigurationValue(JobTools.BackendRootConfigParamName);
+        }
+
+        /// <summary>
+        /// Записать в лог значение параметра конфигурации.
+        /// </summary>
+        /// <param name="paramName">Имя параметра.</param>
+        private void LogConfigurationValue(string paramName)
+        {
+            LogService.Log.Debug($"Param: {paramName} = {Configuration[paramName]}");
         }
     }
 }

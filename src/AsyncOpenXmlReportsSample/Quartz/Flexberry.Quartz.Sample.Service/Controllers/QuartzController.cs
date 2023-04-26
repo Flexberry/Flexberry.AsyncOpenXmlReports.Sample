@@ -53,6 +53,11 @@
         [ActionName("CarListReport")]
         public StatusCodeResult CarListReport([FromBody] CarListReportRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             LogService.LogDebugFormat("SampleReport: params = '{0}'", request.ToString());
 
             var runTask = new Task(async () =>
@@ -63,7 +68,7 @@
                 await scheduler.Start();
 
                 var job = CarListJob.GetDetail("job1_" + request.Id, "group1_" + request.Id);
-                var trigger = CarListJob.GetTrigger("trigger1_" + request.Id, "group1_" + request.Id);
+                var trigger = CarListJob.GetTrigger("trigger1_" + request.Id, "group1_" + request.Id, request.DelaySeconds);
 
                 // Добавим к задаче данные запроса.
                 job.JobDataMap.Add(JobTools.ReportNameParam, "CarListReport");
