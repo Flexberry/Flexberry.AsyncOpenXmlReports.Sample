@@ -33,8 +33,8 @@
         /// <inheritdoc/>
         public string GetUserName(string userId)
         {
-            if (users.Keys.Contains(userId))
-                return users.First(p => p.Key == userId).Value;
+            if (users.ContainsKey(userId))
+                return users[userId];
 
             return null;
         }

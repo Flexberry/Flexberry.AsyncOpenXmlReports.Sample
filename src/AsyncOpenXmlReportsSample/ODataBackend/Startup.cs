@@ -161,7 +161,7 @@
 
             container.RegisterType<IHttpContextAccessor, HttpContextAccessor>();
 
-            container.RegisterInstance<ISignarRClientsService>(new SignarRClientsService());
+            container.RegisterInstance<ISignarRClientsService>(new SignarRClientsService(), InstanceLifetime.Singleton);
 
             // Регистрируем CurrentUserService.
             IUserWithRolesAndEmail userServise = new CurrentHttpUserService(container.Resolve<IHttpContextAccessor>());
