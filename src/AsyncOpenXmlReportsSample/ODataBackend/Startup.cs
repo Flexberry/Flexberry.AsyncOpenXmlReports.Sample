@@ -1,6 +1,10 @@
 ﻿namespace IIS.AsyncOpenXmlReportsSample
 {
     using System;
+    using System.ComponentModel;
+    using System.ComponentModel.Design;
+    using System.Text;
+    using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
     using ICSSoft.Services;
     using ICSSoft.STORMNET;
     using ICSSoft.STORMNET.Business;
@@ -9,10 +13,15 @@
     using IIS.Caseberry.Logging.Objects;
     using Microsoft.AspNet.OData.Extensions;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Components.RenderTree;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Hosting.Builder;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Razor;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using NewPlatform.Flexberry.ORM.ODataService.Extensions;
     using NewPlatform.Flexberry.ORM.ODataService.Files;
@@ -21,6 +30,8 @@
     using NewPlatform.Flexberry.ORM.ODataServiceCore.Common.Exceptions;
     using NewPlatform.Flexberry.Services;
     using Unity;
+    using Unity.Microsoft.DependencyInjection;
+
 
     /// <summary>
     /// Класс настройки запуска приложения.
@@ -85,6 +96,8 @@
             services
                 .AddHealthChecks()
                 .AddNpgSql(connStr);
+
+            services.AddRazorPages();
         }
 
         /// <summary>
@@ -120,6 +133,7 @@
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapHub<SignalRHub>("/SignalRTest");
+                endpoints.MapRazorPages();
             });
 
             app.UseODataService(builder =>
@@ -176,7 +190,9 @@
             var emailOptions = new MailConfigurations.EmailOptions();
             Configuration.GetSection("Email").Bind(emailOptions);
             container.RegisterInstance(emailOptions);
-            container.RegisterType<Services.IEmailSender, Services.MailKitEmailService>();
+
+            container.RegisterType<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+            container.RegisterType<IEmailSender, MailKitEmailService>();
         }
 
         /// <summary>

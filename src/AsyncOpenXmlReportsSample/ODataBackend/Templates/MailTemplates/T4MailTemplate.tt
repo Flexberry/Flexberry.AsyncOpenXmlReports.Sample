@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><#= this.Subject #> <#= this.Subject #></title>
+    <title></title>
 </head>
 <body>
   <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
