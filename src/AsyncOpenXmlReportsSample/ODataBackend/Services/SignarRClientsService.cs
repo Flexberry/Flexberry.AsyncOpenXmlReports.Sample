@@ -8,7 +8,7 @@
     /// </summary>
     public class SignarRClientsService : ISignarRClientsService
     {
-        private readonly ConcurrentDictionary<string, string> users = new ();
+        private readonly ConcurrentDictionary<string, string> users = new ConcurrentDictionary<string, string>();
 
         /// <inheritdoc/>
         public bool AddUser(string userId, string userName)
