@@ -1,11 +1,16 @@
-namespace IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates.RazorPages
+п»їnamespace IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates.RazorPages
 {
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
     public class RazorPagesMailTemplateModel : PageModel
     {
         /// <summary>
-        /// Текст сообщения в формате HTML.
+        /// Р—Р°РіРѕР»РѕРІРѕРє РїРёСЃСЊРјР°.
+        /// </summary>
+        public string HeadTitle { get; set; }
+
+        /// <summary>
+        /// РўРµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ РІ С„РѕСЂРјР°С‚Рµ HTML.
         /// </summary>
         public string HtmlMessage { get; set; }
     }

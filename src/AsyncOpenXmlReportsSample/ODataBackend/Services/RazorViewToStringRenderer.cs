@@ -16,15 +16,15 @@
 
     public class RazorViewToStringRenderer : IRazorViewToStringRenderer
     {
-        private readonly IRazorViewEngine _viewEngine;
-        private readonly ITempDataProvider _tempDataProvider;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IRazorViewEngine viewEngine;
+        private readonly ITempDataProvider tempDataProvider;
+        private readonly IServiceProvider serviceProvider;
 
         public RazorViewToStringRenderer(IRazorViewEngine viewEngine, ITempDataProvider tempDataProvider, IServiceProvider serviceProvider)
         {
-            this._viewEngine = viewEngine;
-            this._tempDataProvider = tempDataProvider;
-            this._serviceProvider = serviceProvider;
+            this.viewEngine = viewEngine;
+            this.tempDataProvider = tempDataProvider;
+            this.serviceProvider = serviceProvider;
         }
 
         public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
@@ -39,7 +39,7 @@
                 new ViewDataDictionary(
                     metadataProvider: new EmptyModelMetadataProvider(),
                     modelState: new ModelStateDictionary()) { Model = model },
-                new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
+                new TempDataDictionary(actionContext.HttpContext, tempDataProvider),
                 output,
                 new HtmlHelperOptions());
 
@@ -50,13 +50,13 @@
 
         private IView FindView(ActionContext actionContext, string viewName)
         {
-            var getViewResult = _viewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
+            var getViewResult = viewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
             if (getViewResult.Success)
             {
                 return getViewResult.View;
             }
 
-            var findViewResult = _viewEngine.FindView(actionContext, viewName, isMainPage: true);
+            var findViewResult = viewEngine.FindView(actionContext, viewName, isMainPage: true);
             if (findViewResult.Success)
             {
                 return findViewResult.View;
@@ -74,7 +74,7 @@
         {
             var httpContext = new DefaultHttpContext
             {
-                RequestServices = _serviceProvider
+                RequestServices = serviceProvider
             };
             return new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
         }

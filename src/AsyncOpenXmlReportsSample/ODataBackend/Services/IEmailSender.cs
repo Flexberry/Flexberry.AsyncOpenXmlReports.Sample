@@ -35,7 +35,7 @@
         void SendT4Email(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
 
         /// <summary>
-        /// Отправить письмо, сформированное на основе шаблона Т4.
+        /// Отправить письмо, сформированное на основе шаблона Razor Pages.
         /// </summary>
         /// <param name="from">Отправитель письма.</param>
         /// <param name="to">Получатель письма.</param>

@@ -18,17 +18,17 @@
         /// <summary>
         /// Настройки отправки по email.
         /// </summary>
-        private readonly EmailOptions _emailOptions;
+        private readonly EmailOptions emailOptions;
 
         /// <summary>
         /// Рендер Razor Page в строковое представление.
         /// </summary>
-        private readonly IRazorViewToStringRenderer _razorPageToStringRenderer;
+        private readonly IRazorViewToStringRenderer razorPageToStringRenderer;
 
         public MailKitEmailService(EmailOptions emailOptions, IRazorViewToStringRenderer razorPageToStringRenderer)
         {
-            this._emailOptions = emailOptions;
-            this._razorPageToStringRenderer = razorPageToStringRenderer;
+            this.emailOptions = emailOptions;
+            this.razorPageToStringRenderer = razorPageToStringRenderer;
         }
 
         /// <summary>
@@ -44,14 +44,15 @@
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
         public async Task SendRazorPagesEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
-            var mailModel = new RazorPagesMailTemplateModel() 
+            var mailModel = new RazorPagesMailTemplateModel()
             {
+                HeadTitle = "Письмо на базе шаблона Razor Pages",
                 HtmlMessage = body,
             };
 
             string razorPage = "/Templates/MailTemplates/RazorPages/RazorPagesMailTemplate.cshtml";
-            string messageBody = await _razorPageToStringRenderer.RenderViewToStringAsync(razorPage, mailModel);
-            this.SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
+            string messageBody = await razorPageToStringRenderer.RenderViewToStringAsync(razorPage, mailModel);
+            SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
         }
 
         /// <summary>
@@ -69,10 +70,11 @@
         {
             T4MailTemplate mailCommonRu = new T4MailTemplate()
             {
+                HeadTitle = "Письмо на базе шаблона T4",
                 HtmlMessage = body,
             };
             string messageBody = mailCommonRu.TransformText();
-            this.SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
+            SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
         }
 
         /// <summary>
@@ -90,9 +92,9 @@
         {
             try
             {
-                using (var client = this.GetSmtpClient())
+                using (var client = GetSmtpClient())
                 {
-                    var message = this.GetMessage(from, to, copyTo, subject, body, bodyAttachments, fileName, fileBody);
+                    var message = GetMessage(from, to, copyTo, subject, body, bodyAttachments, fileName, fileBody);
                     client.Send(message);
                     client.Disconnect(true);
                 }
@@ -101,7 +103,7 @@
             {
                 LogService.LogError(
                     $"{nameof(MailKitEmailService)}" +
-                    $". {nameof(this.SendEmail)}. Ошибка при отправке сообщения.", ex);
+                    $". {nameof(SendEmail)}. Ошибка при отправке сообщения.", ex);
                 throw;
             }
         }
@@ -109,15 +111,15 @@
         private SmtpClient GetSmtpClient()
         {
             var client = new SmtpClient();
-            LogService.LogInfo($"{nameof(MailKitEmailService)} Connect to SmtpClient {this._emailOptions.Host} by port {_emailOptions.Port}");
-            LogService.LogInfo($"{nameof(MailKitEmailService)} CheckCertificateRevocation =  {this._emailOptions.CheckCertificateRevocation}");
-            client.CheckCertificateRevocation = this._emailOptions.CheckCertificateRevocation;
+            LogService.LogInfo($"{nameof(MailKitEmailService)} Connect to SmtpClient {emailOptions.Host} by port {emailOptions.Port}");
+            LogService.LogInfo($"{nameof(MailKitEmailService)} CheckCertificateRevocation =  {emailOptions.CheckCertificateRevocation}");
+            client.CheckCertificateRevocation = emailOptions.CheckCertificateRevocation;
 
-            client.Connect(this._emailOptions.Host, this._emailOptions.Port, this._emailOptions.EnableSsl);
+            client.Connect(emailOptions.Host, emailOptions.Port, emailOptions.EnableSsl);
 
-            if (!string.IsNullOrEmpty(this._emailOptions.Login) && !string.IsNullOrEmpty(this._emailOptions.Password))
+            if (!string.IsNullOrEmpty(emailOptions.Login) && !string.IsNullOrEmpty(emailOptions.Password))
             {
-                client.Authenticate(this._emailOptions.Login, this._emailOptions.Password);
+                client.Authenticate(emailOptions.Login, emailOptions.Password);
             }
 
             return client;
