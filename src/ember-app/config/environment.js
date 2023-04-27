@@ -12,7 +12,8 @@ module.exports = function(environment) {
   
   if (environment === 'docker') {
     // Use `ember s -e development-loc` command for local backend usage.
-    backendUrl = 'http://localhost:80';
+    backendUrl = 'http://asyncopenxmlreportssample:80';
+    authorityUrl = 'http://asyncopenxmlreportssample:8080';
   }
 
   let ENV = {

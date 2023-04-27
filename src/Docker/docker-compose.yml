@@ -9,12 +9,10 @@ services:
     links:
       - app-postgres-db:app-postgres-db
       - quartz:quartz
-    ports:
-      - 80:80
     environment:
       - BackendRoot=http://localhost
       - DefConnStr=SERVER=app-postgres-db;User ID=flexberryuser;Password=jhv;Port=5432;database=appdb;
-      - AuthorityUrl=http://keycloak:8080/realms/master/
+      - AuthorityUrl=http://asyncopenxmlreportssample:8080/realms/master/
       - QuartzUrl=http://quartz:5001/api/quartz/
       - UploadUrl=/var/reports
       - TemplatesPath=/var/templates
@@ -35,11 +33,11 @@ services:
 
   keycloak:
     image: asyncopenxmlreportssample/keycloak
-    ports:
-      - "8080:8080"
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - PROXY_ADDRESS_FORWARDING=true
+      - PROXY_PORT_FORWARDING=true
     networks:
       - asyncopenxmlreportssample
     volumes:
@@ -62,6 +60,16 @@ services:
       - TEMPLATES:/var/templates
     networks:
       - asyncopenxmlreportssample
+
+  nginx:
+    image: asyncopenxmlreportssample/nginx
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      asyncopenxmlreportssample:
+        aliases:
+          - asyncopenxmlreportssample
 
 volumes:
   DB:
