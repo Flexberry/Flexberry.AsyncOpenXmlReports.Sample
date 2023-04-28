@@ -25,6 +25,11 @@
         /// </summary>
         private readonly IRazorViewToStringRenderer razorPageToStringRenderer;
 
+        /// <summary>
+        /// Сервис отправки электронных писем.
+        /// </summary>
+        /// <param name="emailOptions">Настройки электронной почты.</param>
+        /// <param name="razorPageToStringRenderer">Сервис рендеринга шаблонов с синтаксисом Razor.</param>
         public MailKitEmailService(EmailOptions emailOptions, IRazorViewToStringRenderer razorPageToStringRenderer)
         {
             this.emailOptions = emailOptions;
@@ -42,15 +47,16 @@
         /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
         /// <param name="fileName">Имя прикрепляемого файла.</param>
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
+        /// <returns>A <see cref="Task"/> Ничего.</returns>
         public async Task SendRazorPagesEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
-            var mailModel = new RazorPagesMailTemplateModel()
+            var mailModel = new RazorPagesMailTemplate()
             {
                 HtmlMessage = body,
             };
 
             string razorPage = "/Templates/MailTemplates/RazorPages/RazorPagesMailTemplate.cshtml";
-            string messageBody = await razorPageToStringRenderer.RenderViewToStringAsync(razorPage, mailModel);
+            string messageBody = await razorPageToStringRenderer.RenderViewToStringAsync(razorPage, mailModel).ConfigureAwait(true);
             SendEmail(from, to, copyTo, subject, messageBody, bodyAttachments, fileName, fileBody);
         }
 
@@ -106,6 +112,10 @@
             }
         }
 
+        /// <summary>
+        /// Получить smtp-клиент.
+        /// </summary>
+        /// <returns>smtp-клиент</returns>
         private SmtpClient GetSmtpClient()
         {
             var client = new SmtpClient();
@@ -123,6 +133,18 @@
             return client;
         }
 
+        /// <summary>
+        /// Получить сформированное сообщение.
+        /// </summary>
+        /// <param name="from">Отправитель письма.</param>
+        /// <param name="to">Получатель письма.</param>
+        /// <param name="copyTo">Получатель копии письма.</param>
+        /// <param name="subject">Тема письма.</param>
+        /// <param name="body">Содержимое письма.</param>
+        /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
+        /// <param name="fileName">Имя прикрепляемого файла.</param>
+        /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
+        /// <returns>Сформированное сообщение.</returns>
         private MimeMessage GetMessage(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody)
         {
             var message = new MimeMessage();

@@ -2,7 +2,10 @@
 {
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    public class RazorPagesMailTemplateModel : PageModel
+    /// <summary>
+    /// Модель данных представления.
+    /// </summary>
+    public class RazorPagesMailTemplate : PageModel
     {
         /// <summary>
         /// Текст сообщения в формате HTML.

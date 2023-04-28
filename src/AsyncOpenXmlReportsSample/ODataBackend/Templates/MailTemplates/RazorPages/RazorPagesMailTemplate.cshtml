@@ -1,4 +1,4 @@
-﻿@model IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates.RazorPages.RazorPagesMailTemplateModel
+﻿@model IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates.RazorPages.RazorPagesMailTemplate
 @{
     Layout = "~/Templates/MailTemplates/RazorPages/MailTemplateLayout.cshtml";
 
@@ -9,9 +9,9 @@
     }
 }
 
-<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+<table role="presentation" style="max-width: 600px; border:0; width:100%; border-spacing: 0; border-collapse: collapse;">
     <tr>
-        <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 18px;">
+        <td style="background-color: #ffffff; text-align: left; text-align: -webkit-left; padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 18px;">
             @foreach (var paragraph in getStringLines(Model.HtmlMessage))
             {
                 <p>@paragraph</p>

@@ -14,12 +14,21 @@
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Routing;
 
+    /// <summary>
+    /// Класс рендеринга представлений с синтаксисом Razor.
+    /// </summary>
     public class RazorViewToStringRenderer : IRazorViewToStringRenderer
     {
         private readonly IRazorViewEngine viewEngine;
         private readonly ITempDataProvider tempDataProvider;
         private readonly IServiceProvider serviceProvider;
 
+        /// <summary>
+        /// Конструктор класса.
+        /// </summary>
+        /// <param name="viewEngine">Razor View Engine.</param>
+        /// <param name="tempDataProvider">Temp Data Provider.</param>
+        /// <param name="serviceProvider">Service Provider.</param>
         public RazorViewToStringRenderer(IRazorViewEngine viewEngine, ITempDataProvider tempDataProvider, IServiceProvider serviceProvider)
         {
             this.viewEngine = viewEngine;
@@ -27,6 +36,13 @@
             this.serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Рендеринг представлений с синтаксисом Razor.
+        /// </summary>
+        /// <typeparam name="TModel">Тип модели представления.</typeparam>
+        /// <param name="viewName">Представление.</param>
+        /// <param name="model">Модель представления.</param>
+        /// <returns>Отрендеринное представление.</returns>
         public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
         {
             var actionContext = GetActionContext();
@@ -43,7 +59,7 @@
                 output,
                 new HtmlHelperOptions());
 
-            await view.RenderAsync(viewContext);
+            await view.RenderAsync(viewContext).ConfigureAwait(true);
 
             return output.ToString();
         }
@@ -74,7 +90,7 @@
         {
             var httpContext = new DefaultHttpContext
             {
-                RequestServices = serviceProvider
+                RequestServices = serviceProvider,
             };
             return new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
         }
