@@ -10,7 +10,11 @@ export default Controller.extend(SignalRMixin, {
   keycloakSession: service(),
 
   userName: computed('keycloakSession.tokenParsed.preferred_username', function() {
-    return this.keycloakSession.tokenParsed.preferred_username;
+    try {
+      return this.keycloakSession.tokenParsed.preferred_username;
+    } catch (e) {
+      return null;
+    }
   }),
 
   sitemap: computed('i18n.locale', function () {
