@@ -46,7 +46,6 @@
         {
             var mailModel = new RazorPagesMailTemplateModel()
             {
-                HeadTitle = "Письмо на базе шаблона Razor Pages",
                 HtmlMessage = body,
             };
 
@@ -70,7 +69,6 @@
         {
             T4MailTemplate mailCommonRu = new T4MailTemplate()
             {
-                HeadTitle = "Письмо на базе шаблона T4",
                 HtmlMessage = body,
             };
             string messageBody = mailCommonRu.TransformText();

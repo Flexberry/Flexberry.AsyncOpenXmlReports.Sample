@@ -21,7 +21,7 @@
     <None Remove="Templates\MailTemplates\T4MailTemplate.tt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\MailTemplates\T4MailTemplate.tt">
+    <Content Include="Templates\MailTemplates\T4\T4MailTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>T4MailTemplate.cs</LastGenOutput>
     </Content>
@@ -53,7 +53,7 @@
     <ProjectReference Include="..\Objects\AsyncOpenXmlReportsSample.Objects.csproj"></ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Templates\MailTemplates\T4MailTemplate.cs">
+    <Compile Update="Templates\MailTemplates\T4\T4MailTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>T4MailTemplate.tt</DependentUpon>
@@ -63,5 +63,8 @@
     <None Update="Templates\CarListTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

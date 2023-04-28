@@ -28,36 +28,30 @@ namespace IIS.AsyncOpenXmlReportsSample.Templates.MailTemplates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n    <title>");
-            
-            #line 8 "D:\Work\Projects\Flexberry.AsyncOpenXmlReports.Sample\src\AsyncOpenXmlReportsSample\ODataBackend\Templates\MailTemplates\T4MailTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.HeadTitle));
-            
-            #line default
-            #line hidden
-            this.Write("</title>\r\n</head>\r\n<body>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" wi" +
-                    "dth=\"100%\" style=\"width:100.0%;border-collapse:collapse\">\r\n    <tbody>\r\n      <t" +
-                    "r>\r\n        <td bgcolor=\"#538ee2\" align=\"center\">\r\n            <table border=\"0\"" +
-                    " cellpadding=\"0\" cellspacing=\"0\" style=\"max-width: 600px;\">\r\n                <tr" +
-                    ">\r\n                    <td align=\"center\" valign=\"top\" style=\"padding: 40px 10px" +
-                    " 40px 10px;\">\r\n                        <a href=\"#\" target=\"_blank\">\r\n           " +
-                    "                 <img alt=\"Logo\" src=\"cid:logoIconCid\" height=\"40\">\r\n           " +
-                    "             </a>\r\n                    </td>\r\n                </tr>\r\n           " +
-                    " </table>\r\n        </td>\r\n      </tr>\r\n      <tr>\r\n        <td bgcolor=\"#538ee2\"" +
-                    " align=\"center\" style=\"padding: 0px 10px 0px 10px;\">\r\n            <table border=" +
-                    "\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"max-width: 600px;\">\r\n   " +
-                    "             <tr>\r\n                    <td bgcolor=\"#ffffff\" align=\"center\" vali" +
-                    "gn=\"top\" style=\"padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; co" +
-                    "lor: #272727; font-family: \'Lato\', Helvetica, Arial, sans-serif; font-size: 36px" +
-                    "; font-weight: 400; line-height: 48px;\">\r\n                        <h1 style=\"fon" +
-                    "t-size: 48px; font-weight: 400; margin: 0; line-height: 48px;\"></h1>\r\n          " +
-                    "          </td>\r\n                </tr>\r\n            </table>\r\n        </td>\r\n   " +
-                    "   </tr>\r\n      <tr>\r\n        <td bgcolor=\"#f4f4f4\" align=\"center\" style=\"paddin" +
-                    "g: 0px 10px 0px 10px;\">\r\n            <table border=\"0\" cellpadding=\"0\" cellspaci" +
-                    "ng=\"0\" width=\"100%\" style=\"max-width: 600px;\">\r\n                <tr>\r\n          " +
-                    "          <td bgcolor=\"#ffffff\" align=\"left\" style=\"padding: 20px 30px 40px 30px" +
-                    "; color: #666666; font-family: \'Lato\', Helvetica, Arial, sans-serif; font-size: " +
-                    "18px; line-height: 18px;\">\r\n                      ");
+            this.Write("<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n<head>\r\n    <title>Письмо на базе ша" +
+                    "блона T4</title>\r\n</head>\r\n<body>\r\n  <table border=\"0\" cellspacing=\"0\" cellpaddi" +
+                    "ng=\"0\" width=\"100%\" style=\"width:100.0%;border-collapse:collapse\">\r\n    <tbody>\r" +
+                    "\n      <tr>\r\n        <td bgcolor=\"#538ee2\" align=\"center\">\r\n            <table b" +
+                    "order=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width: 600px;\">\r\n          " +
+                    "      <tr>\r\n                    <td align=\"center\" valign=\"top\" style=\"padding: " +
+                    "40px 10px 40px 10px;\">\r\n                        <a href=\"#\" target=\"_blank\">\r\n  " +
+                    "                          <img alt=\"Logo\" src=\"cid:logoIconCid\" height=\"40\">\r\n  " +
+                    "                      </a>\r\n                    </td>\r\n                </tr>\r\n  " +
+                    "          </table>\r\n        </td>\r\n      </tr>\r\n      <tr>\r\n        <td bgcolor=" +
+                    "\"#538ee2\" align=\"center\" style=\"padding: 0px 10px 0px 10px;\">\r\n            <tabl" +
+                    "e border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"max-width: 600p" +
+                    "x;\">\r\n                <tr>\r\n                    <td bgcolor=\"#ffffff\" align=\"cen" +
+                    "ter\" valign=\"top\" style=\"padding: 40px 20px 20px 20px; border-radius: 4px 4px 0p" +
+                    "x 0px; color: #272727; font-family: \'Lato\', Helvetica, Arial, sans-serif; font-s" +
+                    "ize: 36px; font-weight: 400; line-height: 48px;\">\r\n                        <h1 s" +
+                    "tyle=\"font-size: 48px; font-weight: 400; margin: 0; line-height: 48px;\"></h1>\r\n " +
+                    "                   </td>\r\n                </tr>\r\n            </table>\r\n        <" +
+                    "/td>\r\n      </tr>\r\n      <tr>\r\n        <td bgcolor=\"#f4f4f4\" align=\"center\" styl" +
+                    "e=\"padding: 0px 10px 0px 10px;\">\r\n            <table border=\"0\" cellpadding=\"0\" " +
+                    "cellspacing=\"0\" width=\"100%\" style=\"max-width: 600px;\">\r\n                <tr>\r\n " +
+                    "                   <td bgcolor=\"#ffffff\" align=\"left\" style=\"padding: 20px 30px " +
+                    "40px 30px; color: #666666; font-family: \'Lato\', Helvetica, Arial, sans-serif; fo" +
+                    "nt-size: 18px; line-height: 18px;\">\r\n                      ");
             
             #line 42 "D:\Work\Projects\Flexberry.AsyncOpenXmlReports.Sample\src\AsyncOpenXmlReportsSample\ODataBackend\Templates\MailTemplates\T4MailTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.HtmlMessage));
