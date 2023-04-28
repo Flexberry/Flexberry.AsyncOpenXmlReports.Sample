@@ -8,7 +8,11 @@ export default Mixin.create({
   keycloakSession: service(),
 
   userName: computed('keycloakSession.tokenParsed.preferred_username', function() {
-    return this.keycloakSession.tokenParsed.preferred_username;
+    try {
+      return this.keycloakSession.tokenParsed.preferred_username;
+    } catch (e) {
+      return null;
+    }
   }),
 
   getSignalR() {
@@ -27,19 +31,36 @@ export default Mixin.create({
     const signalr = _this.getSignalR();
 
     signalr.start().then(function () {
-
-      // eslint-disable-next-line no-console
-      console.log("SignalR Connected.");
-
       signalr.connection.onclose( _this._signalROnDisconnected.bind(_this));
       signalr.connection.on('NotifyUser', _this._notifyUser.bind(_this));
       signalr.connection.on('ReportComplete', _this._reportComplete.bind(_this));
-      signalr.connection.invoke("AddUser", _this.userName);
+      _this._signalRInitUserName(_this, signalr);
+
+      // eslint-disable-next-line no-console
+      console.log("SignalR Connected.");
     }).catch(function (err) {
 
       // eslint-disable-next-line no-console
       console.log("SignalR NOT Connected." + err);
     });
+  },
+
+  _signalRInitUserName(_this, signalr) {
+    // Ждем пока keycloak вернет имя пользователя. Делает это он не сразу.
+    if (_this.userName != null) {
+      signalr.connection.invoke("AddUser", _this.userName);
+
+      // eslint-disable-next-line no-console
+      console.log("SignalR: UserName initialized.");
+    } else {
+
+      // eslint-disable-next-line no-console
+      console.log("SignalR: No UserName.");
+
+      later((function() {
+        _this._signalRInitUserName(_this, signalr);
+      }), 5000);
+    }
   },
 
   _signalRTryToReconnect() {
@@ -50,7 +71,7 @@ export default Mixin.create({
       this.signalRTryToConnect();
       later((function() {
         _this._signalRTryToReconnect();
-      }), 60000);
+      }), 5000);
     }
   },
 
