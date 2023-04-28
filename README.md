@@ -48,3 +48,5 @@
 ```http://localhost```
 - Консоль управления keycloak доступна по адресу
 ```http://keycloak:8080```
+- Логин и пароль для доступа к сайту и keycloak
+```admin\admin```
