@@ -45,6 +45,7 @@
         /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
         /// <param name="fileName">Имя прикрепляемого файла.</param>
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
+        /// <returns>Ничего.</returns>
         Task SendRazorPagesEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
     }
 }

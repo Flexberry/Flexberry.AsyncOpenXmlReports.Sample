@@ -115,7 +115,7 @@
         /// <summary>
         /// Получить smtp-клиент.
         /// </summary>
-        /// <returns>smtp-клиент</returns>
+        /// <returns>smtp-клиент.</returns>
         private SmtpClient GetSmtpClient()
         {
             var client = new SmtpClient();
