@@ -11,41 +11,41 @@
         /// <summary>
         /// Отправить письмо.
         /// </summary>
-        /// <param name="from">Отправитель письма.</param>
-        /// <param name="to">Получатель письма.</param>
+        /// <param name="sender">Отправитель письма.</param>
+        /// <param name="recipient">Получатель письма.</param>
         /// <param name="copyTo">Получатель копии письма.</param>
         /// <param name="subject">Тема письма.</param>
         /// <param name="body">Содержимое письма.</param>
         /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
         /// <param name="fileName">Имя прикрепляемого файла.</param>
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
-        void SendEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
+        void SendEmail(string sender, string recipient, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
 
         /// <summary>
         /// Отправить письмо, сформированное на основе шаблона Т4.
         /// </summary>
-        /// <param name="from">Отправитель письма.</param>
-        /// <param name="to">Получатель письма.</param>
+        /// <param name="sender">Отправитель письма.</param>
+        /// <param name="recipient">Получатель письма.</param>
         /// <param name="copyTo">Получатель копии письма.</param>
         /// <param name="subject">Тема письма.</param>
         /// <param name="body">Содержимое письма.</param>
         /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
         /// <param name="fileName">Имя прикрепляемого файла.</param>
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
-        void SendT4Email(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
+        void SendT4Email(string sender, string recipient, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
 
         /// <summary>
         /// Отправить письмо, сформированное на основе шаблона Razor Pages.
         /// </summary>
-        /// <param name="from">Отправитель письма.</param>
-        /// <param name="to">Получатель письма.</param>
+        /// <param name="sender">Отправитель письма.</param>
+        /// <param name="recipient">Получатель письма.</param>
         /// <param name="copyTo">Получатель копии письма.</param>
         /// <param name="subject">Тема письма.</param>
         /// <param name="body">Содержимое письма.</param>
         /// <param name="bodyAttachments">Прикреляемые изображения для отображения в теле письма.</param>
         /// <param name="fileName">Имя прикрепляемого файла.</param>
         /// <param name="fileBody">Содержимое прикрепляемого файла.</param>
-        /// <returns>Ничего.</returns>
-        Task SendRazorPagesEmail(string from, string to, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
+        /// <returns>Task.</returns>
+        Task SendRazorPagesEmail(string sender, string recipient, string copyTo, string subject, string body, Dictionary<string, string> bodyAttachments, string fileName, byte[] fileBody);
     }
 }

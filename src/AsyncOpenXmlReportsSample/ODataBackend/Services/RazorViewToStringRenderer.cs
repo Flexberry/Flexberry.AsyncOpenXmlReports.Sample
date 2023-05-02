@@ -26,9 +26,9 @@
         /// <summary>
         /// Конструктор класса.
         /// </summary>
-        /// <param name="viewEngine">Razor View Engine.</param>
-        /// <param name="tempDataProvider">Temp Data Provider.</param>
-        /// <param name="serviceProvider">Service Provider.</param>
+        /// <param name="viewEngine">Движок рендеринга страниц с синтаксисом Razor.</param>
+        /// <param name="tempDataProvider">Контракт для поставщиков временных данных.</param>
+        /// <param name="serviceProvider">Механизм получения объекта службы.</param>
         public RazorViewToStringRenderer(IRazorViewEngine viewEngine, ITempDataProvider tempDataProvider, IServiceProvider serviceProvider)
         {
             this.viewEngine = viewEngine;
@@ -59,7 +59,7 @@
                 output,
                 new HtmlHelperOptions());
 
-            await view.RenderAsync(viewContext).ConfigureAwait(true);
+            await view.RenderAsync(viewContext).ConfigureAwait(false);
 
             return output.ToString();
         }
