@@ -85,6 +85,8 @@
             services
                 .AddHealthChecks()
                 .AddNpgSql(connStr);
+
+            services.AddRazorPages();
         }
 
         /// <summary>
@@ -176,7 +178,9 @@
             var emailOptions = new MailConfigurations.EmailOptions();
             Configuration.GetSection("Email").Bind(emailOptions);
             container.RegisterInstance(emailOptions);
-            container.RegisterType<Services.IEmailSender, Services.MailKitEmailService>();
+
+            container.RegisterType<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+            container.RegisterType<IEmailSender, MailKitEmailService>();
         }
 
         /// <summary>
